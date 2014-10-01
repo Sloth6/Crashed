@@ -123,13 +123,13 @@ header {
   text-shadow: 0px -1px 0px #b34700;
 }
 .container {
-  width: 500px;
+  width: 550px;
   margin: 50px auto;
   overflow: hidden;
 }
 .main-content {
   float: left;
-  width: 500px;
+  width: 550px;
 }
 .main-content p {
   margin-bottom: 20px;
