@@ -1,16 +1,37 @@
 start = new Date().getTime()
-stage = new PIXI.Stage(0xFFFFFF);
+hexContainer = {}
 
-stage.mousedown = () ->
 
-texture = PIXI.Texture.fromImage "images/hex.png"
+renderer = PIXI.autoDetectRenderer 620, 380
+stage = new PIXI.Stage 0xFFFFFF
+mousedown = false
+
+mouseStart = {}
+mouseCurrent = {}
+mapStart = {}
+
+stage.mousedown = (data) ->
+  mapStart.x = hexContainer.x
+  mapStart.y = hexContainer.y
+  mouseStart.x = data.originalEvent.x
+  mouseStart.y = data.originalEvent.y
+  mousedown = true
+
+stage.mouseup = () ->
+  mousedown = false
+
+stage.mousemove = (data) ->
+  mouseCurrent.x = data.originalEvent.x
+  mouseCurrent.y = data.originalEvent.y
+
 createHexagon = ({ x, y, size, id }) ->
-  
+  texture = PIXI.Texture.fromImage "images/hex.png"  
   hex = new PIXI.Sprite texture
   hex.position.x = x
   hex.position.y = y
   hex.width = 2*size
   hex.height = (Math.sqrt(3)*size)
+  new PIXI.Point(size, hex.height/2)
 
   # hex = new PIXI.Graphics()
   #   # set a fill and line style
@@ -34,41 +55,48 @@ createHexagon = ({ x, y, size, id }) ->
   hex.interactive = true
   hex.click = hex.tap = (data) ->
     console.log 'CLICKED', id
-  # stage.addChild hex
-  stage.addChild hex
+  hex
 
 animate = () ->
-  # thing.rotation = count * 0.1;
+  stats.begin()
+  update()
   renderer.render stage
   requestAnimFrame animate
+  stats.end()
 
-
-
-# stage.mousemove = (data)->
-  # console.log(data.originalEvent.x);
-  # console.log(stage.getMousePosition());
-
-# stage.setInteractive(true);
-
-
-#stage.addChild(sprite);
-# create a renderer instance
+update = () ->
+  if mousedown
+    hexContainer.position.x = mapStart.x + mouseCurrent.x - mouseStart.x
+    hexContainer.position.y = mapStart.y + mouseCurrent.y - mouseStart.y
 
 
 makeWorld = () ->
+  hexContainer = new PIXI.DisplayObjectContainer()
+  hexContainer = new PIXI.SpriteBatch()
+  hexContainer.x = 0
+  hexContainer.y = 0
+  stage.addChild hexContainer
   size = 40
   for col in [0...5] by 1
     for row in [0...10] by 1
       x = (col * size * 3) + (if (row%2) then (size*1.5) else 0)
       y =  row * (Math.sqrt(3)*size)/2
-      createHexagon { x, y, size:40, id: row+':'+col}
+      hexContainer.addChild createHexagon { x, y, size:40, id: row+':'+col }
+  return
 
 
 
 # main = () ->
-renderer = PIXI.autoDetectRenderer 620, 380
+
+
 document.body.appendChild renderer.view
+renderer.view.style.position = "absolute";
+stats = new Stats();
+document.body.appendChild( stats.domElement );
+stats.domElement.style.position = "absolute";
+stats.domElement.style.top = "0px";
 makeWorld()
+
 console.log('Finished in ', new Date().getTime() - start)
 requestAnimFrame animate
 
