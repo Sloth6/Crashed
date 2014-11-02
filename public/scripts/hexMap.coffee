@@ -10,20 +10,6 @@ mouseStart = {}
 mouseCurrent = {}
 mapStart = {}
 
-stage.mousedown = (data) ->
-  mapStart.x = hexContainer.x
-  mapStart.y = hexContainer.y
-  mouseStart.x = data.originalEvent.x
-  mouseStart.y = data.originalEvent.y
-  mousedown = true
-
-stage.mouseup = () ->
-  mousedown = false
-
-stage.mousemove = (data) ->
-  mouseCurrent.x = data.originalEvent.x
-  mouseCurrent.y = data.originalEvent.y
-
 animate = () ->
   stats.begin()
   update()
@@ -32,12 +18,7 @@ animate = () ->
   stats.end()
 
 update = () ->
-  # if mousedown
-  #   hexContainer.position.x = mapStart.x + mouseCurrent.x - mouseStart.x
-  #   hexContainer.position.y = mapStart.y + mouseCurrent.y - mouseStart.y
 
-
-# main = () ->
 
 $ ->
   document.body.appendChild renderer.view

@@ -2,7 +2,6 @@ express = require 'express'
 app = express()
 coffeeMiddleware = require 'coffee-middleware'
 # view engine setup
-console.log __dirname
 app.set 'views', __dirname+'/views'
 app.set 'view engine', 'jade'
 app.use express.static(__dirname+'/public')
