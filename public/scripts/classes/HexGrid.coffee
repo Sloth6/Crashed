@@ -1,8 +1,8 @@
 class HexGrid
   constructor: (rows, cols, texture) ->
-    # @container = new PIXI.DisplayObjectContainer()
+    @container = new PIXI.DisplayObjectContainer()
     size = 40
-    @container = new PIXI.SpriteBatch()
+    # @container = new PIXI.SpriteBatch()
     @container.x = 0
     @container.y = 0
     @container.width = 3*size*cols
@@ -21,9 +21,6 @@ class HexGrid
     @container.buttonMode = true
 
     @container.mousedown = (data) ->
-      # console.log 'mosueDown', @downdata.originalEvent
-      # data.originalEvent.preventDefault()
-      
       @startX = @position.x
       @startY = @position.y
       @startMouseX = data.originalEvent.x
@@ -38,11 +35,8 @@ class HexGrid
         mouseDiffX = data.originalEvent.x - @startMouseX
         mouseDiffY = data.originalEvent.y - @startMouseY
 
-
         @position.x = @startX + mouseDiffX
         @position.y = @startY + mouseDiffY
-      
-
  
   addTo : (scene) ->
     scene.addChild @container  
