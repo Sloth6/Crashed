@@ -31,16 +31,30 @@ class HexGrid
     @container.mouseup = @container.mouseupoutside = (data) ->
       @dragging = false
 
-    @container.mousemove = @container.touchmove = (data) ->
+    @container.mousemove = (data) ->
       if @dragging
         mouseDiffX = data.originalEvent.x - @startMouseX
         mouseDiffY = data.originalEvent.y - @startMouseY
 
         @position.x = @startX + mouseDiffX
         @position.y = @startY + mouseDiffY
+      # else
+      #   @getHexFromXY data.originalEvent.x, data.originalEvent.y
   
   getHex : (q, r) ->
     @hexes[q+':'+r] or null
+
+  getHexFromXY : (x, y) ->
+    q = 2 / 3 * x / size
+    r = (-1 / 3 * x + 1 / 3 * sqrt(3) * y) / size
+    
+    @getHex(q, r).select()
+    
+  selctLine : ({q1, r1}, {q2, r2}) ->
+    N = @getHex({q1, r1}).distanceTo { q2, r2 }
+    for i in [0...N] by 1
+      getHex()
+
 
   addTo : (scene) ->
     scene.addChild @container  

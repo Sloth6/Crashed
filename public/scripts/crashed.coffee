@@ -1,5 +1,4 @@
 start = new Date().getTime()
-hexContainer = {}
 stats = {}
 
 renderer = PIXI.autoDetectRenderer window.innerWidth, window.innerHeight
@@ -26,7 +25,28 @@ $ ->
   stats.domElement.style.position = 'absolute';
   stats.domElement.style.top = "0px";
   # makeWorld()
-  window.grid = new window.HexGrid 3, PIXI.Texture.fromImage "images/hex.png"  
+  
+  window.selected = []
+
+  window.imgAssets = 
+    hex : PIXI.Texture.fromImage "images/hex.png"  
+    Tower : PIXI.Texture.fromImage "images/buildings/tower.gif"
+    Collector : PIXI.Texture.fromImage "images/buildings/collector.png"
+    Pylon : PIXI.Texture.fromImage "images/buildings/pylon.gif"
+    Wall : PIXI.Texture.fromImage "images/buildings/Wall.gif"
+
+  window.grid = new window.HexGrid 3
   window.grid.addTo stage
   console.log('Finished in ', new Date().getTime() - start)
   requestAnimFrame animate
+
+  $( "#progressbar" ).progressbar { value: 37 }
+  $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
+    item = ui.item.text()
+    console.log window.selected
+    window.selected.forEach (hex) ->
+      # hex.select()
+      hex.build item
+    window.selected.forEach (hex) ->
+      hex.select()
+    

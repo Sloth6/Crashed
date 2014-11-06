@@ -1,6 +1,24 @@
 body {
-  padding: 50px;
+  /*padding: 50px;*/
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+#ui {
+  height:100vh;
+}
+
+#progressbar {
+  position: absolute;
+  bottom: 0px;
+  width: 400px;
+  z-index: 5;
+}
+
+#buildmenu {
+  position: absolute;
+  top: 100px;
+  width: 100px;
+  z-index: 6;
 }
 
 a {

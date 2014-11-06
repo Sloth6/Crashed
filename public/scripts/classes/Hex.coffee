@@ -1,38 +1,62 @@
 class Hex
-  constructor: ({ x, y, size, @q, @r, texture }) ->
-    @sprite = new PIXI.Sprite texture
-    @sprite.anchor.x = 0.5
-    @sprite.anchor.y = 0.5
-    @sprite.position.x = x
-    @sprite.position.y = y
-    @sprite.width = 2*size
-    @sprite.height = size * Math.sqrt 3
-    @sprite.interactive = true
-    
+  constructor: ({ @x, @y, @size, @q, @r }) ->
     @selected = false
+    @type = 'open'
+
+    @hexSprite = new PIXI.Sprite window.imgAssets.hex
+    @hexSprite.anchor.x = 0.5
+    @hexSprite.anchor.y = 0.5
+    @hexSprite.position.x = @x
+    @hexSprite.position.y = @y
+    @hexSprite.width = 2*@size
+    @hexSprite.height = @size * Math.sqrt 3
+    @hexSprite.interactive = true
+    
     clicked = false
-
-    @sprite.mousedown = (data) =>
+    @hexSprite.mousedown = (data) =>
       clicked = true
-      console.log {q:@q, r:@r}
+      console.log { q: @q, r: @r }
 
-    @sprite.mouseup = (data) ->
+    @hexSprite.mouseup = (data) =>
       @selected = !@selected if clicked
-      @alpha = if @selected then .5 else 1.0
+      @onToggleSelect()
       
-    @sprite.mousemove = (data) ->
+    @hexSprite.mousemove = (data) =>
       clicked = false
 
   getNeighbors : () ->
     [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, +1]].map ([q, r]) =>
       window.grid.getHex q+@q, r+@r
 
+  distanceTo : ({ q, r }) ->
+    (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
+  
   select : () ->
     @selected = !@selected
-    @sprite.alpha = if @selected then .5 else 1.0
+    @onToggleSelect()
 
+  onToggleSelect : () ->
+    if @selected 
+      @hexSprite.alpha = .5
+      window.selected.push @
+    else 
+      @hexSprite.alpha = 1.0
+      index = window.selected.indexOf @
+      window.selected.splice(index, 1);
+    # console.log window.selected
+    # delete window.selected[@]
+    # @build 'turret'
+
+  build : (buildingName) ->
+    @type = buildingName
+    @buildingSprite = new PIXI.Sprite window.imgAssets[buildingName]
+    @buildingSprite.anchor.x = 0.5
+    @buildingSprite.anchor.y = 0.5
+    @buildingSprite.position.x = @x
+    @buildingSprite.position.y = @y
+    @hexSprite.parent.addChild @buildingSprite
   addTo : (container) ->
-    container.addChild @sprite
+    container.addChild @hexSprite
 
 window.Hex = Hex
 
