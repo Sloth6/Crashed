@@ -8,13 +8,19 @@ class Hex
     @sprite.width = 2*size
     @sprite.height = size * Math.sqrt 3
     @sprite.interactive = true
+    
+    @Selected = false
+    clicked = false
 
-    @sprite.mouseover = (data) ->
-      console.log "Hex id: #{id}"
-      @alpha = 0.5
-  
-    @sprite.mouseout = (data) ->
-      @alpha = 1.0
+    @sprite.mousedown = (data) ->
+      clicked = true
+    
+    @sprite.mouseup = (data) ->
+      @selected = !@selected if clicked
+      @alpha = if @selected then .5 else 1.0
+    
+    @sprite.mousemove = (data) ->
+      clicked = false
 
   addTo : (container) ->
     container.addChild @sprite
