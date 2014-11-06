@@ -45,8 +45,10 @@ $ ->
     item = ui.item.text()
     console.log window.selected
     window.selected.forEach (hex) ->
-      # hex.select()
       hex.build item
-    window.selected.forEach (hex) ->
-      hex.select()
+      hex.selected = false
+      hex.hexSprite.alpha = 1.0
+    window.selected = []
+    # window.selected.forEach (hex) ->
+    #   hex.sleecte
     
