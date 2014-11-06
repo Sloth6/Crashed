@@ -1,8 +1,7 @@
 class HexGrid
-  constructor: (rows, texture) ->
+  constructor: (rows, size) ->
     @container = new PIXI.DisplayObjectContainer()
     @hexes = {}
-    size = 40
     @container.x = window.innerWidth/2
     @container.y = window.innerHeight/2
 
@@ -13,7 +12,7 @@ class HexGrid
       for r in [start..end] by 1
         x = q * size * 1.5
         y =  r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size)
-        hex = new window.Hex { x, y, size, q, r, texture }
+        hex = new window.Hex { x, y, size, q, r }
         @hexes[q+':'+r] = hex
         hex.addTo @container
       if q < 0 then start-- else end--
@@ -49,7 +48,7 @@ class HexGrid
     r = (-1 / 3 * x + 1 / 3 * sqrt(3) * y) / size
     
     @getHex(q, r).select()
-    
+
   selctLine : ({q1, r1}, {q2, r2}) ->
     N = @getHex({q1, r1}).distanceTo { q2, r2 }
     for i in [0...N] by 1

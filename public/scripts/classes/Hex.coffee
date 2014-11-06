@@ -54,6 +54,8 @@ class Hex
     @buildingSprite.anchor.y = 0.5
     @buildingSprite.position.x = @x
     @buildingSprite.position.y = @y
+    @buildingSprite.width = 2*@size
+    @buildingSprite.height = @size * Math.sqrt 3
     @hexSprite.parent.addChild @buildingSprite
   addTo : (container) ->
     container.addChild @hexSprite

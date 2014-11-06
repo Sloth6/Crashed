@@ -33,9 +33,9 @@ $ ->
     Tower : PIXI.Texture.fromImage "images/buildings/tower.gif"
     Collector : PIXI.Texture.fromImage "images/buildings/collector.png"
     Pylon : PIXI.Texture.fromImage "images/buildings/pylon.gif"
-    Wall : PIXI.Texture.fromImage "images/buildings/Wall.gif"
+    Wall : PIXI.Texture.fromImage "images/buildings/wall.gif"
 
-  window.grid = new window.HexGrid 3
+  window.grid = new window.HexGrid 6, 20
   window.grid.addTo stage
   console.log('Finished in ', new Date().getTime() - start)
   requestAnimFrame animate
