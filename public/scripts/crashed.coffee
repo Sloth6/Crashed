@@ -26,7 +26,7 @@ $ ->
   stats.domElement.style.position = 'absolute';
   stats.domElement.style.top = "0px";
   # makeWorld()
-  grid  = new window.HexGrid 5, PIXI.Texture.fromImage "images/hex.png"  
-  grid.addTo stage
+  window.grid = new window.HexGrid 3, PIXI.Texture.fromImage "images/hex.png"  
+  window.grid.addTo stage
   console.log('Finished in ', new Date().getTime() - start)
   requestAnimFrame animate

@@ -1,6 +1,7 @@
 class HexGrid
   constructor: (rows, texture) ->
     @container = new PIXI.DisplayObjectContainer()
+    @hexes = {}
     size = 40
     @container.x = window.innerWidth/2
     @container.y = window.innerHeight/2
@@ -8,13 +9,14 @@ class HexGrid
     # Build map.
     start = 0
     end = rows
-    for col in [-rows..rows] by 1
-      for row in [start..end] by 1
-        x = col * size * 1.5
-        y =  row * (Math.sqrt(3)*size) + (col * Math.sqrt(3)/2 * size)
-        hex = new window.Hex { x, y, size, id: col+':'+row, texture }
+    for q in [-rows..rows] by 1
+      for r in [start..end] by 1
+        x = q * size * 1.5
+        y =  r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size)
+        hex = new window.Hex { x, y, size, q, r, texture }
+        @hexes[q+':'+r] = hex
         hex.addTo @container
-      if col < 0 then start-- else end--
+      if q < 0 then start-- else end--
 
     @container.interactive = true
     @container.buttonMode = true
@@ -36,7 +38,10 @@ class HexGrid
 
         @position.x = @startX + mouseDiffX
         @position.y = @startY + mouseDiffY
- 
+  
+  getHex : (q, r) ->
+    @hexes[q+':'+r] or null
+
   addTo : (scene) ->
     scene.addChild @container  
   

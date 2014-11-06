@@ -1,5 +1,5 @@
 class Hex
-  constructor: ({ x, y, size, id, texture, onclick}) ->
+  constructor: ({ x, y, size, @q, @r, texture }) ->
     @sprite = new PIXI.Sprite texture
     @sprite.anchor.x = 0.5
     @sprite.anchor.y = 0.5
@@ -9,22 +9,30 @@ class Hex
     @sprite.height = size * Math.sqrt 3
     @sprite.interactive = true
     
-    @Selected = false
+    @selected = false
     clicked = false
 
-    @sprite.mousedown = (data) ->
+    @sprite.mousedown = (data) =>
       clicked = true
-    
+      console.log {q:@q, r:@r}
+
     @sprite.mouseup = (data) ->
       @selected = !@selected if clicked
       @alpha = if @selected then .5 else 1.0
-    
+      
     @sprite.mousemove = (data) ->
       clicked = false
 
+  getNeighbors : () ->
+    [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, +1]].map ([q, r]) =>
+      window.grid.getHex q+@q, r+@r
+
+  select : () ->
+    @selected = !@selected
+    @sprite.alpha = if @selected then .5 else 1.0
+
   addTo : (container) ->
     container.addChild @sprite
-    # container.addChild @sprite.hitArea
 
 window.Hex = Hex
 
