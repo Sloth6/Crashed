@@ -4,6 +4,18 @@ stats = {}
 renderer = PIXI.autoDetectRenderer window.innerWidth, window.innerHeight
 stage = new PIXI.Stage 0xFFFFFF
 
+
+window.crashed ?= {}
+window.crashed.level = 0
+window.crashed.gold = 100
+# window.buildings ?= {}
+window.crashed.prices =
+  tower : 10
+  collector : 10
+  wall : 10
+  pylon : 10
+window.crashed.buildings = []
+
 animate = () ->
   stats.begin()
   update()
@@ -12,6 +24,7 @@ animate = () ->
   stats.end()
 
 update = () ->
+  window.crashed.buildings.forEach (building) -> building.act()
 
 
 $ ->
@@ -35,7 +48,7 @@ $ ->
     Pylon : PIXI.Texture.fromImage "images/buildings/pylon.gif"
     Wall : PIXI.Texture.fromImage "images/buildings/wall.gif"
 
-  window.grid = new window.HexGrid 6, 20
+  window.grid = new window.HexGrid 6, 40
   window.grid.addTo stage
   console.log('Finished in ', new Date().getTime() - start)
   requestAnimFrame animate
@@ -43,7 +56,6 @@ $ ->
   $( "#progressbar" ).progressbar { value: 37 }
   $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
     item = ui.item.text()
-    console.log window.selected
     window.selected.forEach (hex) ->
       hex.build item
       hex.selected = false

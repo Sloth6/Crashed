@@ -1,7 +1,7 @@
 class Hex
   constructor: ({ @x, @y, @size, @q, @r }) ->
     @selected = false
-    @type = 'open'
+    @building = 'open'
 
     @hexSprite = new PIXI.Sprite window.imgAssets.hex
     @hexSprite.anchor.x = 0.5
@@ -43,20 +43,11 @@ class Hex
       @hexSprite.alpha = 1.0
       index = window.selected.indexOf @
       window.selected.splice(index, 1);
-    # console.log window.selected
-    # delete window.selected[@]
-    # @build 'turret'
 
-  build : (buildingName) ->
-    @type = buildingName
-    @buildingSprite = new PIXI.Sprite window.imgAssets[buildingName]
-    @buildingSprite.anchor.x = 0.5
-    @buildingSprite.anchor.y = 0.5
-    @buildingSprite.position.x = @x
-    @buildingSprite.position.y = @y
-    @buildingSprite.width = 2*@size
-    @buildingSprite.height = @size * Math.sqrt 3
-    @hexSprite.parent.addChild @buildingSprite
+  build : (type) ->
+    @building = new window.buildings[type](@, type)
+    @building.addTo @hexSprite.parent
+
   addTo : (container) ->
     container.addChild @hexSprite
 

@@ -11,12 +11,13 @@ class HexGrid
     for q in [-rows..rows] by 1
       for r in [start..end] by 1
         x = q * size * 1.5
-        y =  r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size)
+        y =  (r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size))
         hex = new window.Hex { x, y, size, q, r }
         @hexes[q+':'+r] = hex
         hex.addTo @container
       if q < 0 then start-- else end--
 
+    # @container.rotation = 0.3
     @container.interactive = true
     @container.buttonMode = true
 
