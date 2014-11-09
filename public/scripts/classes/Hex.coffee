@@ -3,7 +3,7 @@ class Hex
     @selected = false
     @building = 'open'
 
-    @hexSprite = new PIXI.Sprite window.imgAssets.hex
+    @hexSprite = new PIXI.Sprite textures.hex
     @hexSprite.anchor.x = 0.5
     @hexSprite.anchor.y = 0.5
     @hexSprite.position.x = @x
@@ -15,40 +15,40 @@ class Hex
     clicked = false
     @hexSprite.mousedown = (data) =>
       clicked = true
-      console.log { q: @q, r: @r }
 
     @hexSprite.mouseup = (data) =>
       @selected = !@selected if clicked
-      @onToggleSelect()
+      @onToggleSelect() if clicked
       
     @hexSprite.mousemove = (data) =>
       clicked = false
 
-  getNeighbors : () ->
+  getNeighbors: () ->
     [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, +1]].map ([q, r]) =>
-      window.grid.getHex q+@q, r+@r
+      game.hexGrid.getHex q+@q, r+@r
 
-  distanceTo : ({ q, r }) ->
+  distanceTo: ({ q, r }) ->
     (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
   
-  select : () ->
+  select: () ->
     @selected = !@selected
     @onToggleSelect()
 
-  onToggleSelect : () ->
+  onToggleSelect: () ->
     if @selected 
       @hexSprite.alpha = .5
-      window.selected.push @
+      game.selected.push @
     else 
       @hexSprite.alpha = 1.0
-      index = window.selected.indexOf @
-      window.selected.splice(index, 1);
+      index = game.selected.indexOf @
+      game.selected.splice(index, 1);
 
-  build : (type) ->
-    @building = new window.buildings[type](@, type)
+  build: (type) ->
+    @building = new buildings[type](@, type)
     @building.addTo @hexSprite.parent
+    @building
 
-  addTo : (container) ->
+  addTo: (container) ->
     container.addChild @hexSprite
 
 window.Hex = Hex

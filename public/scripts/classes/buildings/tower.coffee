@@ -13,7 +13,7 @@ class Tower extends Building
     #shoot shit
 
 window.buildings ?= {}
-window.buildings.Collector = Collector
-window.buildings.Wall = Wall
-window.buildings.Pylon = Pylon
-window.buildings.Tower = Tower
+window.buildings.collector = Collector
+window.buildings.wall = Wall
+window.buildings.pylon = Pylon
+window.buildings.tower = Tower

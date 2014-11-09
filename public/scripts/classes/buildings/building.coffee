@@ -1,22 +1,23 @@
 class Building
   constructor: ( @hex, @type ) ->
-    cost = window.crashed.prices[@type]
-    return if @cost > window.crashed.gold
-    window.crashed.gold -= @cost
+    cost = game.prices[@type]
+    return if @cost > game.gold
+    game.gold -= @cost
 
-    @sprite = new PIXI.Sprite window.imgAssets[@type]
+    @sprite = new PIXI.Sprite textures[@type]
     @sprite.anchor.x = 0.5
     @sprite.anchor.y = 0.5
     @sprite.position.x = @hex.x
     @sprite.position.y = @hex.y
-    @sprite.width = 2*@hex.size
+    @sprite.width = 2 * @hex.size
     @sprite.height = @hex.size * Math.sqrt 3
-    # @sprite.interactive = true
-    window.crashed.buildings.push(@)
+  
   sell: () ->
-    # @hex.remove()
     # TODO
-  addTo : (container) ->
+    # @hex.remove()
+    # $$$ += n
+  
+  addTo: (container) ->
     container.addChild @sprite
 
 window.Building = Building

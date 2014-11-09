@@ -1,0 +1,56 @@
+$ ->
+  start = new Date().getTime()
+  
+  renderer = PIXI.autoDetectRenderer window.innerWidth, window.innerHeight
+  stage = new PIXI.Stage 0xFFFFFF
+
+  document.body.appendChild renderer.view
+  renderer.view.style.position = 'absolute'
+  renderer.view.style.top = '0px'
+  renderer.view.style.left = '0px'
+
+  stats = new Stats()
+  document.body.appendChild stats.domElement
+  stats.domElement.style.position = 'absolute'
+  stats.domElement.style.top = '0px'
+  
+  window.textures =
+    hex : PIXI.Texture.fromImage "images/hex.gif"  
+    tower : PIXI.Texture.fromImage "images/buildings/tower.gif"
+    collector : PIXI.Texture.fromImage "images/buildings/collector.png"
+    pylon : PIXI.Texture.fromImage "images/buildings/pylon.gif"
+    wall : PIXI.Texture.fromImage "images/buildings/wall.gif"
+
+  gameOptions =
+    levels: 10
+    startingGold: 100
+    gridSize: 4
+    tileSize: 40
+    prices: 
+      tower: 10
+      collector: 10
+      wall: 10
+      pylon: 10
+
+  window.game = new Crashed gameOptions
+  game.hexGrid.addTo stage
+  
+  $( "#progressbar" ).progressbar { value: 37 }
+  $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
+    type = ui.item.text().toLowerCase()
+    game.selected.forEach (hex) ->
+      building = hex.build type
+      game.buildings.push building
+      hex.selected = false
+      hex.hexSprite.alpha = 1.0
+    game.selected = []
+
+  animate = () ->
+    stats.begin()
+    game.update()
+    renderer.render stage
+    requestAnimFrame animate
+    stats.end()
+
+  console.log 'Finished in ', new Date().getTime() - start
+  requestAnimFrame animate

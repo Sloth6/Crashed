@@ -38,9 +38,7 @@ class HexGrid
 
         @position.x = @startX + mouseDiffX
         @position.y = @startY + mouseDiffY
-      # else
-      #   @getHexFromXY data.originalEvent.x, data.originalEvent.y
-  
+
   getHex : (q, r) ->
     @hexes[q+':'+r] or null
 
@@ -51,10 +49,10 @@ class HexGrid
     @getHex(q, r).select()
 
   selctLine : ({q1, r1}, {q2, r2}) ->
+    # TODO
     N = @getHex({q1, r1}).distanceTo { q2, r2 }
     for i in [0...N] by 1
       getHex()
-
 
   addTo : (scene) ->
     scene.addChild @container  

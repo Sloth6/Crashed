@@ -8,11 +8,11 @@ app.use express.static(__dirname+'/public')
 
 app.use coffeeMiddleware {
   src: __dirname+'/public'
-  compress: false
+  compress: true
   encodeSrc: false
   force: true
   debug: true
-  bare: true
+  # bare: false
 }
 
 app.get '/', (req, res) ->
