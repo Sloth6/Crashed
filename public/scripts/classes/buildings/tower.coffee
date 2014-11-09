@@ -1,15 +1,20 @@
 class Collector extends Building
-  act : () ->
+  act: () ->
 
 class Wall extends Building
-  act : () ->
+  act: () ->
 
 class Pylon extends Building
-  act : () ->
+  act: () ->
 
 class Tower extends Building
-  act : () ->
-    @sprite.rotation += 0.05
+  act: () ->
+    if not @happened?
+      enemy = game.nearestEnemy(@.hex)[0][0]
+      a = @sprite.position
+      b = enemy.sprite.position
+      @sprite.rotation = Math.atan2(b.y - a.y, b.x - a.x) + Math.PI/2
+      # @happened = true
     #shoot shit
 
 window.buildings ?= {}

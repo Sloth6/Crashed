@@ -35,15 +35,11 @@ $ ->
 
   window.game = new Crashed gameOptions
   game.hexGrid.addTo stage
-
-  setInterval (() ->
-    enemy = new Enemy {q: -4, r: Math.randomInt(-4, 4)}
-    enemy.addTo game.hexGrid.container), 500
+  game.run()
 
   $( "#progressbar" ).progressbar { value: 37 }
   $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
     type = ui.item.text().toLowerCase()
-    console.log type
     game.selected.forEach (hex) ->
       building = hex.build type
       game.buildings.push building
