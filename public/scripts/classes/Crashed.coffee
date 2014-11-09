@@ -10,8 +10,8 @@ class Crashed
     @buildings = []
     @enemies = []
     @selected = []
-    @hexGrid = new window.HexGrid gridSize, tileSize
-
+    @hexGrid = new HexGrid gridSize, tileSize
+  
   update : () ->
     @buildings.forEach (building) -> building.act()
     @enemies.forEach (building) -> building.act()

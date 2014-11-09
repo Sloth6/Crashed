@@ -17,7 +17,6 @@ class HexGrid
         hex.addTo @container
       if q < 0 then start-- else end--
 
-    # @container.rotation = 0.3
     @container.interactive = true
     @container.buttonMode = true
 
@@ -48,7 +47,11 @@ class HexGrid
     
     @getHex(q, r).select()
 
-  selctLine : ({q1, r1}, {q2, r2}) ->
+  neighbors: ({ q, r }) ->
+    [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, +1]].map(([_q, _r]) =>
+      @getHex q+_q, r+_r).filter((elem) -> !!elem)
+
+  selectLine : ({q1, r1}, {q2, r2}) ->
     # TODO
     N = @getHex({q1, r1}).distanceTo { q2, r2 }
     for i in [0...N] by 1
