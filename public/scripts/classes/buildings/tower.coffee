@@ -1,8 +1,8 @@
 class Collector extends Building
-  act: () ->
+  act: () -> #Collect stuff
 
 class Wall extends Building
-  act: () ->
+  act: () -> #Be a wall
 
 class Pylon extends Building
   act: () ->

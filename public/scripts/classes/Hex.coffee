@@ -3,7 +3,6 @@ class Hex
     @selected = false
     @building = null
 
-
     @text = new PIXI.Text @q+':'+@r, { font:"12px Arial", fill:"black" }
     @text.x = @x
     @text.y = @y
@@ -30,13 +29,6 @@ class Hex
     @hexSprite.mousemove = (data) =>
       clicked = false
 
-  neighbors: () ->
-    ([[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]].map ([q, r]) =>
-          game.hexGrid.getHex q+@q, r+@r).filter((elem) -> !!elem)
-
-  distanceTo: ({ q, r }) ->
-    (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
-  
   select: () ->
     @selected = !@selected
     @onToggleSelect()
@@ -50,10 +42,17 @@ class Hex
       index = game.selected.indexOf @
       game.selected.splice(index, 1);
 
-  # cost of traversing, used in astar
+  # cost for unit to traverse, used in astar
   getCost: () -> 1.0
   isWall: () -> @building instanceof buildings.wall
 
+  neighbors: () ->
+    ([[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]].map ([q, r]) =>
+      game.hexGrid.getHex q+@q, r+@r).filter((elem) -> !!elem)
+
+  distanceTo: ({ q, r }) ->
+    (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
+  
   build: (type) ->
     @building = new buildings[type](@, type)
     @building.addTo @hexSprite.parent

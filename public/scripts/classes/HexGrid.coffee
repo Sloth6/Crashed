@@ -44,8 +44,7 @@ class HexGrid
   getHexFromXY : (x, y) ->
     q = 2 / 3 * x / size
     r = (-1 / 3 * x + 1 / 3 * sqrt(3) * y) / size
-    
-    @getHex(q, r).select()
+    @getHex q, r
 
   neighbors: ({ q, r }) ->
     [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, +1]].map(([_q, _r]) =>
@@ -53,9 +52,9 @@ class HexGrid
 
   selectLine : ({q1, r1}, {q2, r2}) ->
     # TODO
-    N = @getHex({q1, r1}).distanceTo { q2, r2 }
-    for i in [0...N] by 1
-      getHex()
+    # N = @getHex({q1, r1}).distanceTo { q2, r2 }
+    # for i in [0...N] by 1
+    #   THETHING()
 
   addTo : (scene) ->
     scene.addChild @container  

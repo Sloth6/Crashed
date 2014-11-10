@@ -16,6 +16,7 @@ class Building
   # TODO
   # @hex.remove()
   # $$$ += n
+  
   destroy: ()  ->
     @sprite.parent.removeChild @sprite
     @sprite = null

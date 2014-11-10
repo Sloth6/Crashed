@@ -13,17 +13,19 @@ class Crashed
 
     #data structures
     @hexGrid = new HexGrid @gridSize, @tileSize
-
-    distance = (a, b) ->
-      (Math.abs(a.q - b.q) + Math.abs(a.r - b.r) + Math.abs(a.q + a.r - b.q - b.r)) / 2
+    # distance function for KD tree. Takes from Hex class
+    distance = (a,b) -> Hex.distanceTo.apply a, b
     @enemyKdTree = new kdTree [], distance, ['q', 'r'] 
+    #KD tree crashes on empty query because it sucks. Insert unreachable root.
     @enemyKdTree.insert { q: Infinity, r: Infinity }
+
   update: () ->
     @buildings.forEach (building) -> building.act()
     @enemies.forEach (building) -> building.act()
 
   # enemiePerLevel : (n) ->
   #   { s : 100 * n, l : 100 * n }
+  
   nearestEnemy: (qr, distance = 100000) ->
     q = @enemyKdTree.nearest qr, 1, distance
     if q.length > 0
@@ -31,17 +33,17 @@ class Crashed
     else {enemy: null, distance: null}
 
   run: () ->
-    # setInterval (() ->
-    enemy = new Enemy({ 
-      q: -4
-      r: Math.randomInt 0, 4
-      health: 300
-      speed: 5000
-    }).onMove(()->
-      hex = game.hexGrid.getHex @q, @r
-      if hex.building?
-        hex.building.destroy()
-    ).addTo game.hexGrid.container
-    # ), 10
+    setInterval (() ->
+      enemy = new Enemy({ 
+        q: -4
+        r: Math.randomInt 0, 4
+        health: 300
+        speed: 5000
+      }).onMove(()->
+        hex = game.hexGrid.getHex @q, @r
+        if hex.building?
+          hex.building.destroy()
+      ).addTo game.hexGrid.container
+    ), 1000
 
 window.Crashed = Crashed

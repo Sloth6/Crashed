@@ -35,7 +35,7 @@ $ ->
 
   window.game = new Crashed gameOptions
   game.hexGrid.addTo stage
-  game.run()
+  # game.run()
 
   $( "#progressbar" ).progressbar { value: 37 }
   $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
