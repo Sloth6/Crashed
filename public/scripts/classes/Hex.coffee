@@ -1,7 +1,7 @@
 class Hex
   constructor: ({ @x, @y, @size, @q, @r }) ->
     @selected = false
-    @building = 'open'
+    @building = null
 
 
     @text = new PIXI.Text @q+':'+@r, { font:"12px Arial", fill:"black" }

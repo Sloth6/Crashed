@@ -31,13 +31,17 @@ class Crashed
     else {enemy: null, distance: null}
 
   run: () ->
-    setInterval (() ->
-      enemy = new Enemy({ 
-        q: -4
-        r: Math.randomInt 0, 4
-        health: 300
-        speed: 5000
-      }).addTo game.hexGrid.container
-    ), 1000
+    # setInterval (() ->
+    enemy = new Enemy({ 
+      q: -4
+      r: Math.randomInt 0, 4
+      health: 300
+      speed: 5000
+    }).onMove(()->
+      hex = game.hexGrid.getHex @q, @r
+      if hex.building?
+        hex.building.destroy()
+    ).addTo game.hexGrid.container
+    # ), 10
 
 window.Crashed = Crashed

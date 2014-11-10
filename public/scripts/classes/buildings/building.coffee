@@ -13,9 +13,13 @@ class Building
     @sprite.height = @hex.size * Math.sqrt 3
   
   sell: () ->
-    # TODO
-    # @hex.remove()
-    # $$$ += n
+  # TODO
+  # @hex.remove()
+  # $$$ += n
+  destroy: ()  ->
+    @sprite.parent.removeChild @sprite
+    @sprite = null
+    @hex.building = null
   
   addTo: (container) ->
     container.addChild @sprite

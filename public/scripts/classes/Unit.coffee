@@ -26,8 +26,11 @@ class Unit
         .to next, unit.speed
         .easing TWEEN.Easing.Quintic.InOut
         .onComplete () ->
+          unit.q = next.q
+          unit.r = next.r
           game.enemyKdTree.remove unit
           if unit.health > 0
+            unit.onMoveFun() if unit.onMoveFun
             game.enemyKdTree.insert unit
             moveR path, unit
         .start()
@@ -48,6 +51,7 @@ class Unit
     @sprite = null
     @alive = false
 
+  onMove: (@onMoveFun) -> @
   onDeath: (@onDeathFun) -> @
   onHit: (@onHitFun) -> @
 
