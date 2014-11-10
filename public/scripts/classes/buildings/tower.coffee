@@ -9,13 +9,12 @@ class Pylon extends Building
 
 class Tower extends Building
   act: () ->
-    if not @happened?
-      enemy = game.nearestEnemy(@.hex)[0][0]
+    { enemy, distance } = game.nearestEnemy @hex
+    if enemy and enemy.alive
       a = @sprite.position
       b = enemy.sprite.position
       @sprite.rotation = Math.atan2(b.y - a.y, b.x - a.x) + Math.PI/2
-      # @happened = true
-    #shoot shit
+      enemy.hurt 2
 
 window.buildings ?= {}
 window.buildings.collector = Collector
