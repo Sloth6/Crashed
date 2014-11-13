@@ -14,10 +14,11 @@ class Crashed
     #data structures
     @hexGrid = new HexGrid @gridSize, @tileSize
     # distance function for KD tree. Takes from Hex class
-    distance = (a,b) -> Hex.distanceTo.apply a, b
+    distance = (a,b) -> Hex::distanceTo.apply a, b
+    # console.log Hex.distanceTo
     @enemyKdTree = new kdTree [], distance, ['q', 'r'] 
     #KD tree crashes on empty query because it sucks. Insert unreachable root.
-    @enemyKdTree.insert { q: Infinity, r: Infinity }
+    @enemyKdTree.insert { q: 100000, r: 100000 }
 
   update: () ->
     @buildings.forEach (building) -> building.act()
@@ -26,7 +27,7 @@ class Crashed
   # enemiePerLevel : (n) ->
   #   { s : 100 * n, l : 100 * n }
   
-  nearestEnemy: (qr, distance = 100000) ->
+  nearestEnemy: (qr, distance = 1000) ->
     q = @enemyKdTree.nearest qr, 1, distance
     if q.length > 0
       {enemy: q[0][0], distance: q[0][1]}

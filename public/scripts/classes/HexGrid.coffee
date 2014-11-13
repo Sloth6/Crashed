@@ -11,7 +11,7 @@ class HexGrid
     for q in [-rows..rows] by 1
       for r in [start..end] by 1
         x = q * size * 1.5
-        y =  (r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size))
+        y =  ((r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size)))/2
         hex = new window.Hex { x, y, size, q, r }
         @hexes[q+':'+r] = hex
         hex.addTo @container

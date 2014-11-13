@@ -9,24 +9,24 @@ class Hex
     @text.anchor.x = 0.5
     @text.anchor.y = 0.5
 
-    @hexSprite = new PIXI.Sprite textures.hex
-    @hexSprite.anchor.x = 0.5
-    @hexSprite.anchor.y = 0.5
-    @hexSprite.position.x = @x
-    @hexSprite.position.y = @y
-    @hexSprite.width = 2 * @size
-    @hexSprite.height = @size * Math.sqrt 3
-    @hexSprite.interactive = true
+    @sprite = new PIXI.Sprite textures.hex
+    @sprite.anchor.x = 0.5
+    @sprite.anchor.y = 0.5
+    @sprite.position.x = @x
+    @sprite.position.y = @y
+    @sprite.width = 2 * @size
+    @sprite.height = @size * Math.sqrt(3)/2
+    @sprite.interactive = true
 
     clicked = false
-    @hexSprite.mousedown = (data) =>
+    @sprite.mousedown = (data) =>
       clicked = true
 
-    @hexSprite.mouseup = (data) =>
+    @sprite.mouseup = (data) =>
       @selected = !@selected if clicked
       @onToggleSelect() if clicked
       
-    @hexSprite.mousemove = (data) =>
+    @sprite.mousemove = (data) =>
       clicked = false
 
   select: () ->
@@ -35,10 +35,10 @@ class Hex
 
   onToggleSelect: () ->
     if @selected 
-      @hexSprite.alpha = .5
+      @sprite.alpha = .5
       game.selected.push @
     else 
-      @hexSprite.alpha = 1.0
+      @sprite.alpha = 1.0
       index = game.selected.indexOf @
       game.selected.splice(index, 1);
 
@@ -50,17 +50,17 @@ class Hex
     ([[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]].map ([q, r]) =>
       game.hexGrid.getHex q+@q, r+@r).filter((elem) -> !!elem)
 
-  distanceTo: ({ q, r }) ->
+  distanceTo: ({ q, r } = {}) ->
     (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
   
   build: (type) ->
     @building = new buildings[type](@, type)
-    @building.addTo @hexSprite.parent
+    @building.addTo @sprite.parent
     @building
 
   addTo: (container) ->
-    container.addChild @hexSprite
-    container.addChild @text
+    container.addChild @sprite
+    # container.addChild @text
 
 window.Hex = Hex
 

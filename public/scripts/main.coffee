@@ -15,9 +15,9 @@ $ ->
   stats.domElement.style.top = '0px'
   
   window.textures =
-    hex: PIXI.Texture.fromImage "images/hex.gif"  
+    hex: PIXI.Texture.fromImage "images/greenhex.gif"  
     tower: PIXI.Texture.fromImage "images/buildings/tower.gif"
-    collector: PIXI.Texture.fromImage "images/buildings/collector.png"
+    collector: PIXI.Texture.fromImage "images/buildings/farm2.png"
     pylon: PIXI.Texture.fromImage "images/buildings/pylon.gif"
     wall: PIXI.Texture.fromImage "images/buildings/wall.gif"
     enemy: PIXI.Texture.fromImage 'images/units/enemy.gif'
@@ -26,7 +26,7 @@ $ ->
     levels: 10
     startingGold: 100
     gridSize: 4
-    tileSize: 40
+    tileSize: 100
     prices: 
       tower: 10
       collector: 10
@@ -44,7 +44,7 @@ $ ->
       building = hex.build type
       game.buildings.push building
       hex.selected = false
-      hex.hexSprite.alpha = 1.0
+      hex.sprite.alpha = 1.0
     game.selected = []
 
   animate = () ->
