@@ -1,5 +1,5 @@
 class Hex
-  constructor: ({ @x, @y, @size, @q, @r }) ->
+  constructor: ({ @x, @y, @width, @height, @q, @r }) ->
     @selected = false
     @building = null
 
@@ -9,13 +9,29 @@ class Hex
     @text.anchor.x = 0.5
     @text.anchor.y = 0.5
 
+    foo = Math.random()
+    if foo < 0.4
+      @enviornmentSprite = new PIXI.Sprite textures['trees'+Math.randInt(3)]
+    else if foo < 0.5
+      @enviornmentSprite = new PIXI.Sprite textures['rocks'+Math.randInt(3)]
+
+    if @enviornmentSprite
+      @enviornmentSprite.anchor.x = 0.5
+      @enviornmentSprite.anchor.y = 0.5
+      @enviornmentSprite.position.x = @x
+      @enviornmentSprite.position.y = @y
+      @enviornmentSprite.width = @width
+      @enviornmentSprite.height = @height      
+    
+
+
     @sprite = new PIXI.Sprite textures.hex
     @sprite.anchor.x = 0.5
     @sprite.anchor.y = 0.5
     @sprite.position.x = @x
     @sprite.position.y = @y
-    @sprite.width = 2 * @size
-    @sprite.height = @size * Math.sqrt(3)/2
+    @sprite.width = @width
+    @sprite.height = @height
     @sprite.interactive = true
 
     clicked = false
@@ -54,12 +70,14 @@ class Hex
     (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
   
   build: (type) ->
+    @building.destroy() if @building
     @building = new buildings[type](@, type)
     @building.addTo @sprite.parent
     @building
 
   addTo: (container) ->
     container.addChild @sprite
+    container.addChild @enviornmentSprite if @enviornmentSprite
     # container.addChild @text
 
 window.Hex = Hex

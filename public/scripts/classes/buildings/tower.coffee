@@ -7,6 +7,9 @@ class Wall extends Building
 class Pylon extends Building
   act: () ->
 
+class Barracks extends Building
+  act: () ->
+
 class Tower extends Building
   act: () ->
     { enemy, distance } = game.nearestEnemy @hex
@@ -21,3 +24,4 @@ window.buildings.collector = Collector
 window.buildings.wall = Wall
 window.buildings.pylon = Pylon
 window.buildings.tower = Tower
+window.buildings.barracks = Barracks

@@ -10,7 +10,7 @@ class Building
     @sprite.position.x = @hex.x
     @sprite.position.y = @hex.y
     @sprite.width = @hex.sprite.width
-    @sprite.height = @hex.sprite.height
+    @sprite.height = @hex.sprite.height * 2
   
   sell: () ->
   # TODO

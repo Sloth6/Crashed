@@ -5,14 +5,16 @@ class HexGrid
     @container.x = window.innerWidth/2
     @container.y = window.innerHeight/2
 
+    width = 2 * size
+    height = size * Math.sqrt(3) * .5
     # Build map.
     start = 0
     end = rows
     for q in [-rows..rows] by 1
       for r in [start..end] by 1
         x = q * size * 1.5
-        y =  ((r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size)))/2
-        hex = new window.Hex { x, y, size, q, r }
+        y =  ((r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size))) * .5
+        hex = new window.Hex { x, y, width, height, q, r }
         @hexes[q+':'+r] = hex
         hex.addTo @container
       if q < 0 then start-- else end--

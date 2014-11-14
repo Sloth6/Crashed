@@ -21,12 +21,21 @@ $ ->
     pylon: PIXI.Texture.fromImage "images/buildings/pylon.gif"
     wall: PIXI.Texture.fromImage "images/buildings/wall.gif"
     enemy: PIXI.Texture.fromImage 'images/units/enemy.gif'
+    barracks: PIXI.Texture.fromImage 'images/buildings/barracks.png'
+    # trees: [
+    trees0: PIXI.Texture.fromImage 'images/enviornment/trees0.png'
+    trees1: PIXI.Texture.fromImage 'images/enviornment/trees1.png'
+    trees2: PIXI.Texture.fromImage 'images/enviornment/trees2.png'
+
+    rocks0: PIXI.Texture.fromImage 'images/enviornment/rocks0.png'
+    rocks1: PIXI.Texture.fromImage 'images/enviornment/rocks1.png'
+    rocks2: PIXI.Texture.fromImage 'images/enviornment/rocks2.png'
 
   gameOptions =
     levels: 10
     startingGold: 100
     gridSize: 4
-    tileSize: 100
+    tileSize: 80
     prices: 
       tower: 10
       collector: 10
@@ -34,8 +43,13 @@ $ ->
       pylon: 10
 
   window.game = new Crashed gameOptions
-  game.hexGrid.addTo stage
-  # game.run()
+  game.addTo stage
+  
+  gradient = new PIXI.Sprite PIXI.Texture.fromImage('images/AtmosphericGradient.png')
+  gradient.width = window.innerWidth
+  gradient.height = window.innerHeight
+  stage.addChild gradient
+  game.run()
 
   $( "#progressbar" ).progressbar { value: 37 }
   $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
@@ -58,5 +72,11 @@ $ ->
   console.log 'Finished in ', new Date().getTime() - start
   requestAnimFrame animate
 
-Math.randomInt = (min, max) ->
-    Math.floor(Math.random() * (max - min + 1)) + min
+Math.randInt = (min, max) ->
+    if max == undefined
+      max = min
+      min = 0
+    Math.floor(Math.random() * (max - min)) + min
+
+window.random = (array) ->
+  array[Math.randomInt(array.length)]

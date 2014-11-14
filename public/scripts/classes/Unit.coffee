@@ -7,9 +7,9 @@ class Unit
     @sprite.anchor.y = 0.5
     @sprite.position.x = hex.x
     @sprite.position.y = hex.y
-    @sprite.width = hex.size/2 
-    @sprite.height = (hex.size * Math.sqrt 3) /4
-    
+    @sprite.width = hex.sprite.width/4
+    @sprite.height = hex.sprite.height/2
+
     game.enemyKdTree.insert @
 
   moveTo: ({ q, r }, done) ->
