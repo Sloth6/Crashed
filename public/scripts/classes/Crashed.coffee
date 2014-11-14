@@ -12,11 +12,14 @@ class Crashed
     @selected = []
 
     #create layers, so hexes on bottom, buildings above and enemeies on top
+    @viewContainer = new DraggableContainer()
     @enemyContainer = new PIXI.DisplayObjectContainer()
+    @enemyContainer.x = window.innerWidth/2
+    @enemyContainer.y = window.innerHeight/2
     @buildingContainer = new PIXI.DisplayObjectContainer()
+    @enemyContainer.x = window.innerWidth/2
+    @enemyContainer.y = window.innerHeight/2
 
-    # @enemyContainer.x = window.innerWidth/2
-    # @enemyContainer.y = window.innerHeight/2
     #data structures
     @hexGrid = new HexGrid @gridSize, @tileSize
     # distance function for KD tree. Takes from Hex class
@@ -40,9 +43,11 @@ class Crashed
     else {enemy: null, distance: null}
 
   addTo : (scene) ->
-    scene.addChild @hexGrid.container
-    scene.addChild @buildingContainer
-    scene.addChild @enemyContainer
+    @hexGrid.addTo @viewContainer
+    @viewContainer.addChild @buildingContainer
+    @viewContainer.addChild @enemyContainer
+    @viewContainer.addTo scene
+  
 
   run: () ->
     setInterval (() ->
@@ -57,9 +62,7 @@ class Crashed
           hex.building.destroy()
       ).onDeath(() =>
         game.gold += 1
-      ).addTo game.hexGrid.container
-    # game.enemyContainer
-    # console.log game.enemyContainer
+      ).addTo game.enemyContainer
     ), 500
 
 window.Crashed = Crashed

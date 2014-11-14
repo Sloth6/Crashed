@@ -19,27 +19,6 @@ class HexGrid
         hex.addTo @container
       if q < 0 then start-- else end--
 
-    @container.interactive = true
-    @container.buttonMode = true
-
-    @container.mousedown = (data) ->
-      @startX = @position.x
-      @startY = @position.y
-      @startMouseX = data.originalEvent.x
-      @startMouseY = data.originalEvent.y
-      @dragging = true
-
-    @container.mouseup = @container.mouseupoutside = (data) ->
-      @dragging = false
-
-    @container.mousemove = (data) ->
-      if @dragging
-        mouseDiffX = data.originalEvent.x - @startMouseX
-        mouseDiffY = data.originalEvent.y - @startMouseY
-
-        @position.x = @startX + mouseDiffX
-        @position.y = @startY + mouseDiffY
-
   getHex : (q, r) ->
     @hexes[q+':'+r] or null
 
@@ -57,6 +36,9 @@ class HexGrid
     # N = @getHex({q1, r1}).distanceTo { q2, r2 }
     # for i in [0...N] by 1
     #   THETHING()
+
+  outerRing = () ->
+
 
   addTo : (scene) ->
     scene.addChild @container  
