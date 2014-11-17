@@ -78,7 +78,7 @@ class Hex
   addTo: (container) ->
     container.addChild @sprite
     container.addChild @enviornmentSprite if @enviornmentSprite
-    container.addChild @text
+    # container.addChild @text
 
 window.Hex = Hex
 

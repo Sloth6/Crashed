@@ -22,6 +22,11 @@ class DraggableContainer
         @position.x = @_startX + mouseDiffX
         @position.y = @_startY + mouseDiffY
   
+  scale : (d) ->
+    return if @_container.scale.x + d <= 0
+    @_container.scale.x += d
+    @_container.scale.y += d
+
   addTo : (scene) ->
     scene.addChild @_container
 

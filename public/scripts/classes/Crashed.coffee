@@ -13,6 +13,9 @@ class Crashed
 
     #create layers, so hexes on bottom, buildings above and enemeies on top
     @viewContainer = new DraggableContainer()
+    @viewContainer.x = window.innerWidth/2
+    @viewContainer.y = window.innerHeight/2
+
     @enemyContainer = new PIXI.DisplayObjectContainer()
     @enemyContainer.x = window.innerWidth/2
     @enemyContainer.y = window.innerHeight/2
@@ -30,6 +33,7 @@ class Crashed
     @enemyKdTree.insert { q: 100000, r: 100000 }
     window.foobar = { q: 0, r: 0 }
     @enemyKdTree.insert foobar
+  
   update: () ->
     @buildings.forEach (building) -> building.act()
     # @enemies.forEach (building) -> building.act()
@@ -50,7 +54,7 @@ class Crashed
     @viewContainer.addChild @enemyContainer
     @viewContainer.addTo scene
   
-  getBuildings: () -> @buildingss
+  getBuildings: () -> @buildings
   getEnemyUnits: () -> @enemyContainer.children.map (sprite) -> sprite.unit
 
   updateEnemyPaths: () ->
@@ -61,7 +65,7 @@ class Crashed
     outerHexes = @hexGrid.getOuterRing()
     setInterval (() ->
       hex = random outerHexes
-      enemy = new Enemy({ 
+      enemy = new Enemy({
         q: hex.q
         r: hex.r
         health: 300

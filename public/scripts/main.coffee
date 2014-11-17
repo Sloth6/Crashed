@@ -34,7 +34,7 @@ $ ->
   gameOptions =
     levels: 10
     startingGold: 100
-    gridSize: 10
+    gridSize: 20
     tileSize: 80
     prices: 
       tower: 10
@@ -52,6 +52,12 @@ $ ->
   game.run()
 
   game.hexGrid.getOuterRing()
+
+  $( ".zoomIn").click () ->
+    game.viewContainer.scale 0.25
+  
+  $( ".zoomOut").click () ->
+    game.viewContainer.scale -0.25
 
   $( "#progressbar" ).progressbar { value: 37 }
   $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
