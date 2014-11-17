@@ -20,6 +20,7 @@ class Building
   # $$$ += n
   
   destroy: ()  ->
+    @onDeath() if @onDeath
     @sprite.parent.removeChild @sprite
     @sprite = null
     @hex.building = null

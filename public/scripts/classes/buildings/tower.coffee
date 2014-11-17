@@ -12,6 +12,8 @@ class Barracks extends Building
 
 class Base extends Building
   act: () ->
+  onDeath: () ->
+    confirm 'YOU ARE BAD'
 
 class Tower extends Building
   act: () ->
