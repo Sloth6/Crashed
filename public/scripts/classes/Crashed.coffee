@@ -25,6 +25,9 @@ class Crashed
 
     #data structures
     @hexGrid = new HexGrid @gridSize, @tileSize
+
+    @hexGrid.getHex(0,0).build('base')
+
     # distance function for KD tree. Takes from Hex class
     distance = (a,b) -> Hex::distanceTo.apply a, b
     # console.log Hex.distanceTo
@@ -68,7 +71,7 @@ class Crashed
       enemy = new Enemy({
         q: hex.q
         r: hex.r
-        health: 300
+        health: 500
         speed: 2000
       }).onMove(() ->
         # game.enemyKdTree.remove @
@@ -79,6 +82,6 @@ class Crashed
         game.gold += 1
       ).addTo game.enemyContainer
       # gage.enemyKdTree.insert enemy
-    ), 500
+    ), 2000
 
 window.Crashed = Crashed

@@ -37,7 +37,7 @@ class HexGrid
     # N = @getHex({q1, r1}).distanceTo { q2, r2 }
     # for i in [0...N] by 1
     #   THETHING()
-  
+
   getRing: (r) -> 
     hex = @getHex -r, r
     ringHexes = []

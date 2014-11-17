@@ -10,9 +10,9 @@ class Hex
     @text.anchor.y = 0.5
 
     foo = Math.random()
-    if foo < 0.4
+    if foo < 0.1
       @enviornmentSprite = new PIXI.Sprite textures['trees'+Math.randInt(3)]
-    else if foo < 0.5
+    else if foo < 0.2
       @enviornmentSprite = new PIXI.Sprite textures['rocks'+Math.randInt(3)]
 
     if @enviornmentSprite

@@ -10,9 +10,12 @@ class Pylon extends Building
 class Barracks extends Building
   act: () ->
 
+class Base extends Building
+  act: () ->
+
 class Tower extends Building
   act: () ->
-    enemy = game.nearestEnemy @hex
+    enemy = game.nearestEnemy @hex, 2
     if enemy and enemy.alive and @sprite?
       a = @sprite.position
       b = enemy.sprite.position
@@ -25,3 +28,4 @@ window.buildings.wall = Wall
 window.buildings.pylon = Pylon
 window.buildings.tower = Tower
 window.buildings.barracks = Barracks
+window.buildings.base = Base

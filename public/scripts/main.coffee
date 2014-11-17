@@ -15,7 +15,8 @@ $ ->
   stats.domElement.style.top = '0px'
   
   window.textures =
-    hex: PIXI.Texture.fromImage "images/greenhex.gif"  
+    base: PIXI.Texture.fromImage "images/buildings/base.png"
+    hex: PIXI.Texture.fromImage "images/greenhex.gif"
     tower: PIXI.Texture.fromImage "images/buildings/tower.gif"
     collector: PIXI.Texture.fromImage "images/buildings/farm2.png"
     pylon: PIXI.Texture.fromImage "images/buildings/pylon.gif"

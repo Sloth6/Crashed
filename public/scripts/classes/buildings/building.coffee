@@ -1,8 +1,9 @@
 class Building
   constructor: ( @hex, @type ) ->
-    cost = game.prices[@type]
-    return if @cost > game.gold
-    game.gold -= @cost
+    if window.game
+      cost = game.prices[@type]
+      return if @cost > game.gold
+      game.gold -= @cost
 
     @sprite = new PIXI.Sprite textures[@type]
     @sprite.anchor.x = 0.5
