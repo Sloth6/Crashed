@@ -37,6 +37,7 @@ $ ->
     startingGold: 100
     gridSize: 14
     tileSize: 80
+    gold: 100
     prices: 
       tower: 10
       collector: 10

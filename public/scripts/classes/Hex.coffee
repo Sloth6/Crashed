@@ -1,27 +1,28 @@
 class Hex
-  constructor: ({ @x, @y, @width, @height, @q, @r }) ->
+  constructor: ({ @x, @y, @width, @height, @q, @r, @gold}) ->
     @selected = false
     @building = null
+    # @environment 
 
-    @text = new PIXI.Text @q+':'+@r, { font:"12px Arial", fill:"black" }
-    @text.x = @x
-    @text.y = @y
-    @text.anchor.x = 0.5
-    @text.anchor.y = 0.5
+    # @text = new PIXI.Text @q+':'+@r, { font:"12px Arial", fill:"black" }
+    # @text.x = @x
+    # @text.y = @y
+    # @text.anchor.x = 0.5
+    # @text.anchor.y = 0.5
 
     foo = Math.random()
     if foo < 0.1
-      @enviornmentSprite = new PIXI.Sprite textures['trees'+Math.randInt(3)]
+      @environmentSprite = new PIXI.Sprite textures['trees'+Math.randInt(3)]
     else if foo < 0.2
-      @enviornmentSprite = new PIXI.Sprite textures['rocks'+Math.randInt(3)]
+      @environmentSprite = new PIXI.Sprite textures['rocks'+Math.randInt(3)]
 
-    if @enviornmentSprite
-      @enviornmentSprite.anchor.x = 0.5
-      @enviornmentSprite.anchor.y = 0.5
-      @enviornmentSprite.position.x = @x
-      @enviornmentSprite.position.y = @y
-      @enviornmentSprite.width = @width
-      @enviornmentSprite.height = @height      
+    if @environmentSprite
+      @environmentSprite.anchor.x = 0.5
+      @environmentSprite.anchor.y = 0.5
+      @environmentSprite.position.x = @x
+      @environmentSprite.position.y = @y
+      @environmentSprite.width = @width
+      @environmentSprite.height = @height      
     
 
 
@@ -77,7 +78,7 @@ class Hex
 
   addTo: (container) ->
     container.addChild @sprite
-    container.addChild @enviornmentSprite if @enviornmentSprite
+    container.addChild @environmentSprite if @environmentSprite
     # container.addChild @text
 
 window.Hex = Hex

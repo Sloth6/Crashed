@@ -1,7 +1,7 @@
 class Crashed
   constructor: ({ level, gold, prices, @gridSize, @tileSize }) ->
     @level ?= 0
-    @gold ?= gold
+    @gold ?= 0
     @prices ?= 
       tower : 10
       collector : 10
@@ -37,7 +37,8 @@ class Crashed
     window.foobar = { q: 0, r: 0 }
     @enemyKdTree.insert foobar
   
-
+    $('#leveltext').text('Level: '+@level)
+    $('#goldtext').text('Gold: '+@gold)
 
   update: () ->
     @buildings.forEach (building) -> building.act()
@@ -69,6 +70,7 @@ class Crashed
 
   buildPhase: () ->
     @level++
+    $('#leveltext').text('Level: '+@level)
     $('#start').show()
     $('#progressbar').hide()
 

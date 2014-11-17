@@ -55,3 +55,22 @@ button {
   width: 100px;
   height: 100px;
 }
+
+#info {
+  position: absolute;
+  z-index: 5;
+  background-color: gray;
+  top: 0px;
+  left: 100px;
+  font-size: 20px
+}
+
+#leveltext {
+  width: 150px;
+  float: left;
+}
+
+#goldtext {
+  width: 150px;
+  float: left;
+}
