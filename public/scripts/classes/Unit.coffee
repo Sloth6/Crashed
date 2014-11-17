@@ -21,12 +21,14 @@ class Unit
         return done() if done
         return
       next = path.shift()
-      
       if next.isWall()
         moveTo({ q, r }, done)
       else
         new TWEEN.Tween unit.sprite.position
-          .to next, unit.speed
+          .to {
+            x: next.x + Math.randInt(-20,20)
+            y: next.y + Math.randInt(-20,20)
+          }, unit.speed
           .easing TWEEN.Easing.Quintic.InOut
           .onComplete () ->
             unit.q = next.q

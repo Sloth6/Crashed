@@ -35,7 +35,7 @@ $ ->
   gameOptions =
     levels: 10
     startingGold: 100
-    gridSize: 7
+    gridSize: 14
     tileSize: 80
     prices: 
       tower: 10

@@ -86,7 +86,7 @@ class Crashed
         q: hex.q
         r: hex.r
         health: 500
-        speed: 2000
+        speed: 2000 * (Math.random()/2 + 0.5)
       }).onMove(() ->
         # game.enemyKdTree.remove @
         hex = game.hexGrid.getHex @q, @r
