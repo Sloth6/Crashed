@@ -13,7 +13,7 @@ class Barracks extends Building
 class Tower extends Building
   act: () ->
     enemy = game.nearestEnemy @hex
-    if enemy and enemy.alive
+    if enemy and enemy.alive and @sprite?
       a = @sprite.position
       b = enemy.sprite.position
       @sprite.rotation = Math.atan2(b.y - a.y, b.x - a.x) + Math.PI/2
