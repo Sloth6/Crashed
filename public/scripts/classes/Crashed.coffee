@@ -28,7 +28,8 @@ class Crashed
     @enemyKdTree = new kdTree [], distance, ['q', 'r'] 
     #KD tree crashes on empty query because it sucks. Insert unreachable root.
     @enemyKdTree.insert { q: 100000, r: 100000 }
-
+    window.foobar = { q: 0, r: 0 }
+    @enemyKdTree.insert foobar
   update: () ->
     @buildings.forEach (building) -> building.act()
     # @enemies.forEach (building) -> building.act()
@@ -36,11 +37,12 @@ class Crashed
   # enemiePerLevel : (n) ->
   #   { s : 100 * n, l : 100 * n }
   
-  nearestEnemy: (qr, distance = 1000) ->
-    q = @enemyKdTree.nearest qr, 1, distance
+  nearestEnemy: (qr) ->
+    q = @enemyKdTree.nearest qr, 1
     if q.length > 0
-      {enemy: q[0][0], distance: q[0][1]}
-    else {enemy: null, distance: null}
+      q[0][0]
+    else
+      null
 
   addTo : (scene) ->
     @hexGrid.addTo @viewContainer
@@ -48,6 +50,12 @@ class Crashed
     @viewContainer.addChild @enemyContainer
     @viewContainer.addTo scene
   
+  getBuildings: () -> @buildingss
+  getEnemyUnits: () -> @enemyContainer.children.map (sprite) -> sprite.unit
+
+  updateEnemyPaths: () ->
+    @getEnemyUnits().forEach (unit) ->
+      unit.moveTo { q: 0, r: 0 }
 
   run: () ->
     outerHexes = @hexGrid.getOuterRing()
@@ -59,12 +67,14 @@ class Crashed
         health: 300
         speed: 2000
       }).onMove(() ->
+        # game.enemyKdTree.remove @
         hex = game.hexGrid.getHex @q, @r
         if hex.building?
           hex.building.destroy()
       ).onDeath(() =>
         game.gold += 1
       ).addTo game.enemyContainer
+      # gage.enemyKdTree.insert enemy
     ), 500
 
 window.Crashed = Crashed

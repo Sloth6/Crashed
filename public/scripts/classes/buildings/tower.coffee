@@ -12,8 +12,7 @@ class Barracks extends Building
 
 class Tower extends Building
   act: () ->
-    { enemy, distance } = game.nearestEnemy @hex
-    # console.log enemy, distance
+    enemy = game.nearestEnemy @hex
     if enemy and enemy.alive
       a = @sprite.position
       b = enemy.sprite.position

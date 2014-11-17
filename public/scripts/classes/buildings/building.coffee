@@ -9,8 +9,9 @@ class Building
     @sprite.anchor.y = 0.5
     @sprite.position.x = @hex.x
     @sprite.position.y = @hex.y
-    @sprite.width = @hex.sprite.width
-    @sprite.height = @hex.sprite.height * 2
+    ratio = @sprite.height / @hex.sprite.height
+    @sprite.width /= ratio#= @hex.sprite.width
+    @sprite.height /= ratio#= @hex.sprite.height
   
   sell: () ->
   # TODO
