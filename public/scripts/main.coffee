@@ -51,6 +51,8 @@ $ ->
   stage.addChild gradient
   game.run()
 
+  game.hexGrid.getOuterRing()
+
   $( "#progressbar" ).progressbar { value: 37 }
   $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
     type = ui.item.text().toLowerCase()
@@ -73,10 +75,10 @@ $ ->
   requestAnimFrame animate
 
 Math.randInt = (min, max) ->
-    if max == undefined
+    if !max
       max = min
       min = 0
     Math.floor(Math.random() * (max - min)) + min
 
 window.random = (array) ->
-  array[Math.randomInt(array.length)]
+  array[Math.randInt(array.length)]

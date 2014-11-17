@@ -8,7 +8,7 @@ class Crashed
       wall : 10
       pylon : 10
     @buildings = []
-    @enemies = []
+    # @enemies = []
     @selected = []
 
     #create layers, so hexes on bottom, buildings above and enemeies on top
@@ -31,7 +31,7 @@ class Crashed
 
   update: () ->
     @buildings.forEach (building) -> building.act()
-    @enemies.forEach (building) -> building.act()
+    # @enemies.forEach (building) -> building.act()
 
   # enemiePerLevel : (n) ->
   #   { s : 100 * n, l : 100 * n }
@@ -50,10 +50,12 @@ class Crashed
   
 
   run: () ->
+    outerHexes = @hexGrid.getOuterRing()
     setInterval (() ->
+      hex = random outerHexes
       enemy = new Enemy({ 
-        q: -4
-        r: Math.randInt 0, 4
+        q: hex.q
+        r: hex.r
         health: 300
         speed: 2000
       }).onMove(() ->
