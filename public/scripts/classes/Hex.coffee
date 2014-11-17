@@ -1,22 +1,21 @@
 class Hex
-  constructor: ({ @x, @y, @width, @height, @q, @r, @gold}) ->
+  constructor: ({ @width, @height, @q, @r, @gold, @environment}) ->
     @selected = false
     @building = null
-    # @environment 
+    @environment ?= null
+    @gold ?= 0
 
-    # @text = new PIXI.Text @q+':'+@r, { font:"12px Arial", fill:"black" }
-    # @text.x = @x
-    # @text.y = @y
-    # @text.anchor.x = 0.5
-    # @text.anchor.y = 0.5
-
-    foo = Math.random()
-    if foo < 0.1
-      @environmentSprite = new PIXI.Sprite textures['trees'+Math.randInt(3)]
-    else if foo < 0.2
-      @environmentSprite = new PIXI.Sprite textures['rocks'+Math.randInt(3)]
-
-    if @environmentSprite
+    size = @width/2
+    @x = @q * size * 1.5
+    @y =  ((@r * (Math.sqrt(3)*size) + (@q * Math.sqrt(3)/2 * size))) * .5
+    @text = new PIXI.Text @q+':'+@r, { font:"12px Arial", fill:"black" }
+    @text.x = @x
+    @text.y = @y
+    @text.anchor.x = 0.5
+    @text.anchor.y = 0.5
+      
+    if @environment
+      @environmentSprite = new PIXI.Sprite textures[@environment]
       @environmentSprite.anchor.x = 0.5
       @environmentSprite.anchor.y = 0.5
       @environmentSprite.position.x = @x
@@ -24,8 +23,6 @@ class Hex
       @environmentSprite.width = @width
       @environmentSprite.height = @height      
     
-
-
     @sprite = new PIXI.Sprite textures.hex
     @sprite.anchor.x = 0.5
     @sprite.anchor.y = 0.5
@@ -61,7 +58,8 @@ class Hex
 
   # cost for unit to traverse, used in astar
   getCost: () -> 1.0
-  isWall: () -> @building instanceof buildings.wall
+  isWall: () -> 
+    @building instanceof buildings.wall or @environment?
 
   neighbors: () ->
     ([[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]].map ([q, r]) =>

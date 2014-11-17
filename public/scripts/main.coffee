@@ -24,6 +24,9 @@ $ ->
     enemy: PIXI.Texture.fromImage 'images/units/enemy.gif'
     barracks: PIXI.Texture.fromImage 'images/buildings/barracks.png'
     # trees: [
+    resourcesFull: 'images/enviornment/resourcesFull.png'
+    resourcesHalf: 'images/enviornment/resourcesHalf.png'
+      
     trees0: PIXI.Texture.fromImage 'images/enviornment/trees0.png'
     trees1: PIXI.Texture.fromImage 'images/enviornment/trees1.png'
     trees2: PIXI.Texture.fromImage 'images/enviornment/trees2.png'

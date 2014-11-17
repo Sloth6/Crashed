@@ -24,9 +24,23 @@ class Crashed
     @enemyContainer.y = window.innerHeight/2
 
     #data structures
-    @hexGrid = new HexGrid @gridSize, @tileSize
+    @hexGrid = new HexGrid @gridSize, @tileSize, (q, r) ->
+      building = null
+      if q == 0 and r == 0
+        building = 'base'
+      else if (q == -1 and r == 0) or (q == 0 and r == -1)
+        building = 'collector'
+      else if q not in [-1,0,1] or r not in [-1,0,1]
+        randEnviron = Math.random() # [0, 1)
+        if randEnviron < .1
+          environment = 'rocks'+Math.randInt(3)
+        else if randEnviron < .2
+          environment = 'trees'+Math.randInt(3)
+        # environment = 'rocks0'
+      gold = 0
+      {building, environment, gold}
 
-    @hexGrid.getHex(0,0).build('base')
+    # @hexGrid.getHex(0,0).build('base')
 
     # distance function for KD tree. Takes from Hex class
     distance = (a,b) -> Hex::distanceTo.apply a, b

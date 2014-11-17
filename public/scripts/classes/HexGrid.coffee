@@ -1,5 +1,5 @@
 class HexGrid
-  constructor: (@rows, size) ->
+  constructor: (@rows, size, hexGeneratingFun) ->
     @container = new PIXI.DisplayObjectContainer()
     @hexes = {}
     @directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, +1]]
@@ -7,17 +7,19 @@ class HexGrid
     @container.y = window.innerHeight/2
 
     width = 2 * size
-    height = size * Math.sqrt(3) * .5
+    height = size * Math.sqrt(3) * 0.5
     # Build map.
     start = 0
     end = @rows
     for q in [-@rows..@rows] by 1
       for r in [start..end] by 1
-        x = q * size * 1.5
-        y =  ((r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size))) * .5
-        hex = new window.Hex { x, y, width, height, q, r }
+        { building, environment, gold } = hexGeneratingFun q, r
+        hexOptions = { width, height, q, r, environment, gold }
+        hex = new window.Hex hexOptions
         @hexes[q+':'+r] = hex
         hex.addTo @container
+        hex.build(building) if building
+      # this creates the hex shape with axial coordinates
       if q < 0 then start-- else end--
 
   getHex: (q, r) ->
