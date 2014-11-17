@@ -3,8 +3,10 @@ extends layout
 block content
   #ui
     #progressbar
-    button.zoomIn= "+"
-    button.zoomOut= "-"
+      .progress-label
+    button#zoomIn= "+"
+    button#zoomOut= "-"
+    button#start= ">"
     //- button= -
     ul#buildmenu
       li Collector

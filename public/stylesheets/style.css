@@ -13,6 +13,13 @@ body {
   width: 400px;
   z-index: 5;
 }
+.progress-label {
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #fff;
+}
 
 #buildmenu {
   position: absolute;
@@ -32,12 +39,19 @@ button {
   height: 40px;
 }
 
-.zoomIn {
+#zoomIn {
   right: 15px;
   top: 50px;  
 }
 
-.zoomOut {
+#zoomOut {
   right: 15px;
   top: 100px;  
+}
+
+#start {
+  right: 15px;
+  bottom: 15px;  
+  width: 100px;
+  height: 100px;
 }

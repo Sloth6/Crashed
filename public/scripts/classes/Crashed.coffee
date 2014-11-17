@@ -10,7 +10,7 @@ class Crashed
     @buildings = []
     # @enemies = []
     @selected = []
-
+    @buildMode = true
     #create layers, so hexes on bottom, buildings above and enemeies on top
     @viewContainer = new DraggableContainer()
     @viewContainer.x = window.innerWidth/2
@@ -37,12 +37,15 @@ class Crashed
     window.foobar = { q: 0, r: 0 }
     @enemyKdTree.insert foobar
   
+
+
   update: () ->
     @buildings.forEach (building) -> building.act()
     # @enemies.forEach (building) -> building.act()
 
-  # enemiePerLevel : (n) ->
-  #   { s : 100 * n, l : 100 * n }
+  enemiesPerLevel : (n) ->
+    Math.floor(10 * Math.pow(1.2, n))
+    # { s : 100 * n, l : 100 * n }
   
   nearestEnemy: (qr) ->
     q = @enemyKdTree.nearest qr, 1
@@ -64,9 +67,20 @@ class Crashed
     @getEnemyUnits().forEach (unit) ->
       unit.moveTo { q: 0, r: 0 }
 
-  run: () ->
+  buildPhase: () ->
+    @level++
+    $('#start').show()
+    $('#progressbar').hide()
+
+  fightPhase: () ->
+    $('#start').hide()
+    $('#progressbar').progressbar({ value: 100 }).show()
+
     outerHexes = @hexGrid.getOuterRing()
-    setInterval (() ->
+    numEnemies = @enemiesPerLevel(@level)
+    $('.progress-label').text(numEnemies)
+
+    for i in [0...numEnemies] by 1
       hex = random outerHexes
       enemy = new Enemy({
         q: hex.q
@@ -80,8 +94,13 @@ class Crashed
           hex.building.destroy()
       ).onDeath(() =>
         game.gold += 1
+        if @enemyContainer.children.length == 1
+          game.buildPhase()
+        else
+          value = @enemyContainer.children.length * 100 / numEnemies
+          # console.log value
+          $('#progressbar').progressbar({ value })
+          $( ".progress-label" ).text(@enemyContainer.children.length)
       ).addTo game.enemyContainer
-      # gage.enemyKdTree.insert enemy
-    ), 2000
 
 window.Crashed = Crashed

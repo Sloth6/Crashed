@@ -35,7 +35,7 @@ $ ->
   gameOptions =
     levels: 10
     startingGold: 100
-    gridSize: 5
+    gridSize: 7
     tileSize: 80
     prices: 
       tower: 10
@@ -50,15 +50,19 @@ $ ->
   gradient.width = window.innerWidth
   gradient.height = window.innerHeight
   stage.addChild gradient
-  game.run()
+  game.buildPhase()
 
   game.hexGrid.getOuterRing()
 
-  $( ".zoomIn").click () ->
+  $( "#start" ).click () ->
+    game.fightPhase()
+
+  $( "#zoomIn" ).click () ->
     game.viewContainer.scale 0.25
   
-  $( ".zoomOut").click () ->
+  $( "#zoomOut" ).click () ->
     game.viewContainer.scale -0.25
+
 
   $( "#progressbar" ).progressbar { value: 37 }
   $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
