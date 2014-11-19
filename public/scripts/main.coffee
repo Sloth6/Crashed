@@ -1,6 +1,10 @@
+console.time 'totalLoading'
+console.time 'parsingHtml'
 $ ->
-  start = new Date().getTime()
-  
+  console.timeEnd 'parsingHtml'
+
+  console.time 'creatingRenderer'
+  PIXI.dontSayHello = true #sorry pixi
   renderer = PIXI.autoDetectRenderer window.innerWidth, window.innerHeight
   stage = new PIXI.Stage 0xFFFFFF
 
@@ -13,28 +17,7 @@ $ ->
   document.body.appendChild stats.domElement
   stats.domElement.style.position = 'absolute'
   stats.domElement.style.top = '0px'
-  
-  window.textures =
-    base: PIXI.Texture.fromImage "images/buildings/base.png"
-    hex: PIXI.Texture.fromImage "images/greenhex.gif"
-    tower: PIXI.Texture.fromImage "images/buildings/tower.gif"
-    collector: PIXI.Texture.fromImage "images/buildings/farm2.png"
-    pylon: PIXI.Texture.fromImage "images/buildings/pylon.gif"
-    wall: PIXI.Texture.fromImage "images/buildings/wall.png"
-    smallBlob: PIXI.Texture.fromImage 'images/units/enemy.gif'
-    largeBlob: PIXI.Texture.fromImage 'images/units/bigEnemy.gif'
-    barracks: PIXI.Texture.fromImage 'images/buildings/barracks.png'
-    # trees: [
-    resourcesFull: 'images/enviornment/resourcesFull.png'
-    resourcesHalf: 'images/enviornment/resourcesHalf.png'
-      
-    trees0: PIXI.Texture.fromImage 'images/enviornment/trees0.png'
-    trees1: PIXI.Texture.fromImage 'images/enviornment/trees1.png'
-    trees2: PIXI.Texture.fromImage 'images/enviornment/trees2.png'
-
-    rocks0: PIXI.Texture.fromImage 'images/enviornment/rocks0.png'
-    rocks1: PIXI.Texture.fromImage 'images/enviornment/rocks1.png'
-    rocks2: PIXI.Texture.fromImage 'images/enviornment/rocks2.png'
+  console.timeEnd 'creatingRenderer'
 
   gameOptions =
     levels: 10
@@ -49,7 +32,9 @@ $ ->
       pylon: 10
 
   window.game = new Crashed gameOptions
+
   game.addTo stage
+  bindUi game
   
   gradient = new PIXI.Sprite PIXI.Texture.fromImage('images/AtmosphericGradient.png')
   gradient.width = window.innerWidth
@@ -57,8 +42,18 @@ $ ->
   stage.addChild gradient
   game.buildPhase()
 
-  game.hexGrid.getOuterRing()
+  animate = () ->
+    stats.begin()
+    game.update()
+    TWEEN.update()
+    renderer.render stage
+    requestAnimFrame animate
+    stats.end()
+  
+  requestAnimFrame animate
+  console.timeEnd 'totalLoading'
 
+bindUi = (game) ->
   $( "#start" ).click () ->
     game.fightPhase()
 
@@ -67,7 +62,6 @@ $ ->
   
   $( "#zoomOut" ).click () ->
     game.viewContainer.scale -0.25
-
 
   $( "#progressbar" ).progressbar { value: 37 }
   $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
@@ -79,17 +73,7 @@ $ ->
       hex.sprite.alpha = 1.0
     game.selected = []
 
-  animate = () ->
-    stats.begin()
-    game.update()
-    TWEEN.update()
-    renderer.render stage
-    requestAnimFrame animate
-    stats.end()
-  
-  console.log 'Finished in ', new Date().getTime() - start
-  requestAnimFrame animate
-
+#extend default object (a bad practice SHHHHH)
 Math.randInt = (min, max) ->
     if !max
       max = min

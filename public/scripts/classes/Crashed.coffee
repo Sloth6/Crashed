@@ -1,5 +1,6 @@
-class Crashed
+class window.Crashed
   constructor: ({ @gold, @prices, @gridSize, @tileSize }) ->
+    #Game Variables
     @level = 0
     @gold ?= 0
     @prices ?=
@@ -11,7 +12,7 @@ class Crashed
     @selected = []
     @buildMode = true
 
-    #create layers, so hexes on bottom, buildings above and enemeies on top
+    #Layers, so hexes on bottom, buildings above and enemeies on top
     @viewContainer = new DraggableContainer()
     @viewContainer.x = window.innerWidth/2
     @viewContainer.y = window.innerHeight/2
@@ -22,13 +23,15 @@ class Crashed
     @enemyContainer.x = window.innerWidth/2
     @enemyContainer.y = window.innerHeight/2
 
-    #Create Datasctructures
+    #Datastructures
+    console.time 'generateGrid'
     @hexGrid = new HexGrid @gridSize, @tileSize, @hexGridGenerator
+    console.timeEnd 'generateGrid'
     gridRoot = [{ q: 100000, r: 100000 }]
     distanceFun = (a,b) -> Hex::distanceTo.call a, b
     @enemyKdTree = new kdTree gridRoot, distanceFun, ['q', 'r']
   
-    #Update UI
+    #UI
     $('#leveltext').text('Level: '+@level)
     $('#goldtext').text('Gold: '+@gold)
 
@@ -108,5 +111,3 @@ class Crashed
     for i in [0...numEnemies.large] by 1
       hex = random outerHexes
       new LargeBlob({ q: hex.q, r: hex.r }).addTo game.enemyContainer
-
-window.Crashed = Crashed
