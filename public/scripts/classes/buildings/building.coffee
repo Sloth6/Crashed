@@ -2,8 +2,9 @@ class Building
   constructor: ( @hex, @type ) ->
     if window.game
       cost = game.prices[@type]
-      return if @cost > game.gold
-      game.gold -= @cost
+      return if cost > game.gold
+      game.gold -= cost
+      $('#goldtext').text('Gold: '+game.gold)
 
     @sprite = new PIXI.Sprite textures[@type]
     @sprite.anchor.x = 0.5

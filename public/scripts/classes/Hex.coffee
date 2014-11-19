@@ -48,6 +48,7 @@ class Hex
     @onToggleSelect()
 
   onToggleSelect: () ->
+    # return if isRocks()
     if @selected 
       @sprite.alpha = .5
       game.selected.push @
@@ -57,18 +58,21 @@ class Hex
       game.selected.splice(index, 1);
 
   # cost for unit to traverse, used in astar
-  getCost: () -> 1.0
+  isRocks: () -> @environment?.indexOf('rocks') >= 0
+  isTrees: () -> @environment?.indexOf('trees') >= 0
+  getCost: () -> if @isTrees then 1.5 else 1.0
   isWall: () -> 
-    @building instanceof buildings.wall or @environment?
+    (@building instanceof buildings.wall) or @isRocks()
 
   neighbors: () ->
     ([[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]].map ([q, r]) =>
       game.hexGrid.getHex q+@q, r+@r).filter((elem) -> !!elem)
 
-  distanceTo: ({ q, r } = {}) ->
+  distanceTo: ({ q, r }) ->
     (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
   
   build: (type) ->
+    return if @isRocks()
     @building.destroy() if @building
     @building = new buildings[type](@, type)
     @building.addTo @sprite.parent

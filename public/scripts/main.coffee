@@ -20,8 +20,9 @@ $ ->
     tower: PIXI.Texture.fromImage "images/buildings/tower.gif"
     collector: PIXI.Texture.fromImage "images/buildings/farm2.png"
     pylon: PIXI.Texture.fromImage "images/buildings/pylon.gif"
-    wall: PIXI.Texture.fromImage "images/buildings/wall.gif"
-    enemy: PIXI.Texture.fromImage 'images/units/enemy.gif'
+    wall: PIXI.Texture.fromImage "images/buildings/wall.png"
+    smallBlob: PIXI.Texture.fromImage 'images/units/enemy.gif'
+    largeBlob: PIXI.Texture.fromImage 'images/units/bigEnemy.gif'
     barracks: PIXI.Texture.fromImage 'images/buildings/barracks.png'
     # trees: [
     resourcesFull: 'images/enviornment/resourcesFull.png'
@@ -44,7 +45,7 @@ $ ->
     prices: 
       tower: 10
       collector: 10
-      wall: 10
+      wall: 4
       pylon: 10
 
   window.game = new Crashed gameOptions
@@ -73,7 +74,7 @@ $ ->
     type = ui.item.text().toLowerCase()
     game.selected.forEach (hex) ->
       building = hex.build type
-      game.buildings.push building
+      game.buildings.push building if building
       hex.selected = false
       hex.sprite.alpha = 1.0
     game.selected = []
@@ -81,7 +82,7 @@ $ ->
   animate = () ->
     stats.begin()
     game.update()
-    TWEEN.update();
+    TWEEN.update()
     renderer.render stage
     requestAnimFrame animate
     stats.end()
