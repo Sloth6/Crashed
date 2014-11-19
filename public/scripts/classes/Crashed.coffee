@@ -2,7 +2,7 @@ class Crashed
   constructor: ({ level, gold, prices, @gridSize, @tileSize }) ->
     @level ?= 0
     @gold ?= 0
-    @prices ?= 
+    @prices ?=
       tower : 10
       collector : 10
       wall : 10
@@ -45,7 +45,7 @@ class Crashed
     # distance function for KD tree. Takes from Hex class
     distance = (a,b) -> Hex::distanceTo.apply a, b
     # console.log Hex.distanceTo
-    @enemyKdTree = new kdTree [], distance, ['q', 'r'] 
+    @enemyKdTree = new kdTree [], distance, ['q', 'r']
     #KD tree crashes on empty query because it sucks. Insert unreachable root.
     @enemyKdTree.insert { q: 100000, r: 100000 }
     window.foobar = { q: 0, r: 0 }

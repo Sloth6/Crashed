@@ -41,7 +41,7 @@ $ ->
     gridSize: 14
     tileSize: 80
     gold: 100
-    prices: 
+    prices:
       tower: 10
       collector: 10
       wall: 10
@@ -81,7 +81,7 @@ $ ->
   animate = () ->
     stats.begin()
     game.update()
-    TWEEN.update();
+    TWEEN.update()
     renderer.render stage
     requestAnimFrame animate
     stats.end()

@@ -40,7 +40,7 @@ class HexGrid
     # for i in [0...N] by 1
     #   THETHING()
 
-  getRing: (r) -> 
+  getRing: (r) ->
     hex = @getHex -r, r
     ringHexes = []
     for i in [0...6] by 1
@@ -51,10 +51,10 @@ class HexGrid
     
     ringHexes
   
-  getOuterRing: () -> 
+  getOuterRing: () ->
     @getRing @rows
 
   addTo : (scene) ->
-    scene.addChild @container  
+    scene.addChild @container
   
 window.HexGrid = HexGrid
