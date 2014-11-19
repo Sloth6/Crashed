@@ -42,7 +42,7 @@ $ ->
     gridSize: 14
     tileSize: 80
     gold: 100
-    prices: 
+    prices:
       tower: 10
       collector: 10
       wall: 4

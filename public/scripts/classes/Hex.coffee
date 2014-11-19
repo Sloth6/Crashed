@@ -21,7 +21,7 @@ class Hex
       @environmentSprite.position.x = @x
       @environmentSprite.position.y = @y
       @environmentSprite.width = @width
-      @environmentSprite.height = @height      
+      @environmentSprite.height = @height
     
     @sprite = new PIXI.Sprite textures.hex
     @sprite.anchor.x = 0.5
@@ -49,13 +49,13 @@ class Hex
 
   onToggleSelect: () ->
     # return if isRocks()
-    if @selected 
+    if @selected
       @sprite.alpha = .5
       game.selected.push @
-    else 
+    else
       @sprite.alpha = 1.0
       index = game.selected.indexOf @
-      game.selected.splice(index, 1);
+      game.selected.splice(index, 1)
 
   # cost for unit to traverse, used in astar
   isRocks: () -> @environment?.indexOf('rocks') >= 0

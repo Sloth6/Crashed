@@ -2,7 +2,7 @@ class Crashed
   constructor: ({ @gold, @prices, @gridSize, @tileSize }) ->
     @level = 0
     @gold ?= 0
-    @prices ?= 
+    @prices ?=
       tower : 10
       collector : 10
       wall : 10
@@ -26,7 +26,7 @@ class Crashed
     @hexGrid = new HexGrid @gridSize, @tileSize, @hexGridGenerator
     gridRoot = [{ q: 100000, r: 100000 }]
     distanceFun = (a,b) -> Hex::distanceTo.call a, b
-    @enemyKdTree = new kdTree gridRoot, distanceFun, ['q', 'r'] 
+    @enemyKdTree = new kdTree gridRoot, distanceFun, ['q', 'r']
   
     #Update UI
     $('#leveltext').text('Level: '+@level)
