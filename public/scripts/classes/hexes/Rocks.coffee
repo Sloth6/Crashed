@@ -1,5 +1,5 @@
 class window.Rocks extends Hex
-  constructor: ({ width, height, q, r }) ->
+  constructor: ({ width, height, q, r, gold }) ->
     @environmentSprite = new PIXI.Sprite textures['rocks'+Math.randInt(3)]
     @environmentSprite.anchor.x = 0.5
     @environmentSprite.anchor.y = 0.5
@@ -8,6 +8,6 @@ class window.Rocks extends Hex
     @environmentSprite.position.y = y
     @environmentSprite.width = width
     @environmentSprite.height = height
-    super { width, height, q, r }
+    super { width, height, q, r, gold }
 
   isRocks: () -> true

@@ -7,6 +7,9 @@ class Collector extends Building
   constructor: ( hex ) ->
     super hex, 'collector'
   act: () -> #Collect stuff
+  onEndRound: () ->
+    @hex.gold -= 20
+    game.addGold 20
 
 class Wall extends Building
   constructor: ( hex ) ->

@@ -1,17 +1,21 @@
-class Hex extends Selectable
-  constructor: ({ width, height, q, r }) ->
+class window.Hex extends Selectable
+  constructor: ({ width, height, @q, @r, @gold }) ->
     @building = null
     @wall = null
-    @gold = 0
-    { x, y } = @qrToxy {q, r, width}
-    super { x, y, width, height, texture: textures.hex }
+    @gold ?= 0
+    { x, y } = @qrToxy { @q, @r, width }
 
+    if @gold > 0
+      @goldSprite = new PIXI.Sprite textures.resourcesFull
+      @goldSprite.anchor = { x: 0.5, y: 0.5 }
+      @goldSprite.position = { x, y }
+
+    super { x, y, width, height, texture: textures.hex }
   qrToxy: ({q, r, width}) ->
     size = width/2 
     x = q * size * 1.5
     y =  ((r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size))) * .5
     { x, y }
-
   onToggleSelect: () ->
     # return if isRocks()
     if @selected
@@ -21,38 +25,33 @@ class Hex extends Selectable
       @sprite.alpha = 1.0
       index = game.selected.indexOf @
       game.selected.splice(index, 1)
-
   # cost for unit to traverse, used in astar
   isRocks: () -> false#@environment?.indexOf('rocks') >= 0
   isTrees: () -> false#@environment?.indexOf('trees') >= 0
   getCost: () -> 1#if @isTrees then 1.5 else 1.0
-  isWall: () ->
-    (@building instanceof buildings.wall) or @isRocks()
-
+  isWall: () -> @wall? or @isRocks()
   neighbors: () ->
     ([[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]].map ([q, r]) =>
       game.hexGrid.getHex q+@q, r+@r).filter((elem) -> !!elem)
-
   distanceTo: ({ q, r }) ->
     (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
-  
   build: (type) ->
-    @building.destroy() if @building
     if type == 'wall'
       @wall = new buildings.wall(@, type)
       @wall.addTo @sprite.parent
+    else if type == 'collector' and @gold == 0
+      alert 'Must build collector on gold.'
     else
+      @building.destroy() if @building
       @building = new buildings[type](@, type)
       @building.addTo @sprite.parent
-    @building or @wall
 
+    @building or @wall
   addTo: (container) ->
     container.addChild @sprite
     container.addChild @environmentSprite if @environmentSprite
+    container.addChild @goldSprite if @goldSprite
     # container.addChild @text
-
-window.Hex = Hex
-
 
 # hex = new PIXI.Graphics()
 # hex.beginFill 0xFF3300

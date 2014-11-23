@@ -14,7 +14,7 @@ class window.HexGrid
     for q in [-@rows..@rows] by 1
       for r in [start..end] by 1
         { building, type, gold } = hexGeneratingFun q, r
-        options = { width, height, q, r }
+        options = { width, height, q, r, gold }
         switch type
           when 'rocks' then hex = new window.Rocks options
           when 'trees' then hex = new window.Trees options

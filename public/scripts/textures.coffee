@@ -10,8 +10,8 @@ window.textures =
   wall: PIXI.Texture.fromImage "images/buildings/wall.png"
   smallBlob: PIXI.Texture.fromImage 'images/units/enemy.gif'
   largeBlob: PIXI.Texture.fromImage 'images/units/bigEnemy.gif'
-  resourcesFull: 'images/enviornment/resourcesFull.png'
-  resourcesHalf: 'images/enviornment/resourcesHalf.png'      
+  resourcesFull: PIXI.Texture.fromImage 'images/enviornment/resourcesFull.gif'
+  resourcesHalf: PIXI.Texture.fromImage 'images/enviornment/resourcesHalf.gif'      
   trees0: PIXI.Texture.fromImage 'images/enviornment/trees0.png'
   trees1: PIXI.Texture.fromImage 'images/enviornment/trees1.png'
   trees2: PIXI.Texture.fromImage 'images/enviornment/trees2.png'

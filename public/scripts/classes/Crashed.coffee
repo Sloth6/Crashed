@@ -2,12 +2,7 @@ class window.Crashed
   constructor: ({ @gold, @prices, @gridSize, @tileSize }) ->
     #Game Variables
     @level = 0
-    @gold ?= 0
-    @prices ?=
-      tower : 10
-      collector : 10
-      wall : 10
-      pylon : 10
+
     @buildings = []
     @selected = []
     @buildMode = true
@@ -38,20 +33,26 @@ class window.Crashed
   #Generate a Hex Map
   hexGridGenerator: (q, r) ->
     building = null
+    gold = 0
     if q == 0 and r == 0
       building = 'base'
-    else if (q == -1 and r == 0) or (q == 0 and r == -1)
-      building = 'farm'
+    # else if (q == -1 and r == 0) or (q == 0 and r == -1)
+    #   building = 'farm'
     else if q not in [-1,0,1] or r not in [-1,0,1]
+      if Math.random() < .2 then gold = 100
       randEnviron = Math.random() # [0, 1)
-      if randEnviron < 0.1
+      if randEnviron < 0.075
         type = 'rocks'
-      else if randEnviron < 0.2
+      else if randEnviron < 0.15
         type = 'trees'
       else
         type = ''
-    gold = 0
+    
     { building, type, gold }
+
+  addGold: (n) ->
+    @gold += n
+    $('#goldtext').text('Gold: '+@gold)
 
   #Update called in main update loop. 
   update: () ->
@@ -82,7 +83,7 @@ class window.Crashed
   #   @getEnemyUnits().forEach (unit) ->
   #     unit.moveTo { q: 0, r: 0 }
   onEnemyDeath: (enemy) ->
-    game.gold += 1
+    @addGold 1
     numEnemies = @enemiesPerLevel(@level).total
     if @enemyContainer.children.length == 1
       game.buildPhase()
@@ -93,6 +94,8 @@ class window.Crashed
 
   buildPhase: () ->
     @level++
+    @getBuildings().forEach (b) -> 
+      b.onEndRound() if b.onEndRound
     $('#leveltext').text('Level: '+@level)
     $('#start').show()
     $('#progressbar').hide()

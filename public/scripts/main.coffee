@@ -27,8 +27,10 @@ $ ->
     gold: 100
     prices:
       tower: 10
+      road: 4
       collector: 10
-      wall: 4
+      farm: 10
+      wall: 2
       pylon: 10
 
   window.game = new Crashed gameOptions
