@@ -1,21 +1,38 @@
+class Farm extends Building
+  constructor: ( hex ) ->
+    super hex, 'farm'
+  act: () -> #Collect stuff
+
 class Collector extends Building
+  constructor: ( hex ) ->
+    super hex, 'collector'
   act: () -> #Collect stuff
 
 class Wall extends Building
+  constructor: ( hex ) ->
+    super hex, 'wall'
   act: () -> #Be a wall
 
-class Pylon extends Building
+class Road extends Building
+  constructor: ( hex ) ->
+    super hex, 'road'
   act: () ->
 
 class Barracks extends Building
+  constructor: ( hex ) ->
+    super hex, 'barracks'
   act: () ->
 
 class Base extends Building
+  constructor: ( hex ) ->
+    super hex, 'base'
   act: () ->
   onDeath: () ->
     confirm 'YOU ARE BAD'
 
 class Tower extends Building
+  constructor: ( hex ) ->
+    super hex, 'tower'
   act: () ->
     enemy = game.nearestEnemy @hex, 2
     if enemy and enemy.alive and @sprite?
@@ -25,9 +42,10 @@ class Tower extends Building
       enemy.hurt 2
 
 window.buildings ?= {}
+window.buildings.farm = Farm
 window.buildings.collector = Collector
 window.buildings.wall = Wall
-window.buildings.pylon = Pylon
+window.buildings.road = Road
 window.buildings.tower = Tower
 window.buildings.barracks = Barracks
 window.buildings.base = Base

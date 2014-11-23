@@ -41,7 +41,7 @@ class window.Crashed
     if q == 0 and r == 0
       building = 'base'
     else if (q == -1 and r == 0) or (q == 0 and r == -1)
-      building = 'collector'
+      building = 'farm'
     else if q not in [-1,0,1] or r not in [-1,0,1]
       randEnviron = Math.random() # [0, 1)
       if randEnviron < 0.1

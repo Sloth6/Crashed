@@ -3,8 +3,9 @@ window.textures =
   base: PIXI.Texture.fromImage "images/buildings/base.png"
   hex: PIXI.Texture.fromImage "images/greenhex.gif"
   tower: PIXI.Texture.fromImage "images/buildings/tower.gif"
-  collector: PIXI.Texture.fromImage "images/buildings/farm2.png"
-  pylon: PIXI.Texture.fromImage "images/buildings/pylon.gif"
+  farm: PIXI.Texture.fromImage "images/buildings/farm2.png"
+  collector: PIXI.Texture.fromImage "images/buildings/collector.png"
+  road: PIXI.Texture.fromImage "images/buildings/pylon.gif"
   barracks: PIXI.Texture.fromImage 'images/buildings/barracks.png'
   wall: PIXI.Texture.fromImage "images/buildings/wall.png"
   smallBlob: PIXI.Texture.fromImage 'images/units/enemy.gif'

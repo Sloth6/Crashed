@@ -7,7 +7,7 @@ class window.HexGrid
     @container.y = window.innerHeight/2
 
     width = 2 * size
-    height = size * Math.sqrt(3) * 0.5
+    height = size * Math.sqrt(3) * 0.5 #.5 is for isometric effect
     # Build map.
     start = 0
     end = @rows

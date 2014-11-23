@@ -6,14 +6,14 @@ class Building
       game.gold -= cost
       $('#goldtext').text('Gold: '+game.gold)
 
-    @sprite = new PIXI.Sprite textures[@type]
+    @sprite = new PIXI.Sprite window.textures[@type]
     @sprite.anchor.x = 0.5
     @sprite.anchor.y = 0.5
     @sprite.position.x = @hex.x
     @sprite.position.y = @hex.y
     ratio = @sprite.height / @hex.sprite.height
-    @sprite.width /= ratio#= @hex.sprite.width
-    @sprite.height /= ratio#= @hex.sprite.height
+    @sprite.width = @hex.sprite.width
+    @sprite.height = @hex.sprite.height
   
   sell: () ->
   # TODO

@@ -38,13 +38,16 @@ class Hex extends Selectable
   
   build: (type) ->
     @building.destroy() if @building
-    @building = new buildings[type](@, type)
-    @building.addTo @sprite.parent
-    @building
+    if type == 'wall'
+      @wall = new buildings.wall(@, type)
+      @wall.addTo @sprite.parent
+    else
+      @building = new buildings[type](@, type)
+      @building.addTo @sprite.parent
+    @building or @wall
 
   addTo: (container) ->
     container.addChild @sprite
-    # console.log @environmentSprite
     container.addChild @environmentSprite if @environmentSprite
     # container.addChild @text
 
