@@ -44,13 +44,14 @@ class window.Crashed
       building = 'collector'
     else if q not in [-1,0,1] or r not in [-1,0,1]
       randEnviron = Math.random() # [0, 1)
-      if randEnviron < .1
-        environment = 'rocks'+Math.randInt(3)
-      else if randEnviron < .4
-        environment = 'trees'+Math.randInt(3)
-      # environment = 'rocks0'
+      if randEnviron < 0.1
+        type = 'rocks'
+      else if randEnviron < 0.2
+        type = 'trees'
+      else
+        type = ''
     gold = 0
-    {building, environment, gold}
+    { building, type, gold }
 
   #Update called in main update loop. 
   update: () ->

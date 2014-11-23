@@ -13,9 +13,13 @@ class window.HexGrid
     end = @rows
     for q in [-@rows..@rows] by 1
       for r in [start..end] by 1
-        { building, environment, gold } = hexGeneratingFun q, r
-        hexOptions = { width, height, q, r, environment, gold }
-        hex = new window.Hex hexOptions
+        { building, type, gold } = hexGeneratingFun q, r
+        options = { width, height, q, r }
+        switch type
+          when 'rocks' then hex = new window.Rocks options
+          when 'trees' then hex = new window.Trees options
+          else hex = new window.Hex options
+          
         @hexes[q+':'+r] = hex
         hex.addTo @container
         hex.build(building) if building
