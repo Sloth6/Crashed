@@ -39,13 +39,13 @@ class window.Crashed
     # else if (q == -1 and r == 0) or (q == 0 and r == -1)
     #   building = 'farm'
     else if q not in [-1,0,1] or r not in [-1,0,1]
-      if Math.random() < .2 then gold = 100
       randEnviron = Math.random() # [0, 1)
       if randEnviron < 0.075
         type = 'rocks'
       else if randEnviron < 0.15
         type = 'trees'
       else
+        if Math.random() < .2 then gold = 100
         type = ''
     
     { building, type, gold }
@@ -60,7 +60,7 @@ class window.Crashed
     # @enemies.forEach (building) -> building.act()
 
   enemiesPerLevel : (n) ->
-    n = Math.floor(10 * Math.pow(1.2, n))
+    n = Math.floor(10 * Math.pow(1.15, n))
     small = n
     large = n//4
     { small, large, total: small+large }
@@ -77,6 +77,7 @@ class window.Crashed
     @viewContainer.addTo scene
   
   getBuildings: () -> @buildings
+  
   getEnemyUnits: () -> @enemyContainer.children.map (sprite) -> sprite.unit
 
   # updateEnemyPaths: () ->
@@ -115,3 +116,15 @@ class window.Crashed
     for i in [0...numEnemies.large] by 1
       hex = random outerHexes
       new LargeBlob({ q: hex.q, r: hex.r }).addTo game.enemyContainer
+
+  build: (type) ->
+    totalCost = @selected.length * @prices[type]
+    if totalCost > @gold
+      alert "Cannot afford #{@selected.length} #{type}s. Costs #{totalCost}g."
+    else
+      @selected.forEach (hex) ->
+        building = hex.build type
+        game.buildings.push building if building
+        hex.selected = false
+        hex.sprite.alpha = 1.0
+      game.selected = []

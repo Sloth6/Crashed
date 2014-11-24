@@ -24,8 +24,16 @@ body {
 #buildmenu {
   position: absolute;
   top: 100px;
-  width: 100px;
+  width: 135px;
   z-index: 6;
+}
+
+#sellbutton {
+  position: absolute;
+  top: 250px;
+  width: 135px;
+  height: 30px;
+  z-index: 7;
 }
 
 a {

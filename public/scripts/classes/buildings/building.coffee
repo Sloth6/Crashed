@@ -16,9 +16,10 @@ class Building
     @sprite.width /= ratio #= @hex.sprite.width 
   
   sell: () ->
-  # TODO
-  # @hex.remove()
-  # $$$ += n
+    @sprite.parent.removeChild @sprite
+    @sprite = null
+    @hex.building = null
+    game.addGold game.prices[@type]
   
   destroy: ()  ->
     @onDeath() if @onDeath
