@@ -12,7 +12,7 @@ class window.Hex extends Selectable
 
     super { x, y, width, height, texture: textures.hex }
   qrToxy: ({q, r, width}) ->
-    size = width/2 
+    size = width/2
     x = q * size * 1.5
     y =  ((r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size))) * .5
     { x, y }
@@ -30,6 +30,8 @@ class window.Hex extends Selectable
   isTrees: () -> false#@environment?.indexOf('trees') >= 0
   getCost: () -> 1#if @isTrees then 1.5 else 1.0
   isWall: () -> @wall? or @isRocks()
+  #I don't really know what the question mark syntax is. Did I use it right?
+  isBuildable: () -> not (@isWall or @isTrees or @isRocks or @building?)
   neighbors: () ->
     ([[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]].map ([q, r]) =>
       game.hexGrid.getHex q+@q, r+@r).filter((elem) -> !!elem)
