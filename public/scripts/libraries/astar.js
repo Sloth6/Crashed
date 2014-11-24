@@ -59,6 +59,8 @@ var astar = {
                path to the closest node if the target is unreachable.
     * @param {Function} [options.heuristic] Heuristic function (see
     *          astar.heuristics).
+	* @param {Function} [options.impassable] Impasssable function (returns
+	*          true if impassable)
     */
     search: function(graph, start, end, options) {
         astar.init(graph);
@@ -91,7 +93,7 @@ var astar = {
             for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
-                if (neighbor.closed || neighbor.isWall()) {
+                if (neighbor.closed || options.impassable(neighbor)) {
                     // Not a valid node to process, skip to next neighbor.
                     continue;
                 }

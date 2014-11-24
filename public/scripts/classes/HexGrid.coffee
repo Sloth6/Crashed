@@ -38,6 +38,7 @@ class window.HexGrid
   neighbors: ({ q, r }) -> @getHex(q, r).neighbors()
   distance: ({ q, r }, b) -> @getHex(q, r).distanceTo b
 
+  # using a* since we want the path to go around existing objects
   getLine: ({ q1, r1 }, { q2, r2 }) ->
     # TODO
     # N = @getHex({q1, r1}).distanceTo { q2, r2 }
