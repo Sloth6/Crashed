@@ -82,6 +82,25 @@ bindUi = (game) ->
     else
       game.selected.forEach (hex) -> hex.building.sell()
 
+# =======
+#     type = ui.item.text().toLowerCase()
+#     if game.selected.length == 2 and type == "wall"
+#       path = game.hexGrid.getLine(game.selected[0], game.selected[1])
+#       path.push(game.selected[0])
+#       path.forEach (hex) ->
+#         building = hex.build "wall"
+#         game.buildings.push building if building
+#         hex.selected = false
+#         hex.sprite.alpha = 1.0
+      
+#     else
+#       game.selected.forEach (hex) ->
+#         building = hex.build type
+#         game.buildings.push building if building
+#         hex.selected = false
+#         hex.sprite.alpha = 1.0
+#     game.selected = []
+# >>>>>>> 939daccf9d345733876dd32f156f8e341732f4dc
 
 #extend default object (a bad practice SHHHHH)
 Math.randInt = (min, max) ->

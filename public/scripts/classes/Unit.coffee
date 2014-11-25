@@ -14,7 +14,14 @@ class Unit
   moveTo: ({ q, r }, done) ->
     start = game.hexGrid.getHex @q, @r
     end = game.hexGrid.getHex q, r
-    @path = astar.search game.hexGrid, start, end, { unit: @ }
+    # @path = astar.search game.hexGrid, start, end, { unit: @ }
+
+    # might be a better way to write this in coffeescript
+    options =
+      unit: @
+      impassable: (h, unit) ->  h.isWall unit
+    @path = astar.search game.hexGrid, start, end, options
+
     moveR = (path, unit) ->
       if path.length == 0
         if done then return done() else return

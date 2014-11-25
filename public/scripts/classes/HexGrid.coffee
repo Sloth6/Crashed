@@ -27,7 +27,8 @@ class window.HexGrid
       # this creates the hex shape with axial coordinates
       if q < 0 then start-- else end--
     
-    @getRingCoords(@rows+1).map ({ q, r }) => 
+    # Add an empty ring around map. This ensures enemies dont spawn on rocks.
+    @getRingCoords(@rows+1).map ({ q, r }) =>
       options = { width, height, q, r, gold:0 }
       hex = new window.Hex options
       @hexes[q+':'+r] = hex
@@ -46,11 +47,12 @@ class window.HexGrid
   neighbors: ({ q, r }) -> @getHex(q, r).neighbors()
   distance: ({ q, r }, b) -> @getHex(q, r).distanceTo b
 
-  getLine: ({ q1, r1 }, { q2, r2 }) ->
-    # TODO
-    # N = @getHex({q1, r1}).distanceTo { q2, r2 }
-    # for i in [0...N] by 1
-    #   THETHING()
+  # using a* since we want the path to go around existing objects
+  getLine: (h1, h2) ->
+    options =
+      impassable: (x) ->  !x.isBuildable()
+
+    astar.search @, h1, h2, options
 
   getRingCoords: (_r) ->
     hex = { q: -_r, r: _r }

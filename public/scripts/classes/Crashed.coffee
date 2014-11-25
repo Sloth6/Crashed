@@ -139,7 +139,8 @@ class window.Crashed
       start = game.hexGrid.getOuterRing()[0]
       end = game.hexGrid.getHex 0, 0
       @selected.forEach (h) -> h.wall = true
-      if astar.search(game.hexGrid, start, end).length == 0
+      options = { impassable: (h, unit) ->  h.isWall(unit) }
+      if astar.search(game.hexGrid, start, end, options).length == 0
         @selected.forEach (h) -> h.wall = null
         alert "Cannot completely wall off base"
         return false
