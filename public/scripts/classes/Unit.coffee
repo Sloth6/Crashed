@@ -20,7 +20,7 @@ class Unit
     options =
       unit: @
       impassable: (h, unit) ->  
-        (h.isWall() or (unit instanceof LargeBlob)) or h.isRocks()
+        (h.isWall() and not (unit instanceof LargeBlob)) or h.isRocks()
     @path = astar.search game.hexGrid, start, end, options
 
     moveR = (path, unit) ->
@@ -49,6 +49,7 @@ class Unit
     @kill() if @health <= 0
 
   kill: () ->
+    console.trace()
     @sprite.parent.removeChild @sprite
     @path = null
     @sprite = null
