@@ -78,7 +78,7 @@ bindUi = (game) ->
   $( '#sellbutton').click () ->
     numBuildings = (game.selected.filter (h) -> !!h.building).length
     return alert 'Select buildings to sell.' if numBuildings == 0
-    game.sell type
+    game.sell()
 
 # =======
 #     type = ui.item.text().toLowerCase()

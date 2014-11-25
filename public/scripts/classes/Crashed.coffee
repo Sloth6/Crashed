@@ -2,7 +2,6 @@ class window.Crashed
   constructor: ({ @gold, @prices, @gridSize, @tileSize }) ->
     #Game Variables
     @level = 0
-
     @buildings = []
     @selected = []
     @buildMode = true
@@ -29,6 +28,7 @@ class window.Crashed
     #UI
     $('#leveltext').text('Level: '+@level)
     $('#goldtext').text('Gold: '+@gold)
+    $('#foodtext').text('Food: '+@getFood())
 
   #Generate a Hex Map
   hexGridGenerator: (q, r) ->
@@ -52,6 +52,10 @@ class window.Crashed
         if Math.random() < .2 then gold = 100
     
     { building, type, gold }
+
+  getFood: () ->
+    @buildings.reduce ((s, b) ->
+      s + (if (b instanceof buildings.farm) then 3 else -1)), 0
 
   addGold: (n) ->
     @gold += n
@@ -120,9 +124,16 @@ class window.Crashed
       hex = random outerHexes
       new LargeBlob({ q: hex.q, r: hex.r }).addTo game.enemyContainer
 
-  sell: (type) ->
-    game.selected.forEach (hex) -> hex.building.sell()
+  updateInfo: () ->
+    $('#goldtext').text('Gold: '+@gold)
+    $('#foodtext').text('Food: '+@getFood())
 
+  sell: () ->
+    @selected.forEach (hex) => 
+      hex.building.sell()
+      index = @buildings.indexOf hex
+      @buildings.splice index, 1
+    @updateInfo()
 
   build: (type) ->
     if @canBuild type
@@ -132,12 +143,16 @@ class window.Crashed
         hex.selected = false
         hex.sprite.alpha = 1.0
       game.selected = []
+      @updateInfo()
 
   canBuild: (type) ->
     #check price
     totalCost = @selected.length * @prices[type]
     if totalCost > @gold
       alert "Cannot afford #{@selected.length} #{type}s. Costs #{totalCost}g."
+      return false
+    if @getFood() == 0 and type != 'farm'
+      alert "Not enough food. Build more farms."
       return false
     if type == 'wall' #ensure we don't wall off completly.
       start = game.hexGrid.getOuterRing()[0]

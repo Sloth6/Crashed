@@ -54,7 +54,8 @@ class window.HexGrid
 
     astar.search @, h1, h2, options
 
-  getRingCoords: (_r) ->
+  getRingCoords: (_r, c) ->
+    c ?= { q: 0, r: 0 }
     hex = { q: -_r, r: _r }
     ringHexes = []
     for i in [0...6] by 1
@@ -64,7 +65,7 @@ class window.HexGrid
         hex = { q: hex.q+direction[0], r: hex.r+direction[1] }
     ringHexes
   
-  getRing: (r) -> @getRingCoords(r).map ({q, r}) => @getHex q, r
+  getRing: (r, c) -> @getRingCoords(r, c).map ({q, r}) => @getHex q, r
 
   getOuterRing: () -> @outerRing
 

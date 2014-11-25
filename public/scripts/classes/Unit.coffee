@@ -14,13 +14,10 @@ class Unit
   moveTo: ({ q, r }, done) ->
     start = game.hexGrid.getHex @q, @r
     end = game.hexGrid.getHex q, r
-    # @path = astar.search game.hexGrid, start, end, { unit: @ }
 
-    # might be a better way to write this in coffeescript
     options =
-      unit: @
-      impassable: (h, unit) ->  
-        (h.isWall() and not (unit instanceof LargeBlob)) or h.isRocks()
+      impassable: (h) ->  
+        (h.isWall() and not (@ instanceof LargeBlob)) or h.isRocks()
     @path = astar.search game.hexGrid, start, end, options
 
     moveR = (path, unit) ->
