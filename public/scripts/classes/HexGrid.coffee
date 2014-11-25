@@ -40,10 +40,10 @@ class window.HexGrid
 
   # using a* since we want the path to go around existing objects
   getLine: ({ q1, r1 }, { q2, r2 }) ->
-	options =
+    options =
       impassable: (x) ->  x.isBuildable()
 
-	astar.search @, {q1, r1}, {q2, r2}, options
+    astar.search @, {q1, r1}, {q2, r2}, options
 
   getRing: (r) ->
     hex = @getHex -r, r
