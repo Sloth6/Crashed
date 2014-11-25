@@ -77,10 +77,8 @@ bindUi = (game) ->
 
   $( '#sellbutton').click () ->
     numBuildings = (game.selected.filter (h) -> !!h.building).length
-    if numBuildings == 0
-      alert 'Select buildings to sell.'
-    else
-      game.selected.forEach (hex) -> hex.building.sell()
+    return alert 'Select buildings to sell.' if numBuildings == 0
+    game.sell type
 
 # =======
 #     type = ui.item.text().toLowerCase()

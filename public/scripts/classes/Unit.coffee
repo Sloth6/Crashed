@@ -19,7 +19,8 @@ class Unit
     # might be a better way to write this in coffeescript
     options =
       unit: @
-      impassable: (h, unit) ->  h.isWall unit
+      impassable: (h, unit) ->  
+        (h.isWall() or (unit instanceof LargeBlob)) or h.isRocks()
     @path = astar.search game.hexGrid, start, end, options
 
     moveR = (path, unit) ->

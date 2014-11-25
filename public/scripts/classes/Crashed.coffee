@@ -120,6 +120,10 @@ class window.Crashed
       hex = random outerHexes
       new LargeBlob({ q: hex.q, r: hex.r }).addTo game.enemyContainer
 
+  sell: (type) ->
+    game.selected.forEach (hex) -> hex.building.sell()
+
+
   build: (type) ->
     if @canBuild type
       @selected.forEach (hex) ->
@@ -139,7 +143,7 @@ class window.Crashed
       start = game.hexGrid.getOuterRing()[0]
       end = game.hexGrid.getHex 0, 0
       @selected.forEach (h) -> h.wall = true
-      options = { impassable: (h, unit) ->  h.isWall(unit) }
+      options = { impassable: (h) -> h.isWall() }
       if astar.search(game.hexGrid, start, end, options).length == 0
         @selected.forEach (h) -> h.wall = null
         alert "Cannot completely wall off base"

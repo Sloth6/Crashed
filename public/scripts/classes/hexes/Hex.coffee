@@ -39,10 +39,9 @@ class window.Hex extends Selectable
   
   getCost: () -> 1#if @isTrees then 1.5 else 1.0
   
-  isWall: (unit) ->
-    (@wall? and not (unit instanceof LargeBlob)) or @isRocks()
+  isWall: () -> (@building instanceof buildings.wall) or @wall
   # isWall: () -> @wall? or @isRocks()
-  
+
   #I don't really know what the question mark syntax is. Did I use it right?
   isBuildable: () -> not (@isWall() or @isTrees() or @isRocks() or @building)
 
@@ -54,17 +53,11 @@ class window.Hex extends Selectable
     (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
   
   build: (type) ->
-    if type == 'wall'
-      @wall = new buildings.wall(@, type)
-      @wall.addTo @sprite.parent
-    else if type == 'collector' and @gold == 0
-      alert 'Must build collector on gold.'
-    else
-      @building.destroy() if @building
-      @building = new buildings[type](@, type)
-      @building.addTo @sprite.parent
+    @building.destroy() if @building
+    @building = new buildings[type](@, type)
+    @building.addTo @sprite.parent
 
-    @building or @wall
+    @building
   
   addTo: (container) ->
     container.addChild @sprite
