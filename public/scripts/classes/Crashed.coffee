@@ -130,6 +130,8 @@ class window.Crashed
 
   sell: () ->
     @selected.forEach (hex) =>
+      if hex.q | hex.r == 0
+        return alert "You really don't want to sell that.."
       index = @buildings.indexOf hex.building
       @buildings.splice index, 1
       hex.building.sell()
