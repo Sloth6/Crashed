@@ -31,7 +31,7 @@ class window.Hex extends Selectable
   getCost: () -> 1#if @isTrees then 1.5 else 1.0
   isWall: () -> @wall? or @isRocks()
   #I don't really know what the question mark syntax is. Did I use it right?
-  isBuildable: () -> not (@isWall or @isTrees or @isRocks or @building?)
+  isBuildable: () -> not (@isWall() or @isTrees() or @isRocks() or @building)
   neighbors: () ->
     ([[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]].map ([q, r]) =>
       game.hexGrid.getHex q+@q, r+@r).filter((elem) -> !!elem)

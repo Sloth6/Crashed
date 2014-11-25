@@ -68,11 +68,21 @@ bindUi = (game) ->
   $( "#progressbar" ).progressbar { value: 37 }
   $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
     type = ui.item.text().toLowerCase()
-    game.selected.forEach (hex) ->
-      building = hex.build type
-      game.buildings.push building if building
-      hex.selected = false
-      hex.sprite.alpha = 1.0
+    if game.selected.length == 2 and type == "wall"
+      path = game.hexGrid.getLine(game.selected[0], game.selected[1])
+      path.push(game.selected[0])
+      path.forEach (hex) ->
+        building = hex.build "wall"
+        game.buildings.push building if building
+        hex.selected = false
+        hex.sprite.alpha = 1.0
+      
+    else
+      game.selected.forEach (hex) ->
+        building = hex.build type
+        game.buildings.push building if building
+        hex.selected = false
+        hex.sprite.alpha = 1.0
     game.selected = []
 
 #extend default object (a bad practice SHHHHH)
