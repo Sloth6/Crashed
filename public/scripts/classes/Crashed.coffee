@@ -129,10 +129,10 @@ class window.Crashed
     $('#foodtext').text('Food: '+@getFood())
 
   sell: () ->
-    @selected.forEach (hex) => 
-      hex.building.sell()
-      index = @buildings.indexOf hex
+    @selected.forEach (hex) =>
+      index = @buildings.indexOf hex.building
       @buildings.splice index, 1
+      hex.building.sell()
     @updateInfo()
 
   build: (type) ->
@@ -151,7 +151,7 @@ class window.Crashed
     if totalCost > @gold
       alert "Cannot afford #{@selected.length} #{type}s. Costs #{totalCost}g."
       return false
-    if @getFood() == 0 and type != 'farm'
+    if @getFood() <= 0 and type != 'farm'
       alert "Not enough food. Build more farms."
       return false
     if type == 'wall' #ensure we don't wall off completly.
