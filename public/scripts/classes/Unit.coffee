@@ -14,30 +14,26 @@ class Unit
   moveTo: ({ q, r }, done) ->
     start = game.hexGrid.getHex @q, @r
     end = game.hexGrid.getHex q, r
-    @path = astar.search game.hexGrid, start, end
+    @path = astar.search game.hexGrid, start, end, { unit: @ }
     moveR = (path, unit) ->
       if path.length == 0
-        return done() if done
-        return
+        if done then return done() else return
       next = path.shift()
-      if next.isWall()
-        moveTo({ q, r }, done)
-      else
-        new TWEEN.Tween unit.sprite.position
-          .to {
-            x: next.x + Math.randInt(-20,20)
-            y: next.y + Math.randInt(-20,20)
-          }, unit.speed
-          .easing TWEEN.Easing.Quintic.InOut
-          .onComplete () ->
-            unit.q = next.q
-            unit.r = next.r
-            game.enemyKdTree.remove unit
-            if unit.health > 0
-              game.enemyKdTree.insert unit
-              unit.onMove(game.hexGrid.getHex unit.q, unit.r) if unit.onMove
-              moveR path, unit
-          .start()
+      new TWEEN.Tween unit.sprite.position
+        .to {
+          x: next.x + Math.randInt(-20,20)
+          y: next.y + Math.randInt(-20,20)
+        }, unit.speed
+        .easing TWEEN.Easing.Quintic.InOut
+        .onComplete () ->
+          unit.q = next.q
+          unit.r = next.r
+          game.enemyKdTree.remove unit
+          if unit.health > 0
+            game.enemyKdTree.insert unit
+            unit.onMove(game.hexGrid.getHex unit.q, unit.r) if unit.onMove
+            moveR path, unit
+        .start()
     moveR @path, @
 
   hurt: (h) ->

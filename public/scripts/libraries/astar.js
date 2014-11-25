@@ -63,6 +63,7 @@ var astar = {
     search: function(graph, start, end, options) {
         astar.init(graph);
         options = options || {};
+        var unit = options.unit || false;
         var heuristic = options.heuristic || astar.heuristics.manhattan,
             closest = options.closest || false;
 
@@ -91,7 +92,7 @@ var astar = {
             for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
-                if (neighbor.closed || neighbor.isWall()) {
+                if (neighbor.closed || neighbor.isWall(unit)) {
                     // Not a valid node to process, skip to next neighbor.
                     continue;
                 }

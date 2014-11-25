@@ -6,5 +6,5 @@ class window.SmallBlob extends Enemy
     super { q, r, health, speed, texture }
 
   onMove: (hex) ->
-    if hex.building? and !hex.isWall()
+    if hex.building?
       hex.building.destroy()

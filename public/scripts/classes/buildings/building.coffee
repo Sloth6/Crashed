@@ -19,7 +19,7 @@ class Building
     @sprite.parent.removeChild @sprite
     @sprite = null
     @hex.building = null
-    game.addGold game.prices[@type]
+    game.addGold game.prices[@type]//1.5
   
   destroy: ()  ->
     @onDeath() if @onDeath

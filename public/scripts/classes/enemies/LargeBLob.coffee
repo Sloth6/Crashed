@@ -8,3 +8,6 @@ class window.LargeBlob extends Enemy
   onMove: (hex) ->
     if hex.building?
       hex.building.destroy()
+    if hex.wall?
+    	hex.wall.destroy()
+    	#game.wallUpdate()

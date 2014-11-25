@@ -5,19 +5,25 @@ class window.Hex extends Selectable
     @gold ?= 0
     { x, y } = @qrToxy { @q, @r, width }
 
+    @text = new PIXI.Text @q+':'+@r, { font:"12px Arial", fill:"black" }
+    @text.x = x
+    @text.y = y
+    @text.anchor.x = 0.5
+    @text.anchor.y = 0.5
+
     if @gold > 0
       @goldSprite = new PIXI.Sprite textures.resourcesFull
       @goldSprite.anchor = { x: 0.5, y: 0.5 }
       @goldSprite.position = { x, y }
-
     super { x, y, width, height, texture: textures.hex }
+  
   qrToxy: ({q, r, width}) ->
     size = width/2 
     x = q * size * 1.5
     y =  ((r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size))) * .5
     { x, y }
+  
   onToggleSelect: () ->
-    # return if isRocks()
     if @selected
       @sprite.alpha = .5
       game.selected.push @
@@ -25,16 +31,24 @@ class window.Hex extends Selectable
       @sprite.alpha = 1.0
       index = game.selected.indexOf @
       game.selected.splice(index, 1)
+  
   # cost for unit to traverse, used in astar
   isRocks: () -> false#@environment?.indexOf('rocks') >= 0
+  
   isTrees: () -> false#@environment?.indexOf('trees') >= 0
+  
   getCost: () -> 1#if @isTrees then 1.5 else 1.0
-  isWall: () -> @wall? or @isRocks()
+  
+  isWall: (unit) ->
+    (@wall? and not (unit instanceof LargeBlob)) or @isRocks()
+  
   neighbors: () ->
     ([[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]].map ([q, r]) =>
       game.hexGrid.getHex q+@q, r+@r).filter((elem) -> !!elem)
+  
   distanceTo: ({ q, r }) ->
     (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
+  
   build: (type) ->
     if type == 'wall'
       @wall = new buildings.wall(@, type)
@@ -47,11 +61,12 @@ class window.Hex extends Selectable
       @building.addTo @sprite.parent
 
     @building or @wall
+  
   addTo: (container) ->
     container.addChild @sprite
     container.addChild @environmentSprite if @environmentSprite
     container.addChild @goldSprite if @goldSprite
-    # container.addChild @text
+    container.addChild @text if @text
 
 # hex = new PIXI.Graphics()
 # hex.beginFill 0xFF3300
@@ -76,8 +91,3 @@ class window.Hex extends Selectable
 # @sprite.hitArea = new PIXI.Polygon points
 
 
-# @text = new PIXI.Text q+':'+r, { font:"12px Arial", fill:"black" }
-# @text.x = @x
-# @text.y = @y
-# @text.anchor.x = 0.5
-# @text.anchor.y = 0.5

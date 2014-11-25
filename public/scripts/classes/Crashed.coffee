@@ -34,11 +34,15 @@ class window.Crashed
   hexGridGenerator: (q, r) ->
     building = null
     gold = 0
-    if q == 0 and r == 0
-      building = 'base'
-    # else if (q == -1 and r == 0) or (q == 0 and r == -1)
-    #   building = 'farm'
-    else if q not in [-1,0,1] or r not in [-1,0,1]
+    type = ''
+    building = null
+
+    building = 'base' if q == 0 and r == 0
+    
+    emptySpaces = [-1,0,1]#, @gridSize, -@gridSize]
+    if q in emptySpaces or r in emptySpaces
+      type = ''
+    else
       randEnviron = Math.random() # [0, 1)
       if randEnviron < 0.075
         type = 'rocks'
@@ -46,7 +50,6 @@ class window.Crashed
         type = 'trees'
       else
         if Math.random() < .2 then gold = 100
-        type = ''
     
     { building, type, gold }
 
@@ -118,13 +121,29 @@ class window.Crashed
       new LargeBlob({ q: hex.q, r: hex.r }).addTo game.enemyContainer
 
   build: (type) ->
-    totalCost = @selected.length * @prices[type]
-    if totalCost > @gold
-      alert "Cannot afford #{@selected.length} #{type}s. Costs #{totalCost}g."
-    else
+    if @canBuild type
       @selected.forEach (hex) ->
         building = hex.build type
         game.buildings.push building if building
         hex.selected = false
         hex.sprite.alpha = 1.0
       game.selected = []
+
+  canBuild: (type) ->
+    #check price
+    totalCost = @selected.length * @prices[type]
+    if totalCost > @gold
+      alert "Cannot afford #{@selected.length} #{type}s. Costs #{totalCost}g."
+      return false
+    if type == 'wall' #ensure we don't wall off completly.
+      start = game.hexGrid.getOuterRing()[0]
+      end = game.hexGrid.getHex 0, 0
+      @selected.forEach (h) -> h.wall = true
+      if astar.search(game.hexGrid, start, end).length == 0
+        @selected.forEach (h) -> h.wall = null
+        alert "Cannot completely wall off base"
+        return false
+    else #ensure everything is connected
+      return true
+    true
+

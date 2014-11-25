@@ -1,6 +1,7 @@
 class window.HexGrid
   constructor: (@rows, size, hexGeneratingFun) ->
     @container = new PIXI.DisplayObjectContainer()
+    @outerRing = []
     @hexes = {}
     @directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, +1]]
     @container.x = window.innerWidth/2
@@ -25,6 +26,13 @@ class window.HexGrid
         hex.build(building) if building
       # this creates the hex shape with axial coordinates
       if q < 0 then start-- else end--
+    
+    @getRingCoords(@rows+1).map ({ q, r }) => 
+      options = { width, height, q, r, gold:0 }
+      hex = new window.Hex options
+      @hexes[q+':'+r] = hex
+      @outerRing.push hex
+      hex.addTo @container
 
   getHex: (q, r) ->
     @hexes[q+':'+r] or null
@@ -44,19 +52,19 @@ class window.HexGrid
     # for i in [0...N] by 1
     #   THETHING()
 
-  getRing: (r) ->
-    hex = @getHex -r, r
+  getRingCoords: (_r) ->
+    hex = { q: -_r, r: _r }
     ringHexes = []
     for i in [0...6] by 1
       direction = @directions[i]
-      for j in [0...r] by 1
+      for j in [0..._r] by 1
         ringHexes.push hex
-        hex = @getHex hex.q+direction[0], hex.r+direction[1]
-    
+        hex = { q: hex.q+direction[0], r: hex.r+direction[1] }
     ringHexes
   
-  getOuterRing: () ->
-    @getRing @rows
+  getRing: (r) -> @getRingCoords(r).map ({q, r}) => @getHex q, r
+
+  getOuterRing: () -> @outerRing
 
   addTo : (scene) ->
     scene.addChild @container
