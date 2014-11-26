@@ -33,6 +33,8 @@ class window.Hex extends Selectable
       index = game.selected.indexOf @
       game.selected.splice(index, 1)
   
+  hasBuilding: () => @building?
+
   # cost for unit to traverse, used in astar
   isRocks: () -> false#@environment?.indexOf('rocks') >= 0
   
