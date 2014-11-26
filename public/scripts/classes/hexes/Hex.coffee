@@ -24,6 +24,7 @@ class window.Hex extends Selectable
     { x, y }
   
   onToggleSelect: () ->
+    return if @isRocks() or @isTrees()
     if @selected
       @sprite.alpha = .5
       game.selected.push @
