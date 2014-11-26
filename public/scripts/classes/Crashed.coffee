@@ -24,11 +24,17 @@ class window.Crashed
     gridRoot = [{ q: 100000, r: 100000 }]
     distanceFun = (a,b) -> Hex::distanceTo.call a, b
     @enemyKdTree = new kdTree gridRoot, distanceFun, ['q', 'r']
-  
+    
     #UI
     $('#leveltext').text('Level: '+@level)
     $('#goldtext').text('Gold: '+@gold)
     $('#foodtext').text('Food: '+@getFood())
+
+  enemyCount: () ->
+    countR = (n) ->
+      return 0 if n is null
+      return 1 + countR(n.left) + countR(n.right)
+    countR(@enemyKdTree.root) - 1
 
   #Generate a Hex Map
   hexGridGenerator: (q, r) ->
@@ -55,7 +61,13 @@ class window.Crashed
 
   getFood: () ->
     @buildings.reduce ((s, b) ->
-      s + (if (b instanceof buildings.farm) then 3 else -1)), 0
+      if b instanceof buildings.farm
+        f = 3
+      else if b instanceof buildings.wall
+        f = 0
+      else
+        f = -1
+      s + f), 0
 
   addGold: (n) ->
     @gold += n
@@ -68,14 +80,13 @@ class window.Crashed
 
   enemiesPerLevel : (n) ->
     n = Math.floor(10 * Math.pow(1.15, n))
-    small = n
-    large = n//4
+    small = 36
+    large = small//4
     { small, large, total: small+large }
-    # { s : 100 * n, l : 100 * n }
-  
+
   nearestEnemy: (qr) ->
-    q = @enemyKdTree.nearest qr, 1
-    if q.length > 0 then q[0][0] else null
+    e = @enemyKdTree.nearest qr, 1
+    if e.length > 0 and e[0][0].q != 100000 then e[0][0] else null
 
   addTo : (scene) ->
     @hexGrid.addTo @viewContainer
@@ -130,7 +141,7 @@ class window.Crashed
 
   sell: () ->
     @selected.forEach (hex) =>
-      if hex.q | hex.r == 0
+      if (hex.q | hex.r) == 0
         return alert "You really don't want to sell that.."
       index = @buildings.indexOf hex.building
       @buildings.splice index, 1
@@ -153,7 +164,7 @@ class window.Crashed
     if totalCost > @gold
       alert "Cannot afford #{@selected.length} #{type}s. Costs #{totalCost}g."
       return false
-    if @getFood() <= 0 and type != 'farm'
+    if (@getFood() - @selected.length < 0) and not (type in ['farm', 'wall'])
       alert "Not enough food. Build more farms."
       return false
     if type == 'wall' #ensure we don't wall off completly.

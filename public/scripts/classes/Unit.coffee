@@ -10,6 +10,7 @@ class Unit
     @sprite.width = hex.sprite.width/4
     @sprite.height = hex.sprite.height/2
     @sprite.unit = @
+    game.enemyKdTree.insert @
     
   moveTo: ({ q, r }, done) ->
     start = game.hexGrid.getHex @q, @r
@@ -46,7 +47,6 @@ class Unit
     @kill() if @health <= 0
 
   kill: () ->
-    console.trace()
     @sprite.parent.removeChild @sprite
     @path = null
     @sprite = null

@@ -3,6 +3,7 @@ class DraggableContainer
     @_container = new PIXI.DisplayObjectContainer()
     @_container.interactive = true
     @_container.buttonMode = true
+    @position = @_container.position
 
     @_container.mousedown = (data) ->
       @_startX = @position.x
@@ -21,7 +22,7 @@ class DraggableContainer
 
         @position.x = @_startX + mouseDiffX
         @position.y = @_startY + mouseDiffY
-  
+
   scale : (d) ->
     return if @_container.scale.x + d <= 0
     @_container.scale.x += d

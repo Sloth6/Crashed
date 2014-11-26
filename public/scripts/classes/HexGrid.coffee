@@ -1,5 +1,5 @@
 class window.HexGrid
-  constructor: (@rows, size, hexGeneratingFun) ->
+  constructor: (@rows, @size, hexGeneratingFun) ->
     @container = new PIXI.DisplayObjectContainer()
     @outerRing = []
     @hexes = {}
@@ -7,8 +7,8 @@ class window.HexGrid
     @container.x = window.innerWidth/2
     @container.y = window.innerHeight/2
 
-    width = 2 * size
-    height = size * Math.sqrt(3) * 0.5 #.5 is for isometric effect
+    width = 2 * @size
+    height = @size * Math.sqrt(3) * 0.5 #.5 is for isometric effect
     # Build map.
     start = 0
     end = @rows
@@ -40,8 +40,9 @@ class window.HexGrid
 
   #not sure if this actually works
   getHexFromXY: (x, y) ->
-    q = 2 / 3 * x / size
-    r = (-1 / 3 * x + 1 / 3 * sqrt(3) * y) / size
+    q = Math.floor(2 / 3 * x / @size)
+    r = (-1 / 3 * x + 1 / 3 * Math.sqrt(3) * y) // @size
+    console.log q, r
     @getHex q, r
 
   neighbors: ({ q, r }) -> @getHex(q, r).neighbors()
