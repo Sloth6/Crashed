@@ -17,7 +17,7 @@ class Unit
     end = game.hexGrid.getHex q, r
 
     options =
-      impassable: (h) ->  
+      impassable: (h) ->
         (h.isWall() and not (@ instanceof LargeBlob)) or h.isRocks()
     @path = astar.search game.hexGrid, start, end, options
 

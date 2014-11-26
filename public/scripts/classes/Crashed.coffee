@@ -17,7 +17,7 @@ class window.Crashed
     @enemyContainer.x = window.innerWidth/2
     @enemyContainer.y = window.innerHeight/2
 
-    #Datastructures
+    #Data Structures
     console.time 'generateGrid'
     @hexGrid = new HexGrid @gridSize, @tileSize, @hexGridGenerator
     @buildings.push(@hexGrid.getHex(0, 0).build('base'))
@@ -25,6 +25,7 @@ class window.Crashed
     gridRoot = [{ q: 100000, r: 100000 }]
     distanceFun = (a,b) -> Hex::distanceTo.call a, b
     @enemyKdTree = new kdTree gridRoot, distanceFun, ['q', 'r']
+    @enemyList = []
     
     #UI
     $('#leveltext').text('Level: '+@level)
