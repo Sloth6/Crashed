@@ -14,7 +14,7 @@ class window.HexGrid
     end = @rows
     for q in [-@rows..@rows] by 1
       for r in [start..end] by 1
-        { building, type, gold } = hexGeneratingFun q, r
+        { type, gold } = hexGeneratingFun q, r
         options = { width, height, q, r, gold }
         switch type
           when 'rocks' then hex = new window.Rocks options
@@ -23,7 +23,6 @@ class window.HexGrid
           
         @hexes[q+':'+r] = hex
         hex.addTo @container
-        hex.build(building) if building
       # this creates the hex shape with axial coordinates
       if q < 0 then start-- else end--
     
