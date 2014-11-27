@@ -1,16 +1,17 @@
 class Unit
   constructor: ({ @q, @r, @health, @speed, texture }) ->
-    hex = game.hexGrid.getHex @q, @r
+    @hex = game.hexGrid.getHex @q, @r
     @alive = true
     @sprite = new PIXI.Sprite texture
     @sprite.anchor.x = 0.5
     @sprite.anchor.y = 0.5
-    @sprite.position.x = hex.x
-    @sprite.position.y = hex.y
-    @sprite.width = hex.sprite.width/4
-    @sprite.height = hex.sprite.height/2
+    @sprite.position.x = @hex.x
+    @sprite.position.y = @hex.y
+    @sprite.width = @hex.sprite.width/4
+    @sprite.height = @hex.sprite.height/2
     @sprite.unit = @
     game.enemyKdTree.insert @
+    @recalculatePath = true
     
   moveTo: ({ q, r }, done) ->
     start = game.hexGrid.getHex @q, @r
@@ -19,12 +20,16 @@ class Unit
     options =
       impassable: (h) ->
         (h.isWall() and not (@ instanceof LargeBlob)) or h.isRocks()
-    @path = astar.search game.hexGrid, start, end, options
 
+    @path = astar.search game.hexGrid, start, end, options
     moveR = (path, unit) ->
+      if unit.recalculatePath
+        unit.recalculatePath = false
+        path = astar.search game.hexGrid, unit.hex, end, options
       if path.length == 0
         if done then return done() else return
       next = path.shift()
+      unit.hex = next
       new TWEEN.Tween unit.sprite.position
         .to {
           x: next.x + Math.randInt(-20,20)
