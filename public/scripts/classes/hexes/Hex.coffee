@@ -56,11 +56,14 @@ class window.Hex extends Selectable
     (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
   
   build: (type) ->
-    @building.destroy() if @building
-    @building = new buildings[type](@, type)
-    @building.addTo @sprite.parent
-
-    @building
+    if type == 'wall'
+      @wall = new buildings.wall(@, type)
+      @wall.addTo @sprite.parent
+      return @wall
+    else
+      @building = new buildings[type](@, type)
+      @building.addTo @sprite.parent
+      return @building
   
   addTo: (container) ->
     container.addChild @sprite

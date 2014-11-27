@@ -19,7 +19,7 @@ class Unit
     start = @hex
     end = game.hexGrid.getHex q, r
     options =
-      impassable: (h) ->
+      impassable: (h) =>
         (h.isWall() and not (@ instanceof LargeBlob)) or h.isRocks()
     @path = astar.search game.hexGrid, start, end, options
 
@@ -46,7 +46,7 @@ class Unit
           game.enemyKdTree.remove unit
           if unit.health > 0
             game.enemyKdTree.insert unit
-            unit.onMove(game.hexGrid.getHex unit.q, unit.r) if unit.onMove
+            unit.onMove(unit.hex) if unit.onMove
             moveR path, unit
         .start()
     moveR @path, @
