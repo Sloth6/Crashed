@@ -17,9 +17,10 @@ class Wall extends Building
   act: () -> #Be a wall
   sell: () ->
     game.enemies.forEach (e) -> e.recalculatePath = true
-    super
+    super()
   destroy: () ->
     game.enemies.forEach (e) -> e.recalculatePath = true
+    super()
 
 class Road extends Building
   constructor: ( hex ) ->

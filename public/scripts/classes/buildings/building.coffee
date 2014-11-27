@@ -23,6 +23,7 @@ class Building
     game.addGold game.prices[@type]//1.5
   
   destroy: ()  ->
+    console.log("destroying")
     @onDeath() if @onDeath
     @sprite.parent.removeChild @sprite
     @sprite = null
