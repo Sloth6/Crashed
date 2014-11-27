@@ -14,31 +14,35 @@ class Unit
     @recalculatePath = true
     
   moveTo: ({ q, r }, done) ->
-    start = game.hexGrid.getHex @q, @r
-    end = game.hexGrid.getHex q, r
 
+    #sets up initial movement
+    start = @hex
+    end = game.hexGrid.getHex q, r
     options =
       impassable: (h) ->
         (h.isWall() and not (@ instanceof LargeBlob)) or h.isRocks()
-
     @path = astar.search game.hexGrid, start, end, options
+
+    #moves recursively
     moveR = (path, unit) ->
+      #recalculates paths if necessary
       if unit.recalculatePath
         unit.recalculatePath = false
         path = astar.search game.hexGrid, unit.hex, end, options
+      #if finished calls the done function
       if path.length == 0
         if done then return done() else return
-      next = path.shift()
-      unit.hex = next
+      #sets the unit to the next tile
+      unit.hex = path.shift()
       new TWEEN.Tween unit.sprite.position
         .to {
-          x: next.x + Math.randInt(-20,20)
-          y: next.y + Math.randInt(-20,20)
+          x: unit.hex.x + Math.randInt(-20,20)
+          y: unit.hex.y + Math.randInt(-20,20)
         }, unit.speed
         .easing TWEEN.Easing.Quintic.InOut
         .onComplete () ->
-          unit.q = next.q
-          unit.r = next.r
+          unit.q = unit.hex.q
+          unit.r = unit.hex.r
           game.enemyKdTree.remove unit
           if unit.health > 0
             game.enemyKdTree.insert unit
