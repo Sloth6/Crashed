@@ -25,7 +25,7 @@ class window.Crashed
     gridRoot = [{ q: 100000, r: 100000 }]
     distanceFun = (a,b) -> Hex::distanceTo.call a, b
     @enemyKdTree = new kdTree gridRoot, distanceFun, ['q', 'r']
-    @enemyList = []
+    @enemies = []
     
     #UI
     $('#leveltext').text('Level: '+@level)
