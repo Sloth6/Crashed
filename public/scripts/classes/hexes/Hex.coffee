@@ -40,7 +40,8 @@ class window.Hex extends Selectable
   
   isTrees: () -> false#@environment?.indexOf('trees') >= 0
   
-  getCost: () -> 1#if @isTrees then 1.5 else 1.0
+  getCost: () =>
+    if @isTrees() then 10 else 1.0
   
   isWall: () -> (@building instanceof buildings.wall) or @wall
   # isWall: () -> @wall? or @isRocks()

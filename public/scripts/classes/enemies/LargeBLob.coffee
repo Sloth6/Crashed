@@ -10,4 +10,4 @@ class window.LargeBlob extends Enemy
       hex.building.destroy()
     if hex.wall?
       console.log 'found wall'
-      hex.wall.destroy()
+      console.log hex.wall.destroy()

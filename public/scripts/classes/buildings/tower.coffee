@@ -20,6 +20,7 @@ class Wall extends Building
     super
   destroy: () ->
     game.enemies.forEach (e) -> e.recalculatePath = true
+    super()
 
 class Road extends Building
   constructor: ( hex ) ->

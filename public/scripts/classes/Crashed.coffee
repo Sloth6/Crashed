@@ -17,10 +17,10 @@ class window.Crashed
     @enemyContainer.x = window.innerWidth/2
     @enemyContainer.y = window.innerHeight/2
 
-    #Data Structures
+    #Datastructures
     console.time 'generateGrid'
     @hexGrid = new HexGrid @gridSize, @tileSize, @hexGridGenerator
-    @buildings.push(@hexGrid.getHex(0, 0).build('base'))
+    @hexGrid.getHex(0,0).build 'base'
     console.timeEnd 'generateGrid'
     gridRoot = [{ q: 100000, r: 100000 }]
     distanceFun = (a,b) -> Hex::distanceTo.call a, b
@@ -43,9 +43,12 @@ class window.Crashed
     building = null
     gold = 0
     type = ''
+    building = null
+
+    building = 'base' if q == 0 and r == 0
     
-    emptySpaces = [-1,0,1]
-    if q in emptySpaces or r in emptySpaces
+    emptySpaces = [-1,0,1]#, @gridSize, -@gridSize]
+    if q in emptySpaces and r in emptySpaces
       type = ''
     else
       randEnviron = Math.random() # [0, 1)
@@ -56,7 +59,7 @@ class window.Crashed
       else
         if Math.random() < .2 then gold = 100
     
-    { type, gold }
+    { building, type, gold }
 
   getFood: () ->
     @buildings.reduce ((s, b) ->
@@ -166,42 +169,14 @@ class window.Crashed
     if (@getFood() - @selected.length < 0) and not (type in ['farm', 'wall'])
       alert "Not enough food. Build more farms."
       return false
-    else if @selected.some((elem, index, array) -> elem.hasBuilding())
-      alert "You need to sell that building first."
-      return false
-
-    if type == 'wall' #ensure we don't wall off completely.
+    if type == 'wall' #ensure we don't wall off completly.
       start = game.hexGrid.getOuterRing()[0]
       end = game.hexGrid.getHex 0, 0
       options = { impassable: (h) => h.isWall() or h in @selected }
       if astar.search(game.hexGrid, start, end, options).length == 0
         alert "Cannot completely wall off base"
         return false
-    else # only applies to non-walls
-      # Treat each building as 'true' which allows us to run a simple 
-      # algorithm checking if each building is connected without actually
-      # creating and destroying each building
-      @selected.forEach (h) -> h.building = true
-      isConnected = @isConnected()
-      @selected.forEach (h) -> h.building = null
-      if not isConnected
-        alert "Buildings (not walls) must be adjacent to another building."
-        return false
+    else #ensure everything is connected
+      return true
     true
-
-  isConnected: () ->
-    numSeen = 0
-    seen = {}
-    # recursively check all neighbors
-    checkR = (h) ->
-      return if not h.hasBuilding()
-      return if seen[h.q+':'+h.r]?
-      #record all the buildings we reach from the center.
-      seen[h.q+':'+h.r] = true
-      numSeen++
-      h.neighbors().forEach checkR
-
-    checkR @hexGrid.getHex(0,0)
-    # ensure we see every buildings that will be built.
-    numSeen == @buildings.length + @selected.length
 

@@ -38,7 +38,7 @@ class Unit
         .to {
           x: unit.hex.x + Math.randInt(-20,20)
           y: unit.hex.y + Math.randInt(-20,20)
-        }, unit.speed
+        }, unit.speed * unit.hex.getCost()
         .easing TWEEN.Easing.Quintic.InOut
         .onComplete () ->
           unit.q = unit.hex.q
