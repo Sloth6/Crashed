@@ -68,10 +68,9 @@ var astar = {
         var unit = options.unit || false;
         var heuristic = options.heuristic || astar.heuristics.manhattan,
             closest = options.closest || false;
-
+        var impassable = options.impassable || function(){return false};
         var openHeap = getHeap(),
             closestNode = start; // set the start node to be the closest if required
-
         start.h = heuristic(start, end);
 
         openHeap.push(start);
@@ -95,7 +94,7 @@ var astar = {
                 var neighbor = neighbors[i];
 
                 // if (neighbor.closed || neighbor.isWall(unit)) {
-                if (neighbor.closed || options.impassable(neighbor, unit)) {
+                if (neighbor.closed || impassable(neighbor, unit)) {
                     // Not a valid node to process, skip to next neighbor.
                     continue;
                 }
@@ -104,7 +103,6 @@ var astar = {
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
                 var gScore = currentNode.g + neighbor.getCost(currentNode),
                     beenVisited = neighbor.visited;
-
                 if (!beenVisited || gScore < neighbor.g) {
 
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.

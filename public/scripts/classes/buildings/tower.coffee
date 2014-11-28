@@ -44,7 +44,7 @@ class Tower extends Building
     @dmg = 2
     super hex, 'tower'
   act: () ->
-    if @target? and @target.alive
+    if @target? and @target.alive and !@destroyed
       a = @sprite.position
       b = @target.sprite.position
       @sprite.rotation = Math.atan2(b.y - a.y, b.x - a.x) + Math.PI/2
