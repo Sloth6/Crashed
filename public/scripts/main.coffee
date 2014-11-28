@@ -76,7 +76,7 @@ bindUi = (game) ->
     $(elem).text(text+': '+game.prices[type]+'g')
 
   $( '#sellbutton').click () ->
-    numBuildings = (game.selected.filter (h) -> !!h.building).length
+    numBuildings = (game.selected.filter (h) -> !!h.building or !!h.wall).length
     return alert 'Select buildings to sell.' if numBuildings == 0
     game.sell()
 

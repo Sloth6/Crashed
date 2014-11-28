@@ -15,8 +15,8 @@ class window.Crashed
     @enemyContainer.x = window.innerWidth/2
     @enemyContainer.y = window.innerHeight/2
     @buildingContainer = new PIXI.DisplayObjectContainer()
-    @enemyContainer.x = window.innerWidth/2
-    @enemyContainer.y = window.innerHeight/2
+    @buildingContainer.x = window.innerWidth/2
+    @buildingContainer.y = window.innerHeight/2
 
     #Datastructures
     console.time 'generateGrid'
@@ -84,7 +84,7 @@ class window.Crashed
   enemiesPerLevel : (n) ->
     n = Math.floor(10 * Math.pow(1.15, n))
     small = 36
-    large = small//4
+    large = small//36
     { small, large, total: small+large }
 
   nearestEnemy: (qr) ->
@@ -148,7 +148,8 @@ class window.Crashed
         return alert "You really don't want to sell that.."
       index = @buildings.indexOf hex.building
       @buildings.splice index, 1
-      hex.building.sell()
+      hex.building?.sell()
+      hex.wall?.sell()
     @updateInfo()
 
   build: (type) ->

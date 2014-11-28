@@ -15,10 +15,12 @@ class Wall extends Building
   constructor: ( hex ) ->
     super hex, 'wall'
   act: () -> #Be a wall
-  sell: () ->
+  sell: () =>
+    @hex.wall = null
     game.enemies.forEach (e) -> e.recalculatePath = true
     super()
-  destroy: () ->
+  destroy: () =>
+    @hex.wall = null
     game.enemies.forEach (e) -> e.recalculatePath = true
     super()
 
