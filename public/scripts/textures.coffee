@@ -18,4 +18,11 @@ window.textures =
   rocks0: PIXI.Texture.fromImage 'images/enviornment/rocks0.png'
   rocks1: PIXI.Texture.fromImage 'images/enviornment/rocks1.png'
   rocks2: PIXI.Texture.fromImage 'images/enviornment/rocks2.png'
+  mainmenu:
+    newGame: PIXI.Texture.fromImage 'images/mainmenu/New.gif'
+    scores: PIXI.Texture.fromImage 'images/mainmenu/Scores.gif'
+    credits: PIXI.Texture.fromImage 'images/mainmenu/Credits.gif'
+    newGameActive: PIXI.Texture.fromImage 'images/mainmenu/NewActive.gif'
+    scoresActive: PIXI.Texture.fromImage 'images/mainmenu/ScoresActive.gif'
+    creditsActive: PIXI.Texture.fromImage 'images/mainmenu/CreditsActive.gif'
 console.timeEnd "loadTextures"

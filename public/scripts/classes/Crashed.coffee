@@ -1,6 +1,7 @@
 class window.Crashed
   constructor: ({ @gold, @prices, @gridSize, @tileSize }) ->
     #Game Variables
+    console.log @gold
     @level = 0
     @buildings = []
     @selected = []
@@ -20,7 +21,6 @@ class window.Crashed
     #Datastructures
     console.time 'generateGrid'
     @hexGrid = new HexGrid @gridSize, @tileSize, @hexGridGenerator
-    @hexGrid.getHex(0,0).build 'base'
     console.timeEnd 'generateGrid'
     gridRoot = [{ q: 100000, r: 100000 }]
     distanceFun = (a,b) -> Hex::distanceTo.call a, b
@@ -31,6 +31,12 @@ class window.Crashed
     $('#leveltext').text('Level: '+@level)
     $('#goldtext').text('Gold: '+@gold)
     $('#foodtext').text('Food: '+@getFood())
+
+  start: () ->
+    console.log 'This voyage has begun!'
+    @hexGrid.getHex(0,0).build 'base'
+    @viewContainer.setDraggable true
+    $( "#ui" ).show()
 
   enemyCount: () ->
     countR = (n) ->

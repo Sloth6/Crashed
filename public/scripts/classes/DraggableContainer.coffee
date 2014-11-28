@@ -1,7 +1,7 @@
 class DraggableContainer
   constructor: () ->
     @_container = new PIXI.DisplayObjectContainer()
-    @_container.interactive = true
+    @_container.interactive = false
     @_container.buttonMode = true
     @position = @_container.position
 
@@ -30,6 +30,9 @@ class DraggableContainer
 
   addTo : (scene) ->
     scene.addChild @_container
+
+  setDraggable: (bool) ->
+    @_container.interactive = bool
 
   addChild : (child) ->
     @_container.addChild child

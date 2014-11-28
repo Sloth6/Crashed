@@ -16,7 +16,7 @@ app.use coffeeMiddleware {
 }
 
 app.get '/', (req, res) ->
-  res.render 'index', {title:"Crashed"}
+  res.render 'index', {}
 
 # catch 404 and forward to error handler
 app.get '*', (req, res, next) ->

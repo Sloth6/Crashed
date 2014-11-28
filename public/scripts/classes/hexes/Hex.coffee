@@ -5,11 +5,11 @@ class window.Hex extends Selectable
     @gold ?= 0
     { x, y } = @qrToxy { @q, @r, width }
 
-    @text = new PIXI.Text @q+':'+@r, { font:"12px Arial", fill:"black" }
-    @text.x = x
-    @text.y = y
-    @text.anchor.x = 0.5
-    @text.anchor.y = 0.5
+    # @text = new PIXI.Text @q+':'+@r, { font:"12px Arial", fill:"black" }
+    # @text.x = x
+    # @text.y = y
+    # @text.anchor.x = 0.5
+    # @text.anchor.y = 0.5
 
     if @gold > 0
       @goldSprite = new PIXI.Sprite textures.resourcesFull

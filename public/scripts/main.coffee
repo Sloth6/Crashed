@@ -2,11 +2,10 @@ console.time 'totalLoading'
 console.time 'parsingHtml'
 $ ->
   console.timeEnd 'parsingHtml'
-
   console.time 'creatingRenderer'
   PIXI.dontSayHello = true #sorry pixi
   renderer = PIXI.autoDetectRenderer window.innerWidth, window.innerHeight
-  stage = new PIXI.Stage 0xFFFFFF
+  window.stage = new PIXI.Stage 0xFFFFFF
 
   document.body.appendChild renderer.view
   renderer.view.style.position = 'absolute'
@@ -19,7 +18,7 @@ $ ->
   stats.domElement.style.top = '0px'
   console.timeEnd 'creatingRenderer'
 
-  gameOptions =
+  window.gameOptions =
     levels: 10
     startingGold: 100
     gridSize: 14
@@ -33,52 +32,22 @@ $ ->
       wall: 2
       pylon: 10
 
-  window.game = new Crashed gameOptions
-
-  game.addTo stage
-  bindUi game
   
-  gradient = new PIXI.Sprite PIXI.Texture.fromImage('images/AtmosphericGradient.png')
-  gradient.width = window.innerWidth
-  gradient.height = window.innerHeight
-  stage.addChild gradient
-  game.buildPhase()
-
+  new Gameview()
+  new Mainmenu()
+  
   animate = () ->
     stats.begin()
-    game.update()
+    game.update() if game?
     TWEEN.update()
-    renderer.render stage
+    renderer.render window.stage
     requestAnimFrame animate
     stats.end()
   
   requestAnimFrame animate
   console.timeEnd 'totalLoading'
 
-bindUi = (game) ->
-  $( "#start" ).click () ->
-    game.fightPhase()
 
-  $( "#zoomIn" ).click () ->
-    game.viewContainer.scale 0.25
-  
-  $( "#zoomOut" ).click () ->
-    game.viewContainer.scale -0.25
-
-  # $( "#progressbar" ).progressbar { value: 100 }
-  $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->
-    type = ui.item.text().toLowerCase().split(':')[0]
-    game.build type
-
-  $( '#buildmenu' ).children().each (i, elem) ->
-    text = $(elem).text()
-    type = text.toLowerCase()
-    $(elem).text(text+': '+game.prices[type]+'g')
-
-  $( '#sellbutton').click () ->
-    numBuildings = (game.selected.filter (h) -> !!h.building).length
-    return alert 'Select buildings to sell.' if numBuildings == 0
-    game.sell()
 
 # =======
 #     type = ui.item.text().toLowerCase()
@@ -108,4 +77,5 @@ Math.randInt = (min, max) ->
     Math.floor(Math.random() * (max - min)) + min
 
 window.random = (array) ->
+  return null if array.length is 0
   array[Math.randInt(array.length)]
