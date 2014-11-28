@@ -6,6 +6,7 @@ class Building
       game.gold -= cost
       $('#goldtext').text('Gold: '+game.gold)
 
+    @destroyed = false
     @sprite = new PIXI.Sprite window.textures[@type]
     @sprite.anchor.x = 0.5
     @sprite.anchor.y = 0.5
@@ -29,6 +30,7 @@ class Building
     @sprite = null
     @hex.building = null
     @hex.wall = null
+    @destroyed = true
   
   addTo: (container) ->
     container.addChild @sprite
