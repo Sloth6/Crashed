@@ -173,7 +173,7 @@ class window.Crashed
     if type == 'wall' #ensure we don't wall off completly.
       start = game.hexGrid.getOuterRing()[0]
       end = game.hexGrid.getHex 0, 0
-      options = { impassable: (h) => h.isWall() or h in @selected }
+      options = { impassable: (h) => h.isWall() or h.isRocks() or h in @selected }
       if astar.search(game.hexGrid, start, end, options).length == 0
         alert "Cannot completely wall off base"
         return false
