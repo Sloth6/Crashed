@@ -8,8 +8,9 @@ class window.Crashed
 
     #Layers, so hexes on bottom, buildings above and enemeies on top
     @viewContainer = new DraggableContainer()
-    @viewContainer.x = window.innerWidth/2
-    @viewContainer.y = window.innerHeight/2
+    @viewContainer._container.x = window.innerWidth/2
+    @viewContainer._container.y = window.innerHeight/2
+    @viewContainer._container.pivot = new PIXI.Point @viewContainer._container.x, @viewContainer._container.y
     @enemyContainer = new PIXI.DisplayObjectContainer()
     @enemyContainer.x = window.innerWidth/2
     @enemyContainer.y = window.innerHeight/2
