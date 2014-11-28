@@ -144,6 +144,7 @@ class window.Crashed
       new LargeBlob({ q: hex.q, r: hex.r }).addTo game.enemyContainer
 
   updateInfo: () ->
+    console.log @gold
     $('#goldtext').text('Gold: '+@gold)
     $('#foodtext').text('Food: '+@getFood())
 

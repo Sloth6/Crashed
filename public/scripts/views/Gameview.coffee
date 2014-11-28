@@ -9,10 +9,11 @@
     game.addTo stage
     game.buildPhase()
     $( "#ui" ).hide()
+    @bindUi()
     # game.viewContainer.scale(-0.5)
 
   bindUi: () ->
-    $( "#ui" ).show()
+    
 
     $( "#start" ).click () ->
       game.fightPhase()

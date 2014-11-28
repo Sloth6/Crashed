@@ -45,7 +45,7 @@ class window.Mainmenu extends View
       game.start()
     
     @scores.mousedown () =>
-      alert 'Nothing scores yet.'
+      alert 'No scores yet.'
 
     @credits.mousedown () =>
       alert 'Sloth Norder 2v2 bronze team.'
