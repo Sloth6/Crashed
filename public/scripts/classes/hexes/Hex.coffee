@@ -71,25 +71,3 @@ class window.Hex extends Selectable
     container.addChild @environmentSprite if @environmentSprite
     container.addChild @goldSprite if @goldSprite
     container.addChild @text if @text
-
-# hex = new PIXI.Graphics()
-# hex.beginFill 0xFF3300
-# hex.lineStyle 2, 0x000000, 1
-
-# angle = 0.0
-# scale = 1.0
-# points = []
-# for i in [0...7] by 1
-#   angle = 1 * Math.PI / 3 * i;
-#   x_i = Math.round(x + size * Math.cos(angle))
-#   y_i = Math.round(y + size * Math.sin(angle))
-  # points.push x_i, y_i
-  # if i == 0
-  #   hex.moveTo x_i, scale * y_i
-  # else
-  #   hex.lineTo x_i, scale * y_i
-
-# hex.endFill()
-# hex.drawPolygon points
-
-# @sprite.hitArea = new PIXI.Polygon points
