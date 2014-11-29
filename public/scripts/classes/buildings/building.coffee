@@ -3,8 +3,7 @@ class Building
     if window.game
       cost = game.prices[@type]
       return if cost > game.gold
-      game.gold -= cost
-      $('#goldtext').text('Gold: '+game.gold)
+      game.addGold(-cost)
 
     @destroyed = false
     @sprite = new PIXI.Sprite window.textures[@type]

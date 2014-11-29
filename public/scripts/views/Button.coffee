@@ -19,4 +19,8 @@ class window.Button
   mousedown: (@downfun) =>
   
   remove: () =>
-    window.stage.removeChild @sprite
+    new TWEEN.Tween @sprite
+      .to { alpha: 0 }, 300
+      .easing TWEEN.Easing.Linear.None
+      .onComplete () => window.stage.removeChild @sprite
+      .start()

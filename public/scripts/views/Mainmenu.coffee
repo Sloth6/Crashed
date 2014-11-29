@@ -1,9 +1,8 @@
 class window.Mainmenu extends View
   constructor: () ->
     [ cx, cy ] = [ window.innerWidth // 2, window.innerHeight // 2 ]
-    w = 326
-    h = 287
-
+    [ w, h ] = [ 326, 287 ]
+    
     @newGame = new Button {
       texture: textures.mainmenu.newGame
       x: cx - (3*w/4)
@@ -18,34 +17,27 @@ class window.Mainmenu extends View
       hoverTexture: textures.mainmenu.scoresActive
     }
 
-    @credits = new Button {
-      texture: textures.mainmenu.credits
+    @instructions = new Button {
+      texture: textures.mainmenu.instructions
       x: cx
       y: cy - h/2
-      hoverTexture: textures.mainmenu.creditsActive
+      hoverTexture: textures.mainmenu.instructionsActive
     }
-
-
-    # window.stage.addChild @newGame
-    # window.stage.addChild @scores
-    # window.stage.addChild @credits
-
     super
 
   bindUi: () ->
-    # @newGame.mouseover = () ->
-    #   @setTexture textures.mainmenu.newGameActive
-    # @newGame.mouseout = () ->
-    #   @setTexture textures.mainmenu.newGame
-
     @newGame.mousedown (data) =>
       @newGame.remove()
       @scores.remove()
-      @credits.remove()
-      game.start()
+      @instructions.remove()
+
+      setTimeout (() ->
+        game.viewContainer._container.filters = null
+        game.start()
+      ), 250
     
     @scores.mousedown () =>
       alert 'No scores yet.'
 
-    @credits.mousedown () =>
-      alert 'Sloth Norder 2v2 bronze team.'
+    @instructions.mousedown () =>
+      alert 'L2P'

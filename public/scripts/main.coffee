@@ -25,6 +25,7 @@ $ ->
     tileSize: 80
     gold: 100
     prices:
+      base: 0
       tower: 10
       road: 4
       collector: 10
@@ -35,6 +36,10 @@ $ ->
   
   new Gameview()
   new Mainmenu()
+
+  blurFilter = new PIXI.BlurFilter()
+  blurFilter.blur = 7
+  game.viewContainer._container.filters = [blurFilter]
   
   animate = () ->
     stats.begin()

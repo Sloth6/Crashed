@@ -1,7 +1,6 @@
 class window.Crashed
   constructor: ({ @gold, @prices, @gridSize, @tileSize }) ->
     #Game Variables
-    console.log @gold
     @level = 0
     @buildings = []
     @selected = []
@@ -28,11 +27,10 @@ class window.Crashed
     @enemies = []
     
     #UI
-    $('#leveltext').text('Level: '+@level)
-    $('#goldtext').text('Gold: '+@gold)
-    $('#foodtext').text('Food: '+@getFood())
+    @updateInfo
+    
 
-  start: () ->
+  start: () =>
     console.log 'This voyage has begun!'
     @hexGrid.getHex(0,0).build 'base'
     @viewContainer.setDraggable true
@@ -77,9 +75,9 @@ class window.Crashed
         f = -1
       s + f), 0
 
-  addGold: (n) ->
+  addGold: (n) =>
     @gold += n
-    $('#goldtext').text('Gold: '+@gold)
+    @updateInfo()
 
   #Update called in main update loop. 
   update: () ->
@@ -144,9 +142,9 @@ class window.Crashed
       new LargeBlob({ q: hex.q, r: hex.r }).addTo game.enemyContainer
 
   updateInfo: () ->
-    console.log @gold
     $('#goldtext').text('Gold: '+@gold)
     $('#foodtext').text('Food: '+@getFood())
+    $('#leveltext').text 'Level: '+@level
 
   sell: () ->
     @selected.forEach (hex) =>

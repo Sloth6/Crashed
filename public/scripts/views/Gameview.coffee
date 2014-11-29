@@ -13,8 +13,6 @@
     # game.viewContainer.scale(-0.5)
 
   bindUi: () ->
-    
-
     $( "#start" ).click () ->
       game.fightPhase()
 
