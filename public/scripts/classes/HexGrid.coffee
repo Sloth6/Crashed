@@ -1,6 +1,7 @@
 class window.HexGrid
   constructor: (@rows, @size, hexGeneratingFun) ->
     @container = new PIXI.DisplayObjectContainer()
+
     @outerRing = []
     @hexes = {}
     @directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, +1]]

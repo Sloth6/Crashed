@@ -21,7 +21,6 @@ class window.Crashed
     #Datastructures
     console.time 'generateGrid'
     @hexGrid = new HexGrid @gridSize, @tileSize, @hexGridGenerator
-    @hexGrid.getHex(0,0).build 'base'
     console.timeEnd 'generateGrid'
     gridRoot = [{ q: 100000, r: 100000 }]
     distanceFun = (a,b) -> Hex::distanceTo.call a, b
@@ -29,9 +28,14 @@ class window.Crashed
     @enemies = []
     
     #UI
-    $('#leveltext').text('Level: '+@level)
-    $('#goldtext').text('Gold: '+@gold)
-    $('#foodtext').text('Food: '+@getFood())
+    @updateInfo
+    
+
+  start: () =>
+    console.log 'This voyage has begun!'
+    @hexGrid.getHex(0,0).build 'base'
+    @viewContainer.setDraggable true
+    $( "#ui" ).show()
 
   enemyCount: () ->
     countR = (n) ->
@@ -72,9 +76,9 @@ class window.Crashed
         f = -1
       s + f), 0
 
-  addGold: (n) ->
+  addGold: (n) =>
     @gold += n
-    $('#goldtext').text('Gold: '+@gold)
+    @updateInfo()
 
   #Update called in main update loop. 
   update: () ->
@@ -141,6 +145,7 @@ class window.Crashed
   updateInfo: () ->
     $('#goldtext').text('Gold: '+@gold)
     $('#foodtext').text('Food: '+@getFood())
+    $('#leveltext').text 'Level: '+@level
 
   sell: () ->
     @selected.forEach (hex) =>
@@ -150,6 +155,9 @@ class window.Crashed
       @buildings.splice index, 1
       hex.building?.sell()
       hex.wall?.sell()
+      hex.selected = false
+      hex.sprite.alpha = 1.0
+    game.selected = []
     @updateInfo()
 
   build: (type) ->
