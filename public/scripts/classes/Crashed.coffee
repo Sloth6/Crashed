@@ -8,9 +8,9 @@ class window.Crashed
 
     #Layers, so hexes on bottom, buildings above and enemeies on top
     @viewContainer = new DraggableContainer()
-    @viewContainer._container.x = window.innerWidth/2
-    @viewContainer._container.y = window.innerHeight/2
-    @viewContainer._container.pivot = new PIXI.Point @viewContainer._container.x, @viewContainer._container.y
+    @viewContainer.x = window.innerWidth/2
+    @viewContainer.y = window.innerHeight/2
+    @viewContainer.pivot = new PIXI.Point @viewContainer.x, @viewContainer.y
     @enemyContainer = new PIXI.DisplayObjectContainer()
     @enemyContainer.x = window.innerWidth/2
     @enemyContainer.y = window.innerHeight/2
@@ -29,7 +29,12 @@ class window.Crashed
     
     #UI
     @updateInfo
-    
+
+    @viewContainer.addChild @hexGrid
+    @viewContainer.addChild @buildingContainer
+    @viewContainer.addChild @enemyContainer
+    stage.addChild @viewContainer
+
 
   start: () =>
     console.log 'This voyage has begun!'
@@ -94,12 +99,6 @@ class window.Crashed
   nearestEnemy: (qr) ->
     e = @enemyKdTree.nearest qr, 1
     if e.length > 0 and e[0][0].q != 100000 then e[0][0] else null
-
-  addTo : (scene) ->
-    @hexGrid.addTo @viewContainer
-    @viewContainer.addChild @buildingContainer
-    @viewContainer.addChild @enemyContainer
-    @viewContainer.addTo scene
   
   getBuildings: () -> @buildings
   
@@ -156,7 +155,7 @@ class window.Crashed
       hex.building?.sell()
       hex.wall?.sell()
       hex.selected = false
-      hex.sprite.alpha = 1.0
+      hex.alpha = 1.0
     game.selected = []
     @updateInfo()
 
@@ -166,7 +165,7 @@ class window.Crashed
         building = hex.build type
         game.buildings.push building if building
         hex.selected = false
-        hex.sprite.alpha = 1.0
+        hex.alpha = 1.0
       game.selected = []
       @updateInfo()
 

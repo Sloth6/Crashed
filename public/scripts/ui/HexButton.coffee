@@ -17,6 +17,3 @@ class window.HexButton extends Button
       .easing TWEEN.Easing.Linear.None
       .onComplete () => super
       .start()
-
-
-

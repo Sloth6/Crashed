@@ -7,12 +7,12 @@ class Unit
     @sprite.anchor.y = 0.5
     @sprite.position.x = @hex.x
     @sprite.position.y = @hex.y
-    @sprite.width = @hex.sprite.width/4
-    @sprite.height = @hex.sprite.height/2
+    @sprite.width = @hex.width/4
+    @sprite.height = @hex.height/2
     @sprite.unit = @
     game.enemyKdTree.insert @
     @recalculatePath = true
-    
+
   moveTo: ({ q, r }, done) ->
 
     #sets up initial movement
@@ -22,7 +22,6 @@ class Unit
       impassable: (h) =>
         (h.isWall() and not (@ instanceof LargeBlob)) or h.isRocks()
     @path = astar.search game.hexGrid, start, end, options
-
     #moves recursively
     moveR = (path, unit) ->
       #recalculates paths if necessary

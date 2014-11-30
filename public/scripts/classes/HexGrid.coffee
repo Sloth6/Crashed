@@ -1,12 +1,12 @@
-class window.HexGrid
+class window.HexGrid extends PIXI.DisplayObjectContainer
   constructor: (@rows, @size, hexGeneratingFun) ->
-    @container = new PIXI.DisplayObjectContainer()
-
+    super
     @outerRing = []
     @hexes = {}
     @directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, +1]]
-    @container.x = window.innerWidth/2
-    @container.y = window.innerHeight/2
+    
+    @x = window.innerWidth/2
+    @y = window.innerHeight/2
 
     width = 2 * @size
     height = @size * Math.sqrt(3) * 0.5 #.5 is for isometric effect
@@ -23,7 +23,7 @@ class window.HexGrid
           else hex = new window.Hex options
           
         @hexes[q+':'+r] = hex
-        hex.addTo @container
+        hex.addTo @
       # this creates the hex shape with axial coordinates
       if q < 0 then start-- else end--
     
@@ -33,7 +33,7 @@ class window.HexGrid
       hex = new window.Hex options
       @hexes[q+':'+r] = hex
       @outerRing.push hex
-      hex.addTo @container
+      hex.addTo @
 
   getHex: (q, r) ->
     @hexes[q+':'+r] or null
@@ -69,6 +69,3 @@ class window.HexGrid
   getRing: (r, c) -> @getRingCoords(r, c).map ({q, r}) => @getHex q, r
 
   getOuterRing: () -> @outerRing
-
-  addTo : (scene) ->
-    scene.addChild @container

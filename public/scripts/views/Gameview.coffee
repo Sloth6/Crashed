@@ -6,7 +6,7 @@
     stage.addChild gradient
 
     window.game = new Crashed gameOptions
-    game.addTo stage
+
     game.buildPhase()
     $( "#ui" ).hide()
     @bindUi()
@@ -17,10 +17,10 @@
       game.fightPhase()
 
     $( "#zoomIn" ).click () ->
-      game.viewContainer.scale 0.25
+      game.viewContainer.changeScale 0.25
     
     $( "#zoomOut" ).click () ->
-      game.viewContainer.scale -0.25
+      game.viewContainer.changeScale -0.25
 
     # $( "#progressbar" ).progressbar { value: 100 }
     $( "#buildmenu" ).menu().on 'menuselect', (event, ui) ->

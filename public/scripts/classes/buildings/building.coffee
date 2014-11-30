@@ -11,9 +11,9 @@ class Building
     @sprite.anchor.y = 0.5
     @sprite.position.x = @hex.x
     @sprite.position.y = @hex.y
-    ratio = @sprite.height / @hex.sprite.height
-    @sprite.height = @hex.sprite.height #/ ratio
-    @sprite.width /= ratio #= @hex.sprite.width 
+    ratio = @sprite.height / @hex.height
+    @sprite.height = @hex.height #/ ratio
+    @sprite.width /= ratio #= @hex.width 
   
   sell: () ->
     @sprite.parent.removeChild @sprite

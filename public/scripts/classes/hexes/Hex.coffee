@@ -26,25 +26,24 @@ class window.Hex extends Selectable
   onToggleSelect: () ->
     return if @isRocks() or @isTrees()
     if @selected
-      @sprite.alpha = .5
+      @alpha = .5
       game.selected.push @
     else
-      @sprite.alpha = 1.0
+      @alpha = 1.0
       index = game.selected.indexOf @
       game.selected.splice(index, 1)
   
   hasBuilding: () => @building?
 
   # cost for unit to traverse, used in astar
-  isRocks: () -> false#@environment?.indexOf('rocks') >= 0
+  isRocks: () -> false
   
-  isTrees: () -> false#@environment?.indexOf('trees') >= 0
+  isTrees: () -> false
   
   getCost: () =>
     if @isTrees() then 10 else 1.0
   
-  isWall: () -> (@building instanceof buildings.wall) or @wall
-  # isWall: () -> @wall? or @isRocks()
+  isWall: () -> @wall
 
   #I don't really know what the question mark syntax is. Did I use it right?
   isBuildable: () -> not (@isWall() or @isTrees() or @isRocks() or @building)
@@ -59,15 +58,15 @@ class window.Hex extends Selectable
   build: (type) ->
     if type == 'wall'
       @wall = new buildings.wall(@, type)
-      @wall.addTo @sprite.parent
+      @wall.addTo @parent
       return @wall
     else
       @building = new buildings[type](@, type)
-      @building.addTo @sprite.parent
+      @building.addTo @parent
       return @building
   
   addTo: (container) ->
-    container.addChild @sprite
+    container.addChild @
     container.addChild @environmentSprite if @environmentSprite
     container.addChild @goldSprite if @goldSprite
     container.addChild @text if @text

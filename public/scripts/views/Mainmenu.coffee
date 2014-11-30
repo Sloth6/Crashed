@@ -30,7 +30,7 @@ class window.Mainmenu extends View
       @instructions.remove()
 
       setTimeout (() ->
-        game.viewContainer._container.filters = null
+        game.viewContainer.filters = null
         game.start()
       ), 250
     

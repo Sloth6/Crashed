@@ -39,7 +39,7 @@ $ ->
 
   blurFilter = new PIXI.BlurFilter()
   blurFilter.blur = 7
-  game.viewContainer._container.filters = [blurFilter]
+  game.viewContainer.filters = [blurFilter]
   
   animate = () ->
     stats.begin()

@@ -21,9 +21,9 @@
 function pathTo(node){
     var curr = node,
         path = [];
-    while(curr.parent) {
+    while(curr._parent) {
         path.push(curr);
-        curr = curr.parent;
+        curr = curr._parent;
     }
     return path.reverse();
 }
@@ -45,7 +45,7 @@ var astar = {
             node.h = 0;
             node.visited = false;
             node.closed = false;
-            node.parent = null;
+            node._parent = null;
         }
     },
 
@@ -107,7 +107,7 @@ var astar = {
 
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
                     neighbor.visited = true;
-                    neighbor.parent = currentNode;
+                    neighbor._parent = currentNode;
                     neighbor.h = neighbor.h || heuristic(neighbor, end);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;

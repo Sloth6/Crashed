@@ -1,42 +1,33 @@
-class DraggableContainer
+class window.DraggableContainer extends PIXI.DisplayObjectContainer
   constructor: () ->
-    @_container = new PIXI.DisplayObjectContainer()
-    @_container.interactive = false
-    @_container.buttonMode = true
-    @position = @_container.position
+    # @pivot = 
+    super
+    @interactive = false
+    @buttonMode = true
+    
 
-    @_container.mousedown = (data) ->
-      @_startX = @position.x
-      @_startY = @position.y
-      @_startMouseX = data.originalEvent.x
-      @_startMouseY = data.originalEvent.y
-      @_dragging = true
+  mousedown: (data) =>
+    @startX = @position.x
+    @startY = @position.y
+    @startMouseX = data.originalEvent.x
+    @startMouseY = data.originalEvent.y
+    @dragging = true
 
-    @_container.mouseup = @_container.mouseupoutside = (data) ->
-      @_dragging = false
+  mouseup: () => @dragging = false
 
-    @_container.mousemove = (data) ->
-      if @_dragging
-        mouseDiffX = data.originalEvent.x - @_startMouseX
-        mouseDiffY = data.originalEvent.y - @_startMouseY
+  mousemove: (data) =>
+    if @dragging
+      mouseDiffX = data.originalEvent.x - @startMouseX
+      mouseDiffY = data.originalEvent.y - @startMouseY
+      @position.x = @startX + mouseDiffX
+      @position.y = @startY + mouseDiffY
 
-        @position.x = @_startX + mouseDiffX
-        @position.y = @_startY + mouseDiffY
-
-  scale : (d) ->
-    return if @_container.scale.x + d <= 0
-    @_container.scale.x += d
-    @_container.scale.y += d
-    # @_container.x -= 775*d
-    # @_container.y -= 300*d
-
-  addTo : (scene) ->
-    scene.addChild @_container
+  changeScale : (d) ->
+    return if @scale.x + d <= 0
+    @scale.x += d
+    @scale.y += d
+    # @container.x -= 775*d
+    # @container.y -= 300*d
 
   setDraggable: (bool) ->
-    @_container.interactive = bool
-
-  addChild : (child) ->
-    @_container.addChild child
-
-window.DraggableContainer = DraggableContainer
+    @interactive = bool
