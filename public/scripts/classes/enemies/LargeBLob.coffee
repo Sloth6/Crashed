@@ -1,6 +1,6 @@
 class window.LargeBlob extends Enemy
   constructor: ({ q, r }) ->
-    health =  1500
+    health =  250
     speed = 2000 * (Math.random()/2 + 0.5)
     texture = textures.largeBlob
     super { q, r, health, speed, texture }

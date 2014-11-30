@@ -10,7 +10,6 @@ class Unit
     @sprite.width = @hex.width/4
     @sprite.height = @hex.height/2
     @sprite.unit = @
-    game.enemyKdTree.insert @
     @recalculatePath = true
 
   moveTo: ({ q, r }, done) ->
@@ -42,9 +41,9 @@ class Unit
         .onComplete () ->
           unit.q = unit.hex.q
           unit.r = unit.hex.r
-          game.enemyKdTree.remove unit
+          # game.enemyKdTree.remove unit
           if unit.health > 0
-            game.enemyKdTree.insert unit
+            # game.enemyKdTree.insert unit
             unit.onMove(unit.hex) if unit.onMove
             moveR path, unit
         .start()

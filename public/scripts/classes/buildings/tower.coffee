@@ -44,6 +44,7 @@ class Base extends Building
 class Tower extends Building
   constructor: ( hex ) ->
     @dmg = 2
+    @range = 4
     super hex, 'tower'
   act: () ->
     if @target? and @target.alive and !@destroyed
@@ -52,7 +53,7 @@ class Tower extends Building
       @sprite.rotation = Math.atan2(b.y - a.y, b.x - a.x) + Math.PI/2
       @target.hurt @dmg
     else
-      @target = game.nearestEnemy @hex, 2
+      @target = game.nearestEnemy @hex, @range
       # console.log @target
       # if enemy and enemy.alive and @sprite?
 

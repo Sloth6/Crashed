@@ -22,9 +22,9 @@ class window.Crashed
     console.time 'generateGrid'
     @hexGrid = new HexGrid @gridSize, @tileSize, @hexGridGenerator
     console.timeEnd 'generateGrid'
-    gridRoot = [{ q: 100000, r: 100000 }]
-    distanceFun = (a,b) -> Hex::distanceTo.call a, b
-    @enemyKdTree = new kdTree gridRoot, distanceFun, ['q', 'r']
+    # gridRoot = [{ q: 100000, r: 100000 }]
+    # distanceFun = (a,b) -> Hex::distanceTo.call a, b
+    # @enemyKdTree = new kdTree gridRoot, distanceFun, ['q', 'r']
     @enemies = []
     
     #UI
@@ -35,7 +35,6 @@ class window.Crashed
     @viewContainer.addChild @enemyContainer
     stage.addChild @viewContainer
 
-
   start: () =>
     console.log 'This voyage has begun!'
     @hexGrid.getHex(0,0).build 'base'
@@ -43,10 +42,12 @@ class window.Crashed
     $( "#ui" ).show()
 
   enemyCount: () ->
-    countR = (n) ->
-      return 0 if n is null
-      return 1 + countR(n.left) + countR(n.right)
-    countR(@enemyKdTree.root) - 1
+    enemies.reduce ((s, e) -> s += if e.alive then 1 else 0), 0
+    # @enemies.length
+    # countR = (n) ->
+    #   return 0 if n is null
+    #   return 1 + countR(n.left) + countR(n.right)
+    # countR(@enemyKdTree.root) - 1
 
   #Generate a Hex Map
   hexGridGenerator: (q, r) ->
@@ -96,17 +97,24 @@ class window.Crashed
     large = small//36
     { small, large, total: small+large }
 
-  nearestEnemy: (qr) ->
-    e = @enemyKdTree.nearest qr, 1
-    if e.length > 0 and e[0][0].q != 100000 then e[0][0] else null
+  nearestEnemy: (qr, r) ->
+    dist = (a) -> Hex::distanceTo.call a, qr
+    nearest = null
+    minDist = Infinity
+    for enemy in @enemies
+      d = dist enemy
+      if enemy? and enemy.alive and d <= r and d < minDist
+        nearest = enemy
+        minDist = d
+    nearest
+
+    # e = @enemyKdTree.nearest qr, 1
+    # if e.length > 0 and e[0][0].q != 100000 then e[0][0] else null
   
   getBuildings: () -> @buildings
   
   getEnemyUnits: () -> @enemyContainer.children.map (sprite) -> sprite.unit
 
-  # updateEnemyPaths: () ->
-  #   @getEnemyUnits().forEach (unit) ->
-  #     unit.moveTo { q: 0, r: 0 }
   onEnemyDeath: (enemy) ->
     @addGold 1
     numEnemies = @enemiesPerLevel(@level).total
@@ -127,6 +135,7 @@ class window.Crashed
     $('#progressbar').hide()
 
   fightPhase: () ->
+    @enemies = []
     $('#buildmenu,#sellbutton').hide()
     $('#start').hide()
     $('#progressbar').progressbar({ value: 100 }).show()
