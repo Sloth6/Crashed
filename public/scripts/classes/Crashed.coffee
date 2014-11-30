@@ -199,4 +199,3 @@ class window.Crashed
     else #ensure everything is connected
       return true
     true
-

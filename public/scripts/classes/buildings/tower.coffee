@@ -45,6 +45,7 @@ class Tower extends Building
   constructor: ( hex ) ->
     @dmg = 2
     @range = 4
+    @controlled = false
     super hex, 'tower'
   act: () ->
     if @target? and @target.alive and !@destroyed

@@ -5,6 +5,10 @@ $ ->
   console.time 'creatingRenderer'
   PIXI.dontSayHello = true #sorry pixi
   renderer = PIXI.autoDetectRenderer window.innerWidth, window.innerHeight
+
+  $( window ).resize () -> 
+    renderer.resize window.innerWidth, window.innerHeight
+
   window.stage = new PIXI.Stage 0xFFFFFF
 
   document.body.appendChild renderer.view
