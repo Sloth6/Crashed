@@ -123,9 +123,11 @@ class window.Crashed
       b.onEndRound() if b.onEndRound
     $('#leveltext').text('Level: '+@level)
     $('#start').show()
+    $('#buildmenu,#sellbutton').show()
     $('#progressbar').hide()
 
   fightPhase: () ->
+    $('#buildmenu,#sellbutton').hide()
     $('#start').hide()
     $('#progressbar').progressbar({ value: 100 }).show()
 
