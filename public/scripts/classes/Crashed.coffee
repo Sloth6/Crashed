@@ -73,14 +73,7 @@ class window.Crashed
     { building, type, gold }
 
   getFood: () ->
-    @buildings.reduce ((s, b) ->
-      if b instanceof buildings.farm
-        f = 3
-      else if b instanceof buildings.wall
-        f = 0
-      else
-        f = -1
-      s + f), 0
+    @buildings.reduce ( (s, b) -> s - b.foodCost ), 0
 
   addGold: (n) =>
     @gold += n

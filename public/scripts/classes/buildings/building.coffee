@@ -5,6 +5,7 @@ class Building
       return if cost > game.gold
       game.addGold(-cost)
 
+    @foodCost = 0
     @destroyed = false
     @sprite = new PIXI.Sprite window.textures[@type]
     @sprite.anchor.x = 0.5

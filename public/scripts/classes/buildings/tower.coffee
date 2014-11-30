@@ -1,11 +1,14 @@
 class Farm extends Building
   constructor: ( hex ) ->
     super hex, 'farm'
+    @foodCost = -3
+
   act: () -> #Collect stuff
 
 class Collector extends Building
   constructor: ( hex ) ->
     super hex, 'collector'
+    @foodCost = 1
   act: () -> #Collect stuff
   onEndRound: () ->
     @hex.gold -= 20
@@ -32,6 +35,7 @@ class Road extends Building
 class Barracks extends Building
   constructor: ( hex ) ->
     super hex, 'barracks'
+    @foodCost = 1
   act: () ->
 
 class Base extends Building
@@ -47,6 +51,7 @@ class Tower extends Building
     @range = 4
     @controlled = false
     super hex, 'tower'
+    @foodCost = 1
   act: () ->
     if @target? and @target.alive and !@destroyed
       a = @sprite.position
