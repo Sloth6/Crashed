@@ -6,8 +6,6 @@ $ ->
   PIXI.dontSayHello = true #sorry pixi
   renderer = PIXI.autoDetectRenderer window.innerWidth, window.innerHeight
 
-  $( window ).resize () -> 
-    renderer.resize window.innerWidth, window.innerHeight
 
   window.stage = new PIXI.Stage 0xFFFFFF
 
@@ -38,8 +36,15 @@ $ ->
       pylon: 10
 
   
-  new Gameview()
-  new Mainmenu()
+  gameView = new Gameview()
+  mainMenu = new Mainmenu()
+
+  $( window ).resize () -> 
+    mainMenu.move()
+    gameView.gradient.width = window.innerWidth
+    gameView.gradient.height = window.innerHeight
+    renderer.resize window.innerWidth, window.innerHeight
+
 
   blurFilter = new PIXI.BlurFilter()
   blurFilter.blur = 7

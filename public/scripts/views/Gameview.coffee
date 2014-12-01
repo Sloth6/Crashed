@@ -3,10 +3,10 @@
     
     window.game = new Crashed gameOptions
 
-    gradient = new PIXI.Sprite PIXI.Texture.fromImage('images/AtmosphericGradient.png')
-    gradient.width = window.innerWidth
-    gradient.height = window.innerHeight
-    stage.addChild gradient
+    @gradient = new PIXI.Sprite PIXI.Texture.fromImage('images/AtmosphericGradient.png')
+    @gradient.width = window.innerWidth
+    @gradient.height = window.innerHeight
+    stage.addChild @gradient
 
     
 

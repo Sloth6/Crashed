@@ -23,6 +23,16 @@ class window.Mainmenu extends View
 
     super
 
+  move: () ->
+    [ cx, cy ] = [ window.innerWidth / 2, window.innerHeight / 2 ]
+    [ w, h ] = [ 326, 287 ]
+    @newGame.x = cx - (3*w/4)
+    @newGame.y = cy
+    @scores.x = cx
+    @scores.y = cy + h/2
+    @instructions.x = cx
+    @instructions.y = cy - h/2
+
   bindUi: () ->
     @newGame.onClick (data) =>
       @newGame.remove()
