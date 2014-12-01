@@ -11,12 +11,18 @@ class window.Crashed
     @viewContainer.x = window.innerWidth/2
     @viewContainer.y = window.innerHeight/2
     @viewContainer.pivot = new PIXI.Point @viewContainer.x, @viewContainer.y
+    
     @enemyContainer = new PIXI.DisplayObjectContainer()
     @enemyContainer.x = window.innerWidth/2
     @enemyContainer.y = window.innerHeight/2
-    @buildingContainer = new PIXI.DisplayObjectContainer()
-    @buildingContainer.x = window.innerWidth/2
-    @buildingContainer.y = window.innerHeight/2
+    
+    # @buildingContainer = new PIXI.DisplayObjectContainer()
+    # @buildingContainer.x = window.innerWidth/2
+    # @buildingContainer.y = window.innerHeight/2
+
+    # @wallContainer = new PIXI.DisplayObjectContainer()
+    # @wallContainer.x = window.innerWidth/2
+    # @wallContainer.y = window.innerHeight/2
 
     #Datastructures
     console.time 'generateGrid'
@@ -31,7 +37,8 @@ class window.Crashed
     @updateInfo
 
     @viewContainer.addChild @hexGrid
-    @viewContainer.addChild @buildingContainer
+    # @viewContainer.addChild @buildingContainer
+    # @viewContainer.addChild @wallContainer
     @viewContainer.addChild @enemyContainer
     stage.addChild @viewContainer
 
@@ -159,6 +166,20 @@ class window.Crashed
     game.selected = []
     @updateInfo()
 
+  updateWallTextures: () ->
+    dirs = ['bottomRight', 'topRight', 'top', 'topLeft', 'bottomLeft', 'bottom']
+    # @hexGrid.children.sort (a, b) => if a.q < b.q or a.r < a.r then -1 else 1
+    for b in @buildings
+      continue unless b.hex.isWall()
+      b.hex
+      for n, i in b.hex.neighbors()
+        continue unless n.isWall()
+        dir = dirs[i]
+        # console.log dir
+        b.sprites[dir].visible = false
+
+    
+
   build: (type) ->
     if @canBuild type
       @selected.forEach (hex) ->
@@ -167,6 +188,7 @@ class window.Crashed
         hex.selected = false
         hex.alpha = 1.0
       game.selected = []
+      @updateWallTextures()
       @updateInfo()
 
   canBuild: (type) ->
@@ -175,9 +197,15 @@ class window.Crashed
     if totalCost > @gold
       alert "Cannot afford #{@selected.length} #{type}s. Costs #{totalCost}g."
       return false
+    
     if (@getFood() - @selected.length < 0) and not (type in ['farm', 'wall'])
       alert "Not enough food. Build more farms."
       return false
+    
+    if @selected.some((h) -> h.building? or h.wall?)
+      alert 'Sell that building first!'
+      return false
+
     if type == 'wall' #ensure we don't wall off completly.
       start = game.hexGrid.getOuterRing()[0]
       end = game.hexGrid.getHex 0, 0

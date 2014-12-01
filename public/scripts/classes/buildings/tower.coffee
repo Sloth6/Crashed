@@ -17,7 +17,19 @@ class Collector extends Building
 class Wall extends Building
   constructor: ( hex ) ->
     super hex, 'wall'
-  act: () -> #Be a wall
+    @sprite.visible = false
+    @sprites = {}
+    for pos, texture of textures.walls
+      @sprites[pos] = new PIXI.Sprite texture
+      @sprites[pos].anchor = new PIXI.Point 0.5, 0.5
+      @sprites[pos].position.x = hex.x
+      @sprites[pos].position.y = hex.y
+
+  addTo: (container) =>
+    # console.log 'nonononon', @sprites
+    for pos, s of @sprites
+      container.addChild s
+
   sell: () =>
     @hex.wall = null
     game.enemies.forEach (e) -> e.recalculatePath = true

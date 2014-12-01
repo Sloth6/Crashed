@@ -1,32 +1,44 @@
 console.time "loadTextures"
+fromImage = PIXI.Texture.fromImage
+
 window.textures =
-  base: PIXI.Texture.fromImage "images/buildings/base.png"
-  hex: PIXI.Texture.fromImage "images/greenhex.gif"
-  tower: PIXI.Texture.fromImage "images/buildings/tower.gif"
-  farm: PIXI.Texture.fromImage "images/buildings/farm2.png"
-  collector: PIXI.Texture.fromImage "images/buildings/collector.png"
-  road: PIXI.Texture.fromImage "images/buildings/pylon.gif"
-  barracks: PIXI.Texture.fromImage 'images/buildings/barracks.png'
-  wall: PIXI.Texture.fromImage "images/buildings/wall.png"
-  smallBlob: PIXI.Texture.fromImage 'images/units/enemy.gif'
-  largeBlob: PIXI.Texture.fromImage 'images/units/bigEnemy.gif'
-  resourcesFull: PIXI.Texture.fromImage 'images/enviornment/resourcesFull.gif'
-  resourcesHalf: PIXI.Texture.fromImage 'images/enviornment/resourcesHalf.gif'      
-  trees0: PIXI.Texture.fromImage 'images/enviornment/trees0.png'
-  trees1: PIXI.Texture.fromImage 'images/enviornment/trees1.png'
-  trees2: PIXI.Texture.fromImage 'images/enviornment/trees2.png'
-  rocks0: PIXI.Texture.fromImage 'images/enviornment/rocks0.png'
-  rocks1: PIXI.Texture.fromImage 'images/enviornment/rocks1.png'
-  rocks2: PIXI.Texture.fromImage 'images/enviornment/rocks2.png'
+  base: fromImage "images/buildings/base.png"
+  hex: fromImage "images/greenhex.gif"
+  tower: fromImage "images/buildings/tower.gif"
+  farm: fromImage "images/buildings/farm2.png"
+  collector: fromImage "images/buildings/collector.png"
+  road: fromImage "images/buildings/pylon.gif"
+  barracks: fromImage 'images/buildings/barracks.png'
+  wall: fromImage "images/buildings/wall.png"
+  smallBlob: fromImage 'images/units/enemy.gif'
+  largeBlob: fromImage 'images/units/bigEnemy.gif'
+  resourcesFull: fromImage 'images/enviornment/resourcesFull.gif'
+  resourcesHalf: fromImage 'images/enviornment/resourcesHalf.gif'      
+  
+  trees0: fromImage 'images/enviornment/trees0.png'
+  trees1: fromImage 'images/enviornment/trees1.png'
+  trees2: fromImage 'images/enviornment/trees2.png'
+  rocks0: fromImage 'images/enviornment/rocks0.png'
+  rocks1: fromImage 'images/enviornment/rocks1.png'
+  rocks2: fromImage 'images/enviornment/rocks2.png'
+  
+  walls:
+    topLeft: fromImage 'images/buildings/wall/top-left.gif'
+    topRight: fromImage 'images/buildings/wall/top-right.gif'
+    bottomLeft: fromImage 'images/buildings/wall/bottom-left.gif'
+    bottomRight: fromImage 'images/buildings/wall/bottom-right.gif'
+    top: fromImage 'images/buildings/wall/top.gif'
+    bottom: fromImage 'images/buildings/wall/bottom.png'
+
   mainmenu:
-    gradient: PIXI.Texture.fromImage 'images/mainmenu/gradient.png' 
-    newGame: PIXI.Texture.fromImage 'images/mainmenu/New.gif'
-    scores: PIXI.Texture.fromImage 'images/mainmenu/Scores.gif'
-    credits: PIXI.Texture.fromImage 'images/mainmenu/Credits.gif'
-    newGameActive: PIXI.Texture.fromImage 'images/mainmenu/NewActive.gif'
-    scoresActive: PIXI.Texture.fromImage 'images/mainmenu/ScoresActive.gif'
-    creditsActive: PIXI.Texture.fromImage 'images/mainmenu/CreditsActive.gif'
-    instructions: PIXI.Texture.fromImage 'images/mainmenu/Instructions.gif'
-    instructionsActive: PIXI.Texture.fromImage 'images/mainmenu/InstructionsActive.gif'
+    gradient: fromImage 'images/mainmenu/gradient.png' 
+    newGame: fromImage 'images/mainmenu/New.gif'
+    scores: fromImage 'images/mainmenu/Scores.gif'
+    credits: fromImage 'images/mainmenu/Credits.gif'
+    newGameActive: fromImage 'images/mainmenu/NewActive.gif'
+    scoresActive: fromImage 'images/mainmenu/ScoresActive.gif'
+    creditsActive: fromImage 'images/mainmenu/CreditsActive.gif'
+    instructions: fromImage 'images/mainmenu/Instructions.gif'
+    instructionsActive: fromImage 'images/mainmenu/InstructionsActive.gif'
 
 console.timeEnd "loadTextures"

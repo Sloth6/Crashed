@@ -10,6 +10,7 @@ class window.HexGrid extends PIXI.DisplayObjectContainer
 
     width = 2 * @size
     height = @size * Math.sqrt(3) * 0.5 #.5 is for isometric effect
+    console.log width, height
     # Build map.
     start = 0
     end = @rows

@@ -1,5 +1,5 @@
 class Building
-  constructor: ( @hex, @type ) ->
+  constructor: ( @hex, @type, scaleTofit = true ) ->
     if window.game
       cost = game.prices[@type]
       return if cost > game.gold
@@ -12,9 +12,11 @@ class Building
     @sprite.anchor.y = 0.5
     @sprite.position.x = @hex.x
     @sprite.position.y = @hex.y
-    ratio = @sprite.height / @hex.height
-    @sprite.height = @hex.height #/ ratio
-    @sprite.width /= ratio #= @hex.width 
+
+    if scaleTofit
+      ratio = @sprite.height / @hex.height
+      @sprite.height = @hex.height #/ ratio
+      @sprite.width /= ratio #= @hex.width 
   
   sell: () ->
     @sprite.parent.removeChild @sprite
@@ -22,8 +24,10 @@ class Building
     @hex.building = null
     game.addGold game.prices[@type]//1.5
   
+
+  act: () ->
+
   destroy: ()  ->
-    console.log("destroying")
     @onDeath() if @onDeath
     @sprite.parent.removeChild @sprite
     @sprite = null
