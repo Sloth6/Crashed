@@ -37,7 +37,7 @@ class window.Crashed
 
   start: () =>
     console.log 'This voyage has begun!'
-    @hexGrid.getHex(0,0).build 'base'
+    @buildings.push @hexGrid.getHex(0,0).build('base')
     @viewContainer.setDraggable true
     $( "#ui" ).show()
 
@@ -54,10 +54,6 @@ class window.Crashed
     building = null
     gold = 0
     type = ''
-    building = null
-
-    building = 'base' if q == 0 and r == 0
-    
     emptySpaces = [-1,0,1]#, @gridSize, -@gridSize]
     if q in emptySpaces and r in emptySpaces
       type = ''
@@ -70,7 +66,7 @@ class window.Crashed
       else
         if Math.random() < .2 then gold = 100
     
-    { building, type, gold }
+    { type, gold }
 
   getFood: () ->
     @buildings.reduce ( (s, b) -> s - b.foodCost ), 0
@@ -189,6 +185,31 @@ class window.Crashed
       if astar.search(game.hexGrid, start, end, options).length == 0
         alert "Cannot completely wall off base"
         return false
-    else #ensure everything is connected
-      return true
+    else # only applies to non-walls
+      # Treat each building as 'true' which allows us to run a simple 
+      # algorithm checking if each building is connected without actually
+      # creating and destroying each building
+      @selected.forEach (h) -> h.building = true
+      isConnected = @isConnected()
+      @selected.forEach (h) -> h.building = null
+      if not isConnected
+        alert "Buildings (not walls) must be adjacent to another building."
+        return false
     true
+
+  isConnected: () ->
+    numSeen = 0
+    seen = {}
+    # recursively check all neighbors
+    checkR = (h) ->
+      return if not h.hasBuilding()
+      return if seen[h.q+':'+h.r]?
+      #record all the buildings we reach from the center.
+      seen[h.q+':'+h.r] = true
+      numSeen++
+      h.neighbors().forEach checkR
+
+    checkR @hexGrid.getHex(0,0)
+    # ensure we see every buildings thbat will be built.
+    numBuildings = @buildings.filter((b) -> !(b instanceof buildings.wall)).length
+    numSeen == numBuildings + @selected.length
