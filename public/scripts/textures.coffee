@@ -23,11 +23,11 @@ window.textures =
   rocks2: fromImage 'images/enviornment/rocks2.png'
   
   walls:
-    topLeft: fromImage 'images/buildings/wall/top-left.gif'
-    topRight: fromImage 'images/buildings/wall/top-right.gif'
-    bottomLeft: fromImage 'images/buildings/wall/bottom-left.gif'
-    bottomRight: fromImage 'images/buildings/wall/bottom-right.gif'
-    top: fromImage 'images/buildings/wall/top.gif'
+    topLeft: fromImage 'images/buildings/wall/top-left.png'
+    topRight: fromImage 'images/buildings/wall/top-right.png'
+    bottomLeft: fromImage 'images/buildings/wall/bottom-left.png'
+    bottomRight: fromImage 'images/buildings/wall/bottom-right.png'
+    top: fromImage 'images/buildings/wall/top.png'
     bottom: fromImage 'images/buildings/wall/bottom.png'
 
   mainmenu:
