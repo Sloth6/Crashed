@@ -1,11 +1,14 @@
  class window.Gameview #extends View
   constructor: () ->
+    
+    window.game = new Crashed gameOptions
+
     gradient = new PIXI.Sprite PIXI.Texture.fromImage('images/AtmosphericGradient.png')
     gradient.width = window.innerWidth
     gradient.height = window.innerHeight
     stage.addChild gradient
 
-    window.game = new Crashed gameOptions
+    
 
     game.buildPhase()
     $( "#ui" ).hide()
