@@ -16,13 +16,13 @@ class window.Crashed
     @enemyContainer.x = window.innerWidth/2
     @enemyContainer.y = window.innerHeight/2
     
-    # @buildingContainer = new PIXI.DisplayObjectContainer()
-    # @buildingContainer.x = window.innerWidth/2
-    # @buildingContainer.y = window.innerHeight/2
+    @buildingContainer = new PIXI.DisplayObjectContainer()
+    @buildingContainer.x = window.innerWidth/2
+    @buildingContainer.y = window.innerHeight/2
 
-    # @wallContainer = new PIXI.DisplayObjectContainer()
-    # @wallContainer.x = window.innerWidth/2
-    # @wallContainer.y = window.innerHeight/2
+    @wallContainer = new PIXI.DisplayObjectContainer()
+    @wallContainer.x = window.innerWidth/2
+    @wallContainer.y = window.innerHeight/2
 
     #Datastructures
     console.time 'generateGrid'
@@ -37,8 +37,8 @@ class window.Crashed
     @updateInfo
 
     @viewContainer.addChild @hexGrid
-    # @viewContainer.addChild @buildingContainer
-    # @viewContainer.addChild @wallContainer
+    @viewContainer.addChild @buildingContainer
+    @viewContainer.addChild @wallContainer
     @viewContainer.addChild @enemyContainer
     stage.addChild @viewContainer
 
@@ -168,17 +168,18 @@ class window.Crashed
 
   updateWallTextures: () ->
     dirs = ['bottomRight', 'topRight', 'top', 'topLeft', 'bottomLeft', 'bottom']
-    # @hexGrid.children.sort (a, b) => if a.q < b.q or a.r < a.r then -1 else 1
+    @wallContainer.children.sort (a, b) =>
+      if a.hex.q < b.hex.q or a.hex.r < b.hex.r
+        return -1
+      else if a.hex.q > b.hex.q or a.hex.r > b.hex.r
+        return 1
     for b in @buildings
       continue unless b.hex.isWall()
       b.hex
       for n, i in b.hex.neighbors()
         continue unless n.isWall()
         dir = dirs[i]
-        # console.log dir
         b.sprites[dir].visible = false
-
-    
 
   build: (type) ->
     if @canBuild type

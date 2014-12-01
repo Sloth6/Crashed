@@ -19,16 +19,18 @@ class Wall extends Building
     super hex, 'wall'
     @sprite.visible = false
     @sprites = {}
+    @spriteContainer = new PIXI.DisplayObjectContainer()
+    @spriteContainer.hex = hex
     for pos, texture of textures.walls
-      @sprites[pos] = new PIXI.Sprite texture
-      @sprites[pos].anchor = new PIXI.Point 0.5, 0.5
-      @sprites[pos].position.x = hex.x
-      @sprites[pos].position.y = hex.y
+      s = new PIXI.Sprite texture
+      s.anchor = new PIXI.Point 0.5, 0.5
+      s.position.x = hex.x
+      s.position.y = hex.y
+      @sprites[pos] = s
+      @spriteContainer.addChild s
 
   addTo: (container) =>
-    # console.log 'nonononon', @sprites
-    for pos, s of @sprites
-      container.addChild s
+    container.addChild @spriteContainer
 
   sell: () =>
     @hex.wall = null

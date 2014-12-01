@@ -58,11 +58,11 @@ class window.Hex extends Selectable
   build: (type) ->
     if type == 'wall'
       @wall = new buildings.wall(@, type)
-      @wall.addTo @parent
+      @wall.addTo game.wallContainer
       return @wall
     else
       @building = new buildings[type](@, type)
-      @building.addTo @parent
+      @building.addTo game.buildingContainer
       return @building
   
   addTo: (container) ->
