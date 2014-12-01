@@ -5,6 +5,7 @@ class window.Crashed
     @buildings = []
     @selected = []
     @buildMode = true
+    @enemies = []
 
     #Layers, so hexes on bottom, buildings above and enemeies on top
     @viewContainer = new DraggableContainer()
@@ -31,7 +32,7 @@ class window.Crashed
     # gridRoot = [{ q: 100000, r: 100000 }]
     # distanceFun = (a,b) -> Hex::distanceTo.call a, b
     # @enemyKdTree = new kdTree gridRoot, distanceFun, ['q', 'r']
-    @enemies = []
+   
     
     #UI
     @updateInfo
@@ -50,11 +51,6 @@ class window.Crashed
 
   enemyCount: () ->
     enemies.reduce ((s, e) -> s += if e.alive then 1 else 0), 0
-    # @enemies.length
-    # countR = (n) ->
-    #   return 0 if n is null
-    #   return 1 + countR(n.left) + countR(n.right)
-    # countR(@enemyKdTree.root) - 1
 
   #Generate a Hex Map
   hexGridGenerator: (q, r) ->
@@ -83,9 +79,9 @@ class window.Crashed
     @updateInfo()
 
   #Update called in main update loop. 
-  update: () ->
-    @buildings.forEach (building) -> building.act()
-    # @enemies.forEach (building) -> building.act()
+  update: () -> 
+    b.act() for b in @buildings
+    true
 
   enemiesPerLevel : (n) ->
     n = Math.floor(10 * Math.pow(1.15, n))
@@ -104,9 +100,6 @@ class window.Crashed
         minDist = d
     nearest
 
-    # e = @enemyKdTree.nearest qr, 1
-    # if e.length > 0 and e[0][0].q != 100000 then e[0][0] else null
-  
   getBuildings: () -> @buildings
   
   getEnemyUnits: () -> @enemyContainer.children.map (sprite) -> sprite.unit
@@ -199,7 +192,7 @@ class window.Crashed
       alert "Cannot afford #{@selected.length} #{type}s. Costs #{totalCost}g."
       return false
     
-    if (@getFood() - @selected.length < 0) and not (type in ['farm', 'wall'])
+    if (@getFood() - @selected.length < 0) and not (type in ['farm', 'wall', 'road'])
       alert "Not enough food. Build more farms."
       return false
     
