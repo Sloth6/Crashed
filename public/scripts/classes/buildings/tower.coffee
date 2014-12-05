@@ -17,28 +17,34 @@ class Collector extends Building
 class Wall extends Building
   constructor: ( hex ) ->
     super hex, 'wall'
-    @sprite.visible = false
+    @removeChildren()
     @sprites = {}
-    @spriteContainer = new PIXI.DisplayObjectContainer()
-    @spriteContainer.hex = hex
     for pos, texture of textures.walls
       s = new PIXI.Sprite texture
       s.anchor = new PIXI.Point 0.5, 0.5
-      s.position.x = hex.x
-      s.position.y = hex.y
       @sprites[pos] = s
-      @spriteContainer.addChild s
+      @addChild s
 
-  addTo: (container) =>
-    container.addChild @spriteContainer
+  updateTexture: () ->
+    dirs = ['bottomRight', 'topRight', 'top', 'topLeft', 'bottomLeft', 'bottom']
+    # @wallContainer.children.sort (a, b) =>
+    #   if a.hex.q < b.hex.q or a.hex.r < b.hex.r
+    #     return -1
+    #   else if a.hex.q > b.hex.q or a.hex.r > b.hex.r
+    #     return 1
+    for n, i in @hex.neighbors()
+      dir = dirs[i]
+      @sprites[dir].visible = !n.isWall()
+    true
 
   sell: () =>
     @hex.wall = null
-    game.enemies.forEach (e) -> e.recalculatePath = true
+    game.enemies.each (e) -> e.recalculatePath = true
     super()
+    
   destroy: () =>
     @hex.wall = null
-    game.enemies.forEach (e) -> e.recalculatePath = true
+    game.enemies.each (e) -> e.recalculatePath = true
     super()
 
 class Road extends Building
@@ -46,42 +52,37 @@ class Road extends Building
     super hex, 'road'
   act: () ->
 
-class Barracks extends Building
-  constructor: ( hex ) ->
-    super hex, 'barracks'
-    @foodCost = 1
-  act: () ->
 
 class Base extends Building
   constructor: ( hex ) ->
     super hex, 'base'
   act: () ->
   onDeath: () ->
+    console.trace()
     confirm 'YOU ARE BAD'
 
 class Tower extends Building
   constructor: ( hex ) ->
     @dmg = 2
-    @range = 4
+    @range = 3
     @controlled = false
     super hex, 'tower'
     @foodCost = 1
   act: () ->
     if @target? and @target.alive and !@destroyed
-      a = @sprite.position
-      b = @target.sprite.position
-      @sprite.rotation = Math.atan2(b.y - a.y, b.x - a.x) + Math.PI/2
+      a = @position
+      b = @target.position
+      @rotation = Math.atan2(b.y - a.y, b.x - a.x) + Math.PI/2
       @target.hurt @dmg
     else
-      @target = game.nearestEnemy @hex, @range
+      @target = game.enemies.closestTo @hex, @range
       # console.log @target
       # if enemy and enemy.alive and @sprite?
 
-window.buildings ?= {}
-window.buildings.farm = Farm
-window.buildings.collector = Collector
-window.buildings.wall = Wall
-window.buildings.road = Road
-window.buildings.tower = Tower
-window.buildings.barracks = Barracks
-window.buildings.base = Base
+window.buildingClasses = {}
+window.buildingClasses.farm = Farm
+window.buildingClasses.collector = Collector
+window.buildingClasses.wall = Wall
+window.buildingClasses.road = Road
+window.buildingClasses.tower = Tower
+window.buildingClasses.base = Base

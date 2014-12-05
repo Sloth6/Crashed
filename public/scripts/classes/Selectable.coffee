@@ -1,6 +1,6 @@
 class window.Selectable extends PIXI.Sprite
   constructor: ({ x, y, width, height, texture }) ->
-    super texture    
+    super texture
     @selected = false
     @anchor = new PIXI.Point .5, .5
     @position.x = x

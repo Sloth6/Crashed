@@ -1,15 +1,18 @@
-class Unit
+class Unit extends PIXI.DisplayObjectContainer
   constructor: ({ @q, @r, @health, @speed, texture }) ->
+    super
     @hex = game.hexGrid.getHex @q, @r
     @alive = true
-    @sprite = new PIXI.Sprite texture
-    @sprite.anchor.x = 0.5
-    @sprite.anchor.y = 0.5
-    @sprite.position.x = @hex.x
-    @sprite.position.y = @hex.y
-    @sprite.width = @hex.width/4
-    @sprite.height = @hex.height/2
-    @sprite.unit = @
+    sprite = new PIXI.Sprite texture
+    
+    sprite.anchor = new PIXI.Point 0.5, 0.5
+    
+    @anchor = new PIXI.Point 0.5, 0.5
+    @position = new PIXI.Point @hex.x, @hex.y
+    
+    sprite.width = @hex.width/4
+    sprite.height = @hex.height/2
+    @addChild sprite
     @recalculatePath = true
 
   moveTo: ({ q, r }, done) ->
@@ -32,7 +35,7 @@ class Unit
         if done then return done() else return
       #sets the unit to the next tile
       unit.hex = path.shift()
-      new TWEEN.Tween unit.sprite.position
+      new TWEEN.Tween unit.position
         .to {
           x: unit.hex.x + Math.randInt(-20,20)
           y: unit.hex.y + Math.randInt(-20,20)
@@ -54,7 +57,7 @@ class Unit
     @kill() if @health <= 0
 
   kill: () ->
-    @sprite.parent.removeChild @sprite
+    @parent.removeChild @
     @path = null
     @sprite = null
     @alive = false

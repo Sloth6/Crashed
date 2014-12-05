@@ -1,41 +1,29 @@
-class Building
+class window.Building extends PIXI.DisplayObjectContainer
   constructor: ( @hex, @type, scaleTofit = true ) ->
-    if window.game
-      cost = game.prices[@type]
-      return if cost > game.gold
-      game.addGold(-cost)
-
+    super
+    @position = @hex.position
+    @cost = 0
     @foodCost = 0
     @destroyed = false
-    @sprite = new PIXI.Sprite window.textures[@type]
-    @sprite.anchor.x = 0.5
-    @sprite.anchor.y = 0.5
-    @sprite.position.x = @hex.x
-    @sprite.position.y = @hex.y
+    
+    sprite = new PIXI.Sprite window.textures[@type]
+    sprite.anchor = new PIXI.Point .5, .5
 
     if scaleTofit
-      ratio = @sprite.height / @hex.height
-      @sprite.height = @hex.height #/ ratio
-      @sprite.width /= ratio #= @hex.width 
+      ratio = sprite.height / @hex.height
+      sprite.height = @hex.height #/ ratio
+      sprite.width /= ratio #= @hex.width
+
+    @addChild sprite
   
   sell: () ->
-    @sprite.parent.removeChild @sprite
-    @sprite = null
     @hex.building = null
-    game.addGold game.prices[@type]//1.5
-  
+    @hex.wall = null
 
   act: () ->
 
   destroy: ()  ->
     @onDeath() if @onDeath
-    @sprite.parent.removeChild @sprite
-    @sprite = null
     @hex.building = null
     @hex.wall = null
     @destroyed = true
-  
-  addTo: (container) ->
-    container.addChild @sprite
-
-window.Building = Building

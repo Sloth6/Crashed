@@ -1,7 +1,8 @@
 class window.DraggableContainer extends PIXI.DisplayObjectContainer
   constructor: () ->
-    # @pivot = 
     super
+    # @pivot = new PIXI.Point 0.5, 0.5
+    @anchor = new PIXI.Point 0.5, 0.5
     @interactive = false
     @buttonMode = true
     

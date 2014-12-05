@@ -13,7 +13,7 @@ window.textures =
   smallBlob: fromImage 'images/units/enemy.gif'
   largeBlob: fromImage 'images/units/bigEnemy.gif'
   resourcesFull: fromImage 'images/enviornment/resourcesFull.gif'
-  resourcesHalf: fromImage 'images/enviornment/resourcesHalf.gif'      
+  resourcesHalf: fromImage 'images/enviornment/resourcesHalf.gif'
   
   trees0: fromImage 'images/enviornment/trees0.png'
   trees1: fromImage 'images/enviornment/trees1.png'
@@ -31,7 +31,7 @@ window.textures =
     bottom: fromImage 'images/buildings/wall/bottom.png'
 
   mainmenu:
-    gradient: fromImage 'images/mainmenu/gradient.png' 
+    gradient: fromImage 'images/mainmenu/gradient.png'
     newGame: fromImage 'images/mainmenu/New.gif'
     scores: fromImage 'images/mainmenu/Scores.gif'
     credits: fromImage 'images/mainmenu/Credits.gif'

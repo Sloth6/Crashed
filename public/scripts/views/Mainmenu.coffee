@@ -40,12 +40,12 @@ class window.Mainmenu extends View
       @instructions.remove()
 
       setTimeout (() ->
-        game.viewContainer.filters = null
+        game.filters = null
         game.start()
       ), 250
     
-    @scores.onClick () =>
+    @scores.onClick () ->
       alert 'No scores yet.'
 
-    @instructions.onClick () =>
+    @instructions.onClick () ->
       alert 'L2P'

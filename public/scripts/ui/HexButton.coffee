@@ -4,9 +4,9 @@ class window.HexButton extends Button
     angle = 0
     points = []
     for i in [0...7] by 1
-      angle = 1 * Math.PI / 3 * i;
-      x_i = Math.floor r * Math.cos(angle)
-      y_i = Math.floor r * Math.sin(angle)
+      angle = 1 * Math.PI / 3 * i
+      x_i = Math.floor r * Math.cos angle
+      y_i = Math.floor r * Math.sin angle
       points.push x_i, y_i
     super
     @hitArea = new PIXI.Polygon points

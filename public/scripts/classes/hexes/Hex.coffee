@@ -27,11 +27,11 @@ class window.Hex extends Selectable
     return if @isRocks() or @isTrees()
     if @selected
       @alpha = .5
-      game.selected.push @
+      game.selected.add @
     else
+      @selected = false
       @alpha = 1.0
-      index = game.selected.indexOf @
-      game.selected.splice(index, 1)
+      game.selected.remove @
   
   hasBuilding: () => @building?
 
@@ -55,15 +55,8 @@ class window.Hex extends Selectable
   distanceTo: ({ q, r }) ->
     (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
   
-  build: (type) ->
-    if type == 'wall'
-      @wall = new buildings.wall(@, type)
-      @wall.addTo game.wallContainer
-      return @wall
-    else
-      @building = new buildings[type](@, type)
-      @building.addTo game.buildingContainer
-      return @building
+  addBuilding: (@building) =>
+  addWall: (@wall) =>
   
   addTo: (container) ->
     container.addChild @

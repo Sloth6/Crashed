@@ -20,26 +20,10 @@ $ ->
   stats.domElement.style.top = '0px'
   console.timeEnd 'creatingRenderer'
 
-  window.gameOptions =
-    levels: 10
-    startingGold: 100
-    gridSize: 14
-    tileSize: 80
-    gold: 100
-    prices:
-      base: 0
-      tower: 10
-      road: 4
-      collector: 10
-      farm: 10
-      wall: 2
-      pylon: 10
-
-  
   gameView = new Gameview()
   mainMenu = new Mainmenu()
 
-  $( window ).resize () -> 
+  $( window ).resize () ->
     mainMenu.move()
     gameView.gradient.width = window.innerWidth
     gameView.gradient.height = window.innerHeight
@@ -48,7 +32,7 @@ $ ->
 
   blurFilter = new PIXI.BlurFilter()
   blurFilter.blur = 7
-  game.viewContainer.filters = [blurFilter]
+  game.filters = [blurFilter]
   
   animate = () ->
     stats.begin()
@@ -63,10 +47,10 @@ $ ->
 
 #extend default object (a bad practice SHHHHH)
 Math.randInt = (min, max) ->
-    if !max
-      max = min
-      min = 0
-    Math.floor(Math.random() * (max - min)) + min
+  if !max
+    max = min
+    min = 0
+  Math.floor(Math.random() * (max - min)) + min
 
 window.random = (array) ->
   return null if array.length is 0

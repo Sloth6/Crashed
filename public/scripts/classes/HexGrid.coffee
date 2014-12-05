@@ -10,7 +10,6 @@ class window.HexGrid extends PIXI.DisplayObjectContainer
 
     width = 2 * @size
     height = @size * Math.sqrt(3) * 0.5 #.5 is for isometric effect
-    console.log width, height
     # Build map.
     start = 0
     end = @rows
@@ -27,7 +26,6 @@ class window.HexGrid extends PIXI.DisplayObjectContainer
         hex.addTo @
       # this creates the hex shape with axial coordinates
       if q < 0 then start-- else end--
-    
     # Add an empty ring around map. This ensures enemies dont spawn on rocks.
     @getRingCoords(@rows+1).map ({ q, r }) =>
       options = { width, height, q, r, gold:0 }
@@ -43,7 +41,6 @@ class window.HexGrid extends PIXI.DisplayObjectContainer
   getHexFromXY: (x, y) ->
     q = Math.floor(2 / 3 * x / @size)
     r = (-1 / 3 * x + 1 / 3 * Math.sqrt(3) * y) // @size
-    console.log q, r
     @getHex q, r
 
   neighbors: ({ q, r }) -> @getHex(q, r).neighbors()
