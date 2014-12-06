@@ -23,7 +23,7 @@ class window.HexGrid extends PIXI.DisplayObjectContainer
           else hex = new window.Hex options
           
         @hexes[q+':'+r] = hex
-        hex.addTo @
+        @addChild hex
       # this creates the hex shape with axial coordinates
       if q < 0 then start-- else end--
     # Add an empty ring around map. This ensures enemies dont spawn on rocks.
@@ -32,7 +32,7 @@ class window.HexGrid extends PIXI.DisplayObjectContainer
       hex = new window.Hex options
       @hexes[q+':'+r] = hex
       @outerRing.push hex
-      hex.addTo @
+      @addChild hex
 
   getHex: (q, r) ->
     @hexes[q+':'+r] or null

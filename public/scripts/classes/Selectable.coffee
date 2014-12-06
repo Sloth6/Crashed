@@ -1,12 +1,19 @@
-class window.Selectable extends PIXI.Sprite
+class window.Selectable extends PIXI.DisplayObjectContainer
   constructor: ({ x, y, width, height, texture }) ->
-    super texture
-    @selected = false
+    super
+
     @anchor = new PIXI.Point .5, .5
     @position.x = x
     @position.y = y
-    @width = width
-    @height = height
+
+    sprite = new PIXI.Sprite texture
+    sprite.anchor = new PIXI.Point .5, .5
+    sprite.width = width
+    sprite.height = height
+    
+    @addChild sprite
+    @selected = false
+
     @interactive = true
     @clicked = false
 

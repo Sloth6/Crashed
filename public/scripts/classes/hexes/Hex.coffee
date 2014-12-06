@@ -1,21 +1,22 @@
 class window.Hex extends Selectable
   constructor: ({ width, height, @q, @r, @gold }) ->
+    { x, y } = @qrToxy { @q, @r, width }
+    super { x, y, width, height, texture: textures.hex }
+
     @building = null
     @wall = null
     @gold ?= 0
-    { x, y } = @qrToxy { @q, @r, width }
-
-    @text = new PIXI.Text @q+':'+@r, { font:"12px Arial", fill:"black" }
-    @text.x = x
-    @text.y = y
-    @text.anchor.x = 0.5
-    @text.anchor.y = 0.5
+    text = new PIXI.Text @q+':'+@r, { font:"12px Arial", fill:"black" }
+    text.anchor.x = 0.5
+    text.anchor.y = 0.5
 
     if @gold > 0
-      @goldSprite = new PIXI.Sprite textures.resourcesFull
-      @goldSprite.anchor = { x: 0.5, y: 0.5 }
-      @goldSprite.position = { x, y }
-    super { x, y, width, height, texture: textures.hex }
+      goldSprite = new PIXI.Sprite textures.resourcesFull
+      goldSprite.anchor = { x: 0.5, y: 0.5 }
+      goldSprite.position = { x, y }
+      @addChild goldSprite
+
+    @addChild text
   
   qrToxy: ({q, r, width}) ->
     size = width/2
@@ -35,17 +36,14 @@ class window.Hex extends Selectable
   
   hasBuilding: () => @building?
 
-  # cost for unit to traverse, used in astar
   isRocks: () -> false
   
   isTrees: () -> false
   
-  getCost: () =>
-    if @isTrees() then 10 else 1.0
+  getCost: () => if @isTrees() then 10 else 1.0
   
-  isWall: () -> @wall
+  isWall: () -> @wall?
 
-  #I don't really know what the question mark syntax is. Did I use it right?
   isBuildable: () -> not (@isWall() or @isTrees() or @isRocks() or @building)
 
   neighbors: () ->
@@ -56,10 +54,5 @@ class window.Hex extends Selectable
     (Math.abs(q - @q) + Math.abs(r - @r) + Math.abs(q + r - @q - @r)) / 2
   
   addBuilding: (@building) =>
-  addWall: (@wall) =>
   
-  addTo: (container) ->
-    container.addChild @
-    container.addChild @environmentSprite if @environmentSprite
-    container.addChild @goldSprite if @goldSprite
-    container.addChild @text if @text
+  addWall: (@wall) =>
