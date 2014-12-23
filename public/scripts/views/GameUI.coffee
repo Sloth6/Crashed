@@ -1,5 +1,6 @@
 class window.GameUI
   constructor: () ->
+    @updateInfo()
     $( "#start" ).click () ->
       numEnemies = game.enemiesPerLevel().total
       $('#buildmenu,#sellbutton').hide()
@@ -35,9 +36,15 @@ class window.GameUI
       $('#buildmenu,#sellbutton').show()
       $('#progressbar').hide()
 
-
-    game.addListener 'enemyDeath', (enemy) =>
+    game.addListener 'enemyDeath', (enemy) ->
       numEnemies = game.enemiesPerLevel().total
       value = game.enemies.count() * 100 / numEnemies
       $('#progressbar').progressbar { value }
       $( ".progress-label" ).text game.enemies.count()
+
+    game.addListener 'resourceChange', @updateInfo
+
+  updateInfo: () ->
+    $('#goldtext').text 'Gold: '+game.gold
+    $('#foodtext').text 'Food: '+game.getFood()
+    $('#leveltext').text 'Level: '+game.level

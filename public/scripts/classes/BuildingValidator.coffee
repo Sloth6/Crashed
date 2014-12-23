@@ -2,12 +2,19 @@ class window.BuildingValidator
   constructor: ( ) ->
   
   canSell: (selected) ->
+    err = ''
     for hex in selected
       if (hex.q | hex.r) is 0
-        return "You really don't want to sell that..."
+        err = "You really don't want to sell that..."
+        break
     if not selected.some ((h) -> h.building? or h.wall?)
-      return "Select something to sell!"
-    true
+      err = "Select something to sell!"
+    
+    if err 
+      alert err
+      false
+    else 
+      true
 
   canBuild: (type, game) ->
     #check price
@@ -15,22 +22,23 @@ class window.BuildingValidator
     n = selected.length
     cost = n * game.prices[type].gold
     foodCost = n * game.prices[type].food
+    err = null
 
     if cost > game.gold
-      return "Cannot afford #{@n} #{type}s. Costs #{totalCost}g."
+      err = "Cannot afford #{@n} #{type}s. Costs #{totalCost}g."
     
     if foodCost > game.getFood()
-      return "Not enough food. Build more farms."
+      err = "Not enough food. Build more farms."
     
     if selected.some((h) -> h.building? or h.wall?)
-      return 'Sell that building first!'
+      err = 'Sell that building first!'
 
     if type is 'wall' #ensure we don't wall off completly.
       start = game.hexGrid.getOuterRing()[0]
       end = game.hexGrid.getHex 0, 0
       options = {impassable: (h) -> h.isWall() or h.isRocks() or h in selected }
       if astar.search(game.hexGrid, start, end, options).length == 0
-        return "Cannot completely wall off base"
+        err = "Cannot completely wall off base"
     else # only applies to non-walls
       # Treat each building as 'true' which allows us to run a simple
       # algorithm checking if each building is connected without actually
@@ -39,8 +47,12 @@ class window.BuildingValidator
       isConnected = @isConnected(type, game)
       selected.forEach (h) -> h.building = null
       if not isConnected
-        return "Buildings (not walls) must be adjacent to another building."
-    true
+        err = "Buildings (not walls) must be adjacent to another building."
+    if err 
+      alert err
+      false
+    else 
+      true
 
   isConnected: (type, game) ->
     numSeen = 0

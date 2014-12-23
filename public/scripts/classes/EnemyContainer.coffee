@@ -1,12 +1,7 @@
 class window.EnemyContainer extends PIXI.DisplayObjectContainer
-  constructor: (@smallEnemy, @bigEnemy) ->
+  constructor: () ->
     super
     @anchor = new PIXI.Point .5, .5
-    # @x = window.innerWidth/2
-    # @y = window.innerHeight/2
-  # @enemyContainer.x = window.innerWidth/2
-  # @enemyContainer.y = window.innerHeight/2
-    # ...
 
   generate: ( { small, large, total }, getLocation ) =>
     for i in [0..small] by 1

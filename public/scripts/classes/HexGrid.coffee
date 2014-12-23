@@ -1,5 +1,5 @@
 class window.HexGrid extends DraggableContainer
-  constructor: (@rows, @size, hexGeneratingFun) ->
+  constructor: (@rows, @size) ->
     super
     @outerRing = []
     @hexes = {}
@@ -15,7 +15,7 @@ class window.HexGrid extends DraggableContainer
     end = @rows
     for q in [-@rows..@rows] by 1
       for r in [start..end] by 1
-        { type, gold } = hexGeneratingFun q, r
+        { type, gold } = @hexGridGenerator q, r
         options = { width, height, q, r, gold }
         switch type
           when 'rocks' then hex = new window.Rocks options
@@ -34,8 +34,25 @@ class window.HexGrid extends DraggableContainer
       @outerRing.push hex
       @addChild hex
 
-  getHex: (q, r) ->
-    @hexes[q+':'+r] or null
+    #Generate a Hex Map
+  hexGridGenerator: (q, r) ->
+    building = null
+    gold = 0
+    type = ''
+    emptySpaces = [-1,0,1]
+    if q in emptySpaces and r in emptySpaces
+      type = ''
+    else
+      randEnviron = Math.random()
+      if randEnviron < 0.075
+        type = 'rocks'
+      else if randEnviron < 0.15
+        type = 'trees'
+      else
+        if Math.random() < .2 then gold = 100
+    { type, gold }
+
+  getHex: (q, r) -> @hexes[q+':'+r] or null
 
   #not sure if this actually works
   getHexFromXY: (x, y) ->
@@ -44,6 +61,7 @@ class window.HexGrid extends DraggableContainer
     @getHex q, r
 
   neighbors: ({ q, r }) -> @getHex(q, r).neighbors()
+
   distance: ({ q, r }, b) -> @getHex(q, r).distanceTo b
 
   # using a* since we want the path to go around existing objects

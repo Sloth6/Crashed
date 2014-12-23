@@ -1,5 +1,5 @@
 class window.BuildingContainer extends PIXI.DisplayObjectContainer
-  constructor: (@buildingValidator) ->
+  constructor: () ->
     super
     @anchor = new PIXI.Point .5, .5
   
@@ -16,13 +16,22 @@ class window.BuildingContainer extends PIXI.DisplayObjectContainer
       b = new buildingClasses[type](hex, type)
       if isWall then hex.addWall b else hex.addBuilding b
       @addChild b
+    @updateTextures()
+    null
 
   each: (fun) ->
     return unless @children.length
     @children.forEach fun
+    null
 
   remove: (locations) =>
     locations.forEach (hex) =>
       b = hex.building or hex.wall
       b.sell()
       @removeChild b
+    @updateTextures()
+    null
+
+  updateTextures: () ->
+    b.updateTexture() for b in @get 'wall'
+    null
