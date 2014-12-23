@@ -25,37 +25,53 @@ class window.Crashed extends EventEmitter
     @hexGrid.addChild @buildings
     @hexGrid.addChild @enemies
 
+    @addListener 'buildPhase', () =>
+      @phase = 'build'
+      @level++
+      @buildings.each (b) -> b.onEndRound() if b.onEndRound
+
+    @addListener 'build', (type) =>
+      res = @buildingValidator.canBuild type, @
+      if res is true
+        @gold -= @prices[type].gold * @selected.length
+        @buildings.add type, @selected
+        @updateTextures() if type is 'wall'
+        @updateInfo()
+      else alert res
+      @selected.clear()
+
+    @addListener 'sell', () =>
+      # numBuildings = (game.selected.filter (h) -> h.building or h.wall).length
+      # return alert 'Select buildings to sell.' if numBuildings == 0
+      res = @buildingValidator.canSell @selected
+      toSell = @selected.filter (h) -> h.wall? or h.building?
+      if res is true
+        for h in toSell
+          b = h.wall or h.building
+          @gold += @prices[b.type].gold * toSell.length // 2
+          @buildings.remove toSell
+        @updateTextures()
+        @updateInfo()
+      else alert res
+      @selected.clear()
+
+    @addListener 'enemyDeath', (enemy) =>
+      @changeGold 1
+      @emit 'buildPhase' if @enemies.count() is 1 
+
+    @addListener 'fightPhase', () =>
+      @phase = 'fight'
+      outerHexes = @hexGrid.getOuterRing()
+      @enemies.generate @enemiesPerLevel(), (() -> random(outerHexes))        
+
   start: () =>
     @buildings.add 'base', [@hexGrid.getHex(0,0)]
     @hexGrid.setDraggable true
     @updateInfo()
     $( "#ui" ).show()
-    @buildPhase()
+    @emit 'buildPhase'
     @
 
-  build: (type) =>
-    res = @buildingValidator.canBuild type, @
-    if res is true
-      @gold -= @prices[type].gold * @selected.length
-      @buildings.add type, @selected
-      @updateTextures() if type is 'wall'
-      @updateInfo()
-    else alert res
-    @selected.clear()
-    
-  sell: () ->
-    res = @buildingValidator.canSell @selected
-    toSell = @selected.filter (h) -> h.wall? or h.building?
-    if res is true
-      for h in toSell
-        b = h.wall or h.building
-        console.log b
-        @gold += @prices[b.type].gold * toSell.length // 2
-        @buildings.remove toSell
-      @updateTextures()
-      @updateInfo()
-    else alert res
-    @selected.clear()
 
   updateTextures: () ->
     b.updateTexture() for b in @buildings.get('wall')
@@ -99,37 +115,7 @@ class window.Crashed extends EventEmitter
     large = small//36
     { small, large, total: small+large }
   
-  onEnemyDeath: (enemy) ->
-    @changeGold 1
-    numEnemies = @enemiesPerLevel().total
-    if @enemies.count() == 1
-      game.buildPhase()
-    else
-      value = @enemies.count() * 100 / numEnemies
-      $('#progressbar').progressbar { value }
-      $( ".progress-label" ).text @enemies.count()
 
-  buildPhase: () ->
-    @phase = 'build'
-    @level++
-    @buildings.each (b) ->
-      b.onEndRound() if b.onEndRound
-    $('#leveltext').text('Level: '+@level)
-    $('#start').show()
-    $('#buildmenu,#sellbutton').show()
-    $('#progressbar').hide()
-
-  fightPhase: () ->
-    @phase = 'fight'
-    $('#buildmenu,#sellbutton').hide()
-    $('#start').hide()
-    $('#progressbar').progressbar({ value: 100 }).show()
-
-    outerHexes = @hexGrid.getOuterRing()
-    numEnemies = @enemiesPerLevel().total
-    $('.progress-label').text numEnemies
-    
-    @enemies.generate @enemiesPerLevel(), (() -> random(outerHexes))
 
   updateInfo: () ->
     $('#goldtext').text('Gold: '+@gold)

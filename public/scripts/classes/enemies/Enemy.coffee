@@ -6,5 +6,5 @@ class window.Enemy extends Unit
       @kill()
 
   kill: () ->
-    game.onEnemyDeath @
+    game.emit 'enemyDeath', [@]
     super()

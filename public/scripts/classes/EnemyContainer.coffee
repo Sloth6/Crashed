@@ -2,8 +2,8 @@ class window.EnemyContainer extends PIXI.DisplayObjectContainer
   constructor: (@smallEnemy, @bigEnemy) ->
     super
     @anchor = new PIXI.Point .5, .5
-    @x = window.innerWidth/2
-    @y = window.innerHeight/2
+    # @x = window.innerWidth/2
+    # @y = window.innerHeight/2
   # @enemyContainer.x = window.innerWidth/2
   # @enemyContainer.y = window.innerHeight/2
     # ...
