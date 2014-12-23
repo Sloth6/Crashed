@@ -2,8 +2,6 @@ class window.BuildingContainer extends PIXI.DisplayObjectContainer
   constructor: (@buildingValidator) ->
     super
     @anchor = new PIXI.Point .5, .5
-    @x = window.innerWidth/2
-    @y = window.innerHeight/2
   
   get: (type) =>
     if type?

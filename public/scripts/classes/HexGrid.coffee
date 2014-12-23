@@ -1,4 +1,4 @@
-class window.HexGrid extends PIXI.DisplayObjectContainer
+class window.HexGrid extends DraggableContainer
   constructor: (@rows, @size, hexGeneratingFun) ->
     super
     @outerRing = []

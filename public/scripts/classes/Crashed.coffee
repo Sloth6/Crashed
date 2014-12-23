@@ -1,13 +1,13 @@
-class window.Crashed extends DraggableContainer
+class window.Crashed extends EventEmitter
   constructor: () ->
-    super
+    # super
     @level = 0
     @gold = 100
     @buildMode = true
     @phase = 'build'
     gridSize = 14
     tileSize = 80
-   
+
     @prices =
       collector: { food: 1, gold: 10 }
       farm: { food: -3, gold: 10 }
@@ -17,20 +17,21 @@ class window.Crashed extends DraggableContainer
 
     @buildingValidator = new BuildingValidator()
     @selected  = new SelectionList()
-
     @hexGrid   = new HexGrid gridSize, tileSize, @hexGridGenerator
     @enemies   = new EnemyContainer(@changeGold, @onEnemyDeath)
     @buildings = new BuildingContainer @changeGold
     
-    @addChild @hexGrid
-    @addChild @buildings
-    @addChild @enemies
+    stage.addChild @hexGrid
+    @hexGrid.addChild @buildings
+    @hexGrid.addChild @enemies
 
   start: () =>
     @buildings.add 'base', [@hexGrid.getHex(0,0)]
-    @setDraggable true
+    @hexGrid.setDraggable true
     @updateInfo()
     $( "#ui" ).show()
+    @buildPhase()
+    @
 
   build: (type) =>
     res = @buildingValidator.canBuild type, @

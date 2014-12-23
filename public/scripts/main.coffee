@@ -20,19 +20,20 @@ $ ->
   stats.domElement.style.top = '0px'
   console.timeEnd 'creatingRenderer'
 
-  gameView = new Gameview()
-  mainMenu = new Mainmenu()
+  window.game = new Crashed().start()
+  gameUI = new GameUI game
+  # mainMenu = new Mainmenu()
 
   $( window ).resize () ->
-    mainMenu.move()
-    gameView.gradient.width = window.innerWidth
-    gameView.gradient.height = window.innerHeight
+    # mainMenu.move()
+    # gameView.gradient.width = window.innerWidth
+    # gameView.gradient.height = window.innerHeight
     renderer.resize window.innerWidth, window.innerHeight
 
 
-  blurFilter = new PIXI.BlurFilter()
-  blurFilter.blur = 7
-  game.filters = [blurFilter]
+  # blurFilter = new PIXI.BlurFilter()
+  # blurFilter.blur = 7
+  # game.filters = [blurFilter]
   
   animate = () ->
     stats.begin()
