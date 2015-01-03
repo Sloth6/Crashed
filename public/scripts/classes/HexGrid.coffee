@@ -62,7 +62,7 @@ class window.HexGrid extends DraggableContainer
 
   neighbors: ({ q, r }) -> @getHex(q, r).neighbors()
 
-  distance: ({ q, r }, b) -> @getHex(q, r).distanceTo b
+  distance: (hex1, hex2) -> hex1.distanceTo hex2
 
   # using a* since we want the path to go around existing objects
   getLine: (h1, h2) ->

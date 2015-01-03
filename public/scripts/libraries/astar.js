@@ -36,8 +36,6 @@ function getHeap() {
 
 var astar = {
     init: function(graph) {
-        // for (var i = 0, len = graph.nodes.length; i < len; ++i) {
-            // var node = graph.nodes[i];
         for (qr in graph.hexes) {
             var node = graph.hexes[qr]
             node.f = 0;
@@ -64,7 +62,7 @@ var astar = {
         astar.init(graph);
         options = options || {};
         var unit = options.unit || false;
-        var heuristic = options.heuristic || astar.heuristics.hexagonal,
+        var heuristic = options.heuristic || graph.distance
             closest = options.closest || false;
         var impassable = options.impassable || function(){return false};
         var openHeap = getHeap(),
@@ -91,7 +89,6 @@ var astar = {
             for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
-                // if (neighbor.closed || neighbor.isWall(unit)) {
                 if (neighbor.closed || impassable(neighbor, unit)) {
                     // Not a valid node to process, skip to next neighbor.
                     continue;
@@ -122,30 +119,7 @@ var astar = {
                 }
             }
         }
-        console.log("break");
-        console.log(pathTo(end));
         return pathTo(end);
-
-        // No result was found - empty array signifies failure to find path.
-        return [];
-    },
-    // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
-    heuristics: {
-        manhattan: function(pos0, pos1) {
-            var d1 = Math.abs(pos1.x - pos0.x);
-            var d2 = Math.abs(pos1.y - pos0.y);
-            return d1 + d2;
-        },
-        diagonal: function(pos0, pos1) {
-            var D = 1;
-            var D2 = Math.sqrt(2);
-            var d1 = Math.abs(pos1.x - pos0.x);
-            var d2 = Math.abs(pos1.y - pos0.y);
-            return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2));
-        },
-        hexagonal: function(pos0, pos1) {
-            return 1000000;
-        }
     }
 };
 
@@ -272,7 +246,6 @@ BinaryHeap.prototype = {
 
 return {
     astar: astar
-    // Graph: Graph
 };
 
 });
