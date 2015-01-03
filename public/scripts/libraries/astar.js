@@ -89,7 +89,7 @@ var astar = {
             currentNode.closed = true;
 
             // Find all neighbors for the current node.
-            var neighbors = graph.neighbors(currentNode);
+            var neighbors = currentNode.neighbors();
             for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
@@ -112,14 +112,6 @@ var astar = {
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
 
-                    if (closest) {
-                        // If the neighbour is closer than the current closestNode or if it's equally close but has
-                        // a cheaper path than the current closest node then it becomes the closest node
-                        if (neighbor.h < closestNode.h || (neighbor.h === closestNode.h && neighbor.g < closestNode.g)) {
-                            closestNode = neighbor;
-                        }
-                    }
-
                     if (!beenVisited) {
                         // Pushing to heap will put it in proper place based on the 'f' value.
                         openHeap.push(neighbor);
@@ -130,10 +122,6 @@ var astar = {
                     }
                 }
             }
-        }
-
-        if (closest) {
-            return pathTo(closestNode);
         }
 
         // No result was found - empty array signifies failure to find path.
