@@ -40,7 +40,7 @@ class window.Hex extends Selectable
   
   isTrees: () -> false
   
-  getCost: () => if @isTrees() then 10 else 1.0
+  getCost: () => if @isTrees() then 100 else 1
   
   isWall: () -> @wall?
 

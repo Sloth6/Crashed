@@ -55,8 +55,6 @@ var astar = {
     * @param {GridNode} start
     * @param {GridNode} end
     * @param {Object} [options]
-    * @param {bool} [options.closest] Specifies whether to return the
-               path to the closest node if the target is unreachable.
     * @param {Function} [options.heuristic] Heuristic function (see
     *          astar.heuristics).
 	* @param {Function} [options.impassable] Impasssable function (returns
@@ -66,7 +64,7 @@ var astar = {
         astar.init(graph);
         options = options || {};
         var unit = options.unit || false;
-        var heuristic = options.heuristic || astar.heuristics.manhattan,
+        var heuristic = options.heuristic || astar.heuristics.hexagonal,
             closest = options.closest || false;
         var impassable = options.impassable || function(){return false};
         var openHeap = getHeap(),
@@ -78,18 +76,18 @@ var astar = {
         while(openHeap.size() > 0) {
 
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
-            var currentNode = openHeap.pop();
+            var currentHex = openHeap.pop();
 
             // End case -- result has been found, return the traced path.
-            if(currentNode === end) {
-                return pathTo(currentNode);
-            }
+            //if(currentHex === end) {
+                //return pathTo(currentHex);
+            //}
 
-            // Normal case -- move currentNode from open to closed, process each of its neighbors.
-            currentNode.closed = true;
+            // Normal case -- move currentHex from open to closed, process each of its neighbors.
+            currentHex.closed = true;
 
             // Find all neighbors for the current node.
-            var neighbors = currentNode.neighbors();
+            var neighbors = currentHex.neighbors();
             for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
@@ -101,13 +99,14 @@ var astar = {
 
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
-                var gScore = currentNode.g + neighbor.getCost(currentNode),
+                var gScore = currentHex.g + neighbor.getCost(),
                     beenVisited = neighbor.visited;
+
                 if (!beenVisited || gScore < neighbor.g) {
 
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
                     neighbor.visited = true;
-                    neighbor._parent = currentNode;
+                    neighbor._parent = currentHex;
                     neighbor.h = neighbor.h || heuristic(neighbor, end);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
@@ -123,6 +122,9 @@ var astar = {
                 }
             }
         }
+        console.log("break");
+        console.log(pathTo(end));
+        return pathTo(end);
 
         // No result was found - empty array signifies failure to find path.
         return [];
@@ -140,6 +142,9 @@ var astar = {
             var d1 = Math.abs(pos1.x - pos0.x);
             var d2 = Math.abs(pos1.y - pos0.y);
             return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2));
+        },
+        hexagonal: function(pos0, pos1) {
+            return 1000000;
         }
     }
 };
