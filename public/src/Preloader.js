@@ -28,9 +28,10 @@ Crashed.Preloader.prototype = {
     // this.load.atlas('playButton', 'images/play_button.png', 'images/play_button.json');
     this.load.image('playButton', 'images/mainmenu/New.gif');
     
-    this.load.audio('titleMusic', ['audio/One_More_Time.m4a']);
+    // this.load.audio('titleMusic', ['audio/One_More_Time.m4a']);
 
     this.stage.backgroundColor = '#007236';
+    this.load.image('hex', 'images/greenhex.gif');    
     // this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');
     //  + lots of other required assets here
 
@@ -54,10 +55,12 @@ Crashed.Preloader.prototype = {
     //  If you don't have any music in your game then put the game.state.start line into the create function and delete
     //  the update function completely.
     
-    if (this.cache.isSoundDecoded('titleMusic') && this.ready == false) {
-      this.ready = true;
-      this.state.start('MainMenu');
-    }
+    this.ready = true;
+    this.state.start('MainMenu');
+    // if (this.cache.isSoundDecoded('titleMusic') && this.ready == false) {
+    //   this.ready = true;
+    //   this.state.start('MainMenu');
+    // }
 
   }
 
