@@ -1,10 +1,14 @@
 class window.Hex
   constructor: ({ x, y }) ->
-    @building = null
-    @wall = null
-    @nature = null
+    @building = null #Building Object
+    @nature = null #String
     @sprite = game.add.sprite x, y, 'hex'
-    # @sprite.anchor.set(0.5, 0.5);
+    @sprite.anchor.set 0.5, 0.5
+    @sprite.inputEnabled = true
+    @sprite.events.onInputDown.add @listener, @this
+
+  listener: () ->
+    
 
   # qrToxy: ({q, r, width}) ->
   #   size = width/2

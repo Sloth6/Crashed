@@ -22,6 +22,7 @@ class Crashed.Game
   create: () ->
     @hexGroup = game.add.group()
     @rows = 2
+    @worldScale = 1
 
     #  Modify the world and camera bounds
     game.world.setBounds -2000, -2000, 4000, 4000
@@ -37,8 +38,6 @@ class Crashed.Game
         @hexGroup.add((new window.Hex {x, y}).sprite)
       if q < 0 then start-- else end--
 
-    # for i in [0..100] by 1
-    #   game.add.sprite(game.world.randomX, game.world.randomY, 'hex')
 
     game.add.text(600, 800, "- phaser -", { font: "32px Arial", fill: "#330088", align: "center" })
 
@@ -50,15 +49,22 @@ class Crashed.Game
   update: () ->
     if @cursors.up.isDown
       game.camera.y -= 8
-
     else if @cursors.down.isDown
       game.camera.y += 8
 
     if @cursors.left.isDown
       game.camera.x -= 8
-
     else if @cursors.right.isDown
       game.camera.x += 8
+
+    #zoom
+    if game.input.keyboard.isDown(Phaser.Keyboard.Q)
+      @worldScale += 0.05
+    else if game.input.keyboard.isDown(Phaser.Keyboard.A)
+      @worldScale -= 0.05
+
+    @worldScale = Phaser.Math.clamp(@worldScale, 0.25, 2);
+    game.world.scale.set @worldScale
 
   quitGame: (pointer) ->
     #  Here you should destroy anything you no longer need.
