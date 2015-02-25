@@ -1,5 +1,5 @@
 $ ->
-  window.game = new Phaser.Game 1024, 768, Phaser.AUTO, 'gameContainer'
+  window.game = new Phaser.Game window.innerWidth, window.innerHeight, Phaser.AUTO, 'gameContainer'
   # view.physics.startSystem Phaser.Physics.ARCADE
 
   #Add the States your game has.

@@ -2,6 +2,8 @@ class window.Hex
   constructor: ({ group, @click, x, y }) ->
     @building = null #Building Object
     @nature = null #String
+    @selected = false #Boolean
+
     @sprite = group.create x, y, 'hex'
     @sprite.anchor.set 0.5, 0.5
     @sprite.inputEnabled = true
@@ -13,11 +15,12 @@ class window.Hex
     @click @
 
   select: () ->
-    if @sprite.alpha is .5
-      @sprite.alpha = 1
-    else
-      @sprite.alpha = .5
+    @selected = true
+    @sprite.alpha = 0.5
 
+  deselect: () ->
+    @selected = false
+    @sprite.alpha = 1.0
   # qrToxy: ({q, r, width}) ->
   #   size = width/2
   #   x = q * size * 1.5

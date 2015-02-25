@@ -19,6 +19,11 @@ class Crashed.Boot
       @scale.forceLandscape = true
       @scale.pageAlignHorizontally = true
 
+    Array.prototype.remove = (e) ->
+      i = @indexOf e
+      @splice(i, 1) if i > -1
+      @
+
   preload: () ->
     #  Here we load the assets required for our preloader (in this case a background and a loading bar)
     @load.image('preloaderBackground', 'images/mainmenu/background.gif')
