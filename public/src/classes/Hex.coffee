@@ -1,14 +1,19 @@
 class window.Hex
-  constructor: ({ x, y }) ->
+  constructor: ({ group, @click, x, y }) ->
     @building = null #Building Object
     @nature = null #String
-    @sprite = game.add.sprite x, y, 'hex'
+    @sprite = group.create x, y, 'hex'
     @sprite.anchor.set 0.5, 0.5
     @sprite.inputEnabled = true
-    @sprite.events.onInputDown.add @listener, @this
+    @sprite.events.onInputDown.add @click, @
+    @sprite.input.pixelPerfectOver = true
+    @sprite.input.useHandCursor = true
 
-  listener: () ->
-    
+  select: () ->
+    if @sprite.alpha is .5
+      @sprite.alpha = 1
+    else
+      @sprite.alpha = .5
 
   # qrToxy: ({q, r, width}) ->
   #   size = width/2

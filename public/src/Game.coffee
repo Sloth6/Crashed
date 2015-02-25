@@ -35,7 +35,7 @@ class Crashed.Game
         x = q * size * 1.5
         y =  ((r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size)))
         # game.add.sprite x, y, 'hex'
-        @hexGroup.add((new window.Hex {x, y}).sprite)
+        new Hex { group: @hexGroup, click: @click.hex, x, y }
       if q < 0 then start-- else end--
 
 
@@ -45,6 +45,10 @@ class Crashed.Game
     d.anchor.setTo(0.5, 0.5)
 
     @cursors = game.input.keyboard.createCursorKeys()
+
+  click:
+    hex: () ->
+      @select()
 
   update: () ->
     if @cursors.up.isDown
