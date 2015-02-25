@@ -1,5 +1,6 @@
 $ ->
-  window.game = new Phaser.Game window.innerWidth, window.innerHeight, Phaser.AUTO, 'gameContainer'
+  console.log $('#gameContainer')[0]
+  window.game = new Phaser.Game window.innerWidth, window.innerHeight, Phaser.AUTO, $('#gameContainer')[0]
   # view.physics.startSystem Phaser.Physics.ARCADE
 
   #Add the States your game has.

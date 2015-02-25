@@ -26,7 +26,7 @@ class Crashed.Game
     @selectedHexes = []
     @buildings = []
     @enemeis = []
-    @rows = 2
+    @rows = 5
     @buildingTypes = [ 'collector', 'farm', 'tower', 'wall' ]
 
     # View
@@ -37,7 +37,7 @@ class Crashed.Game
     
     createMenu = () =>
       for type, i in @buildingTypes
-        button = ui.create 50, (i * 100) + 50, type
+        button = ui.create 10, (i * 100) + 50, type
         button.height = 50
         button.width = 50
         button.fixedToCamera = true
