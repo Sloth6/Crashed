@@ -5,9 +5,12 @@ class window.Hex
     @sprite = group.create x, y, 'hex'
     @sprite.anchor.set 0.5, 0.5
     @sprite.inputEnabled = true
-    @sprite.events.onInputDown.add @click, @
+    @sprite.events.onInputDown.add @onInputDown, @
     @sprite.input.pixelPerfectOver = true
     @sprite.input.useHandCursor = true
+
+  onInputDown: () ->
+    @click @
 
   select: () ->
     if @sprite.alpha is .5

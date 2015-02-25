@@ -31,9 +31,11 @@ Crashed.Preloader.prototype = {
     // this.load.audio('titleMusic', ['audio/One_More_Time.m4a']);
 
     this.stage.backgroundColor = '#007236';
-    this.load.image('hex', 'images/greenhex.gif');    
-    // this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');
-    //  + lots of other required assets here
+    this.load.image('hex', 'images/greenhex.gif');
+    this.load.image('collector', 'images/buildings/collector.png');
+    this.load.image('farm', 'images/buildings/farm2.png');
+    this.load.image('pylon', 'images/buildings/pylon.gif');
+    this.load.image('tower', 'images/buildings/tower.gif');
 
   },
 

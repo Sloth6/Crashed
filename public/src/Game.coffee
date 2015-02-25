@@ -21,20 +21,36 @@ class Crashed.Game
 
   create: () ->
     @hexGroup = game.add.group()
+    @selected = []
+    @buildings = []
+    @enemeis = []
     @rows = 2
     @worldScale = 1
-
-    #  Modify the world and camera bounds
     game.world.setBounds -2000, -2000, 4000, 4000
+    @camera.x -= @camera.width/2
+    @camera.y -= @camera.height/2
+    createMenu = () ->
+      buildCollector = game.add.sprite 50, 100, 'collector'
 
+      buildCollector.fixedToCamera = true
+      buildCollector.inputEnabled = true
+      buildCollector.input.useHandCursor = true
+      buildCollector.cameraOffset.setTo 50, 50
+
+      # buildFarm = game.add.sprite 50, 200, 'farm'
+      # buildCollector.fixedToCamera = true
+      # buildCollector.inputEnabled = true
+      # this.load.image 'farm', 'images/farm2.png'
+      # this.load.image 'pylon', 'images/pylon.gif'
+      # this.load.image 'tower', 'images/tower.gif'
+    createMenu()
     start = 0
     end = @rows
-    size = 125
+    size = (new Phaser.Sprite game, 0, 0, 'hex').width/2
     for q in [-@rows..@rows] by 1
       for r in [start..end] by 1
         x = q * size * 1.5
-        y =  ((r * (Math.sqrt(3)*size) + (q * Math.sqrt(3)/2 * size)))
-        # game.add.sprite x, y, 'hex'
+        y = (r * Math.sqrt(3) * size) + (q * Math.sqrt(3)/2 * size)
         new Hex { group: @hexGroup, click: @click.hex, x, y }
       if q < 0 then start-- else end--
 
@@ -47,8 +63,10 @@ class Crashed.Game
     @cursors = game.input.keyboard.createCursorKeys()
 
   click:
-    hex: () ->
-      @select()
+    hex: (hex) ->
+      console.log @
+      @selected.push hex
+      hex.select()
 
   update: () ->
     if @cursors.up.isDown
@@ -62,13 +80,13 @@ class Crashed.Game
       game.camera.x += 8
 
     #zoom
-    if game.input.keyboard.isDown(Phaser.Keyboard.Q)
-      @worldScale += 0.05
-    else if game.input.keyboard.isDown(Phaser.Keyboard.A)
-      @worldScale -= 0.05
+    # if game.input.keyboard.isDown(Phaser.Keyboard.Q)
+    #   @worldScale += 0.05
+    # else if game.input.keyboard.isDown(Phaser.Keyboard.A)
+    #   @worldScale -= 0.05
 
-    @worldScale = Phaser.Math.clamp(@worldScale, 0.25, 2);
-    game.world.scale.set @worldScale
+    # @worldScale = Phaser.Math.clamp(@worldScale, 0.25, 2);
+    # game.world.scale.set @worldScale
 
   quitGame: (pointer) ->
     #  Here you should destroy anything you no longer need.
