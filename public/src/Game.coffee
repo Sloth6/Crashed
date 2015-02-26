@@ -28,6 +28,8 @@ class Crashed.Game
     @selectedHexes = []
     @buildings = []
     @enemeis = []
+    @hexes = []
+
     @rows = 5
     @buildingTypes = [ 'collector', 'farm', 'tower', 'wall' ]
 
@@ -36,8 +38,14 @@ class Crashed.Game
     game.world.setBounds -2000, -2000, 4000, 4000
     @camera.x -= @camera.width/2
     @camera.y -= @camera.height/2
-    
+
     createMenu = () =>
+      start = ui.create 10, 400, 'start'
+      start.fixedToCamera = true
+      start.inputEnabled = true
+      start.input.useHandCursor = true
+      start.events.onInputDown.add @clickStart
+
       for type, i in @buildingTypes
         button = ui.create 10, (i * 100) + 50, type
         button.height = 50
@@ -55,29 +63,34 @@ class Crashed.Game
       for r in [start..end] by 1
         x = q * size * 1.5
         y = (r * Math.sqrt(3) * size) + (q * Math.sqrt(3)/2 * size)
-        new Hex { group: @hexGroup, click: @clickHex, x, y }
+        @hexes["#{q}:#{r}"] = new Hex { group: @hexGroup, click: @clickHex, x, y }
       if q < 0 then start-- else end--
 
     game.add.text(600, 800, "CRASHED", { font: "32px Arial", fill: "#330088", align: "center" })
 
     createMenu()
-
     @cursors = game.input.keyboard.createCursorKeys()
   
-  clickHex: (hex) =>
-      if hex.selected
-        @selectedHexes.remove hex
-        hex.deselect()
-      else
-        @selectedHexes.push hex
-        hex.select()
-  clickBuildButton: (type) ->
-    console.log type, @
-    # type = @type
-    # hex = @hexGroup.children(0)
-    # new Enemy { group: @enemyGroup, hex }
+  build: (hex, type) ->
+    hex.building = type
+    building = game.add.sprite hex.x, hex.y, type
+    building.anchor.set 0.5, 0.5
 
-  clickStart: () ->
+  clickHex: (hex) =>
+    if hex.selected
+      @selectedHexes.remove hex
+      hex.deselect()
+    else
+      @selectedHexes.push hex
+      hex.select()
+
+  clickBuildButton: (type) ->
+    @selectedHexes.forEach (h) =>
+      @build h,'wall'
+      h.deselect()
+
+  clickStart: () =>
+    console.log @
 
 
   startAttack: () ->

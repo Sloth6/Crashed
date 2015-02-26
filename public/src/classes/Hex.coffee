@@ -1,10 +1,14 @@
 class window.Hex
-  constructor: ({ group, @click, x, y }) ->
-    @building = null #Building Object
+  constructor: ({ group, @click, @x, @y }) ->
+    @building = null #String
+    @buildingSprite = null #Phaser sprite object
+
     @nature = null #String
+    @natureSprite = null #Phaser sprite object
+
     @selected = false #Boolean
 
-    @sprite = group.create x, y, 'hex'
+    @sprite = group.create @x, @y, 'hex'
     @sprite.anchor.set 0.5, 0.5
     @sprite.inputEnabled = true
     @sprite.events.onInputDown.add @onInputDown, @
