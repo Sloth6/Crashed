@@ -37,6 +37,7 @@ Crashed.Preloader.prototype = {
     this.load.image('pylon', 'images/buildings/pylon.gif');
     this.load.image('tower', 'images/buildings/tower.gif');
     this.load.image('wall', 'images/buildings/wall.gif');
+    this.load.image('wall', 'images/units/enemy.gif');
 
   },
 

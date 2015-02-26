@@ -22,6 +22,8 @@ class Crashed.Game
   create: () ->
     # Game state
     @hexGroup = game.add.group()
+    @enemyGroup = game.add.group()
+
     ui = game.add.group()
     @selectedHexes = []
     @buildings = []
@@ -43,7 +45,8 @@ class Crashed.Game
         button.fixedToCamera = true
         button.inputEnabled = true
         button.input.useHandCursor = true
-        button.events.onInputDown.add @clickBuildButton, {type}
+        #this monstrousity will wait until I modify phaser library
+        button.events.onInputDown.add ((_type)=>(()=>@clickBuildButton(_type)))(type)
     
     start = 0
     end = @rows
@@ -55,24 +58,30 @@ class Crashed.Game
         new Hex { group: @hexGroup, click: @clickHex, x, y }
       if q < 0 then start-- else end--
 
-
     game.add.text(600, 800, "CRASHED", { font: "32px Arial", fill: "#330088", align: "center" })
 
     createMenu()
 
     @cursors = game.input.keyboard.createCursorKeys()
-
+  
   clickHex: (hex) =>
-    if hex.selected
-      @selectedHexes.remove hex
-      hex.deselect()
-    else
-      @selectedHexes.push hex
-      hex.select()
+      if hex.selected
+        @selectedHexes.remove hex
+        hex.deselect()
+      else
+        @selectedHexes.push hex
+        hex.select()
+  clickBuildButton: (type) ->
+    console.log type, @
+    # type = @type
+    # hex = @hexGroup.children(0)
+    # new Enemy { group: @enemyGroup, hex }
 
-  clickBuildButton: () ->
-    type = @type
-    console.log type
+  clickStart: () ->
+
+
+  startAttack: () ->
+
 
   update: () ->
     if @cursors.up.isDown
@@ -84,18 +93,3 @@ class Crashed.Game
       game.camera.x -= 8
     else if @cursors.right.isDown
       game.camera.x += 8
-
-    #zoom
-    # if game.input.keyboard.isDown(Phaser.Keyboard.Q)
-    #   @worldScale += 0.05
-    # else if game.input.keyboard.isDown(Phaser.Keyboard.A)
-    #   @worldScale -= 0.05
-
-    # @worldScale = Phaser.Math.clamp(@worldScale, 0.25, 2);
-    # game.world.scale.set @worldScale
-
-  quitGame: (pointer) ->
-    #  Here you should destroy anything you no longer need.
-    #  Stop music, delete sprites, purge caches, free resources, all that good stuff.
-    #  Then let's go back to the main menu.
-    @state.start 'MainMenu'
