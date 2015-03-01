@@ -1,5 +1,5 @@
 class window.Hex
-  constructor: ({ group, @click, @x, @y }) ->
+  constructor: ({ group, @click, @x, @y, @q, @r }) ->
     @building = null #String
     @buildingSprite = null #Phaser sprite object
 

@@ -1,8 +1,7 @@
 $ ->
-  console.log $('#gameContainer')[0]
   window.game = new Phaser.Game window.innerWidth, window.innerHeight, Phaser.AUTO, $('#gameContainer')[0]
   # view.physics.startSystem Phaser.Physics.ARCADE
-
+  console.log game
   #Add the States your game has.
   game.state.add('Boot', Crashed.Boot)
   game.state.add('Preloader', Crashed.Preloader)

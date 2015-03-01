@@ -10,7 +10,7 @@ hexUtils =
   hexDistance: (a, b) ->
     (Math.abs(a.q - b.q) + Math.abs(a.r - b.r) + Math.abs(a.q + a.r - b.q - b.r)) / 2
 
-  hexRing: (hexes, r) ->
+  ring: (hexes, r) ->
     # c ?= { q: 0, r: 0 }
     hex = hexes["#{-r}:#{r}"]
     ringHexes = []

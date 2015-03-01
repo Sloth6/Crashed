@@ -20,14 +20,26 @@ class Crashed.Game
     #  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
   create: () ->
+    
+    
+    @game.physics.startSystem Phaser.Physics.P2JS
+    @physics.p2.setImpactEvents true
+    @physics.p2.restitution = 0.8
+
+
+    # enemyCollisionGroup = @physics.p2.createCollisionGroup()
+
     # Game state
     @hexGroup = game.add.group()
     @enemyGroup = game.add.group()
+    
+    # @enemyGroup.enableBody = true
+    # @enemyGroup.physicsBodyType = Phaser.Physics.P2JS
 
     ui = game.add.group()
     @selectedHexes = []
     @buildings = []
-    @enemeis = []
+    @enemies = []
     @hexes = []
 
     @rows = 5
@@ -63,14 +75,21 @@ class Crashed.Game
       for r in [start..end] by 1
         x = q * size * 1.5
         y = (r * Math.sqrt(3) * size) + (q * Math.sqrt(3)/2 * size)
-        @hexes["#{q}:#{r}"] = new Hex { group: @hexGroup, click: @clickHex, x, y }
+        hex = new Hex { group: @hexGroup, click: @clickHex, x, y, q, r }
+        
+        @hexes["#{q}:#{r}"] = hex
       if q < 0 then start-- else end--
 
     game.add.text(600, 800, "CRASHED", { font: "32px Arial", fill: "#330088", align: "center" })
 
     createMenu()
     @cursors = game.input.keyboard.createCursorKeys()
-  
+    
+    for h in hexUtils.ring(@hexes, 3)
+      @enemies.push new Enemy(@, @enemyGroup, h)
+    for h in hexUtils.ring(@hexes, 4)
+      @enemies.push new Enemy(@, @enemyGroup, h)
+
   build: (hex, type) ->
     hex.building = type
     building = game.add.sprite hex.x, hex.y, type
@@ -97,6 +116,10 @@ class Crashed.Game
 
 
   update: () ->
+    for e in @enemies
+      e.update()
+    # game.physics.arcade.collide @enemyGroup, @enemyGroup
+
     if @cursors.up.isDown
       game.camera.y -= 8
     else if @cursors.down.isDown
