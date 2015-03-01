@@ -1,5 +1,5 @@
 class window.Hex
-  constructor: ({ group, @click, @x, @y, @q, @r }) ->
+  constructor: ({ game, group, @click, @x, @y, @q, @r }) ->
     @building = null #String
     @buildingSprite = null #Phaser sprite object
 
@@ -14,6 +14,8 @@ class window.Hex
     @sprite.events.onInputDown.add @onInputDown, @
     @sprite.input.pixelPerfectOver = true
     @sprite.input.useHandCursor = true
+
+  getCost: () -> 1
 
   onInputDown: () ->
     @click @

@@ -4,7 +4,8 @@ directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
 
 hexUtils = 
   neighbors: ( hexes, {q,r} ) ->
-    (directions.map ([ dq, dr ]) => game.hexGrid.getHex dq + q, dr + r)
+    # console.log hexes, {q,r}
+    (directions.map ([ dq, dr ]) => hexes["#{dq+q}:#{dr + r}"])
       .filter (elem) -> !!elem
 
   hexDistance: (a, b) ->

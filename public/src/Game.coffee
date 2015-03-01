@@ -42,7 +42,7 @@ class Crashed.Game
     @enemies = []
     @hexes = []
 
-    @rows = 5
+    @rows = 7
     @buildingTypes = [ 'collector', 'farm', 'tower', 'wall' ]
 
     # View
@@ -75,25 +75,24 @@ class Crashed.Game
       for r in [start..end] by 1
         x = q * size * 1.5
         y = (r * Math.sqrt(3) * size) + (q * Math.sqrt(3)/2 * size)
-        hex = new Hex { group: @hexGroup, click: @clickHex, x, y, q, r }
+        hex = new Hex { game: @, group: @hexGroup, click: @clickHex, x, y, q, r }
         
         @hexes["#{q}:#{r}"] = hex
       if q < 0 then start-- else end--
 
-    game.add.text(600, 800, "CRASHED", { font: "32px Arial", fill: "#330088", align: "center" })
+    @hexes["0:0"].sprite.alpha = 0.3
 
     createMenu()
     @cursors = game.input.keyboard.createCursorKeys()
     
-    for h in hexUtils.ring(@hexes, 3)
-      @enemies.push new Enemy(@, @enemyGroup, h)
-    for h in hexUtils.ring(@hexes, 4)
-      @enemies.push new Enemy(@, @enemyGroup, h)
-
   build: (hex, type) ->
     hex.building = type
     building = game.add.sprite hex.x, hex.y, type
     building.anchor.set 0.5, 0.5
+    @game.physics.p2.enable building, false
+    building.body.setCircle 35
+    building.body.static = true
+    
 
   clickHex: (hex) =>
     if hex.selected
@@ -109,7 +108,8 @@ class Crashed.Game
       h.deselect()
 
   clickStart: () =>
-    console.log @
+    for h in hexUtils.ring(@hexes, @rows)
+      @enemies.push new Enemy(@, @enemyGroup, h)
 
 
   startAttack: () ->

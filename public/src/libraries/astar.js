@@ -36,8 +36,8 @@ function getHeap() {
 
 var astar = {
     init: function(graph) {
-        for (qr in graph.hexes) {
-            var node = graph.hexes[qr]
+        for (qr in graph) {
+            var node = graph[qr]
             node.f = 0;
             node.g = 0;
             node.h = 0;
@@ -58,17 +58,20 @@ var astar = {
 	* @param {Function} [options.impassable] Impasssable function (returns
 	*          true if impassable)
     */
-    search: function(graph, start, end, options) {
+    search: function(options) {
+        var graph = options.graph;
+        var start = options.start;
+        var end = options.end;
         astar.init(graph);
         options = options || {};
         var unit = options.unit || false;
-        var heuristic = options.heuristic || graph.distance
-            closest = options.closest || false;
-        var impassable = options.impassable || function(){return false};
+        var heuristic = options.heuristic;
+        var closest = options.closest || false;
+        // var neighbors = options.neighbors;
+        var impassable = options.impassable || function(){ return false };
         var openHeap = getHeap(),
             closestNode = start; // set the start node to be the closest if required
         start.h = heuristic(start, end);
-
         openHeap.push(start);
 
         while(openHeap.size() > 0) {
@@ -85,7 +88,7 @@ var astar = {
             currentHex.closed = true;
 
             // Find all neighbors for the current node.
-            var neighbors = currentHex.neighbors();
+            var neighbors = options.neighbors(graph, currentHex);
             for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
