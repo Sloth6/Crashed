@@ -26,25 +26,27 @@ class window.Enemy
     @i = 0
     @nextHex = @path[@i]
 
-    # console.log @sprite.body
-    # console.log @path
-    # @nextHex = @path[0]
-
   kill: () ->
     @alive = false
     @sprite.kill()
 
   update: () ->
-    if @game.physics.arcade.distanceBetween(@sprite, @nextHex.sprite) < 30
+    return unless @alive
+    @accelerateToObject(@sprite, @nextHex.sprite, 200)
+    d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite
+    if d < 40
       @i += 1
-      if @path[@i]
+      @nextHex = @path[@i]
+      return @kill() unless @nextHex
+    if @path[@i+1]
+      d2 = @game.physics.arcade.distanceBetween @sprite, @path[@i+1].sprite
+      if d2 < 40 and @path[@i+2]
+        @i += 2
         @nextHex = @path[@i]
-      else
-        @kill()
-    @accelerateToObject(@sprite, @nextHex.sprite, 100)
+    
 
   accelerateToObject: (obj1, obj2, speed) ->
     angle = Math.atan2(obj2.y - obj1.y, obj2.x - obj1.x);
     obj1.body.rotation = angle
-    obj1.body.velocity.x = Math.cos(angle) * speed 
-    obj1.body.velocity.y = Math.sin(angle) * speed
+    obj1.body.velocity.x = (Math.cos(angle) * speed) + Math.random()*3
+    obj1.body.velocity.y = (Math.sin(angle) * speed) + Math.random()*3
