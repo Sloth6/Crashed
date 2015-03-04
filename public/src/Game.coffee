@@ -63,11 +63,11 @@ class Crashed.Game
     @camera.y -= @camera.height/2
 
     createMenu = () =>
-      start = ui.create 10, 400, 'start'
-      start.fixedToCamera = true
-      start.inputEnabled = true
-      start.input.useHandCursor = true
-      start.events.onInputDown.add @startAttack
+      @startButton = ui.create 10, 400, 'start'
+      @startButton.fixedToCamera = true
+      @startButton.inputEnabled = true
+      @startButton.input.useHandCursor = true
+      @startButton.events.onInputDown.add @startAttack
 
       for type, i in @buildingTypes
         button = ui.create 10, (i * 100) + 50, type
@@ -122,12 +122,14 @@ class Crashed.Game
 
   endAttack: () =>
     @mode = 'build'
+    @startButton.exists = true
     @enemies = []
     @level += 1
     console.log 'level over!', @level
   
   startAttack: () =>
     @mode = 'attack'
+    @startButton.exists = false
     @enemyCount = @enemiesPerLevel()
     outerRing = hexUtils.ring(@hexes, @rows)
     for i in [0...@enemyCount] by 1
