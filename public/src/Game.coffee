@@ -20,30 +20,36 @@ class Crashed.Game
     #  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
   create: () ->
-    
-    
+    # Physics
     @game.physics.startSystem Phaser.Physics.P2JS
     @physics.p2.setImpactEvents true
     @physics.p2.restitution = 0.8
 
-
-    # enemyCollisionGroup = @physics.p2.createCollisionGroup()
-
     # Game state
-    @hexGroup = game.add.group()
-    @enemyGroup = game.add.group()
-    
-    # @enemyGroup.enableBody = true
-    # @enemyGroup.physicsBodyType = Phaser.Physics.P2JS
-
-    ui = game.add.group()
-    @selectedHexes = []
-    @buildings = []
-    @enemies = []
-    @hexes = []
-
-    @rows = 7
+    @rows = 6
     @buildingTypes = [ 'collector', 'farm', 'tower', 'wall' ]
+
+    # Hexes
+    @hexes = []
+    @hexGroup = game.add.group()
+    @selectedHexes = []
+
+    # Enemeis
+    @enemies = []
+    @enemyGroup = game.add.group()
+    @enemyCG = game.physics.p2.createCollisionGroup()
+
+    # Bullets
+    @bulletGroup = game.add.group()
+    @bulletCG = game.physics.p2.createCollisionGroup()
+    
+    # Buildings
+    @buildings = []
+    @buildingGroup = game.add.group()
+    @buildingCG = game.physics.p2.createCollisionGroup()
+
+    # UI
+    ui = game.add.group()
 
     # View
     @worldScale = 1
@@ -68,6 +74,7 @@ class Crashed.Game
         #this monstrousity will wait until I modify phaser library
         button.events.onInputDown.add ((_type)=>(()=>@clickBuildButton(_type)))(type)
     
+    # Create the hex field
     start = 0
     end = @rows
     size = (new Phaser.Sprite game, 0, 0, 'hex').width/2
@@ -84,15 +91,19 @@ class Crashed.Game
 
     createMenu()
     @cursors = game.input.keyboard.createCursorKeys()
+    @game.physics.p2.setPostBroadphaseCallback @collided, @
     
+  collided : (a, b) ->
+    a = a.sprite#.container
+    b = b.sprite#.container
+    # a.alpha = .7
+    # b.alpha = .7
+    true
+
+
   build: (hex, type) ->
     hex.building = type
-    building = game.add.sprite hex.x, hex.y, type
-    building.anchor.set 0.5, 0.5
-    @game.physics.p2.enable building, false
-    building.body.setCircle 35
-    building.body.static = true
-    
+    @buildings.push(new Buildings[type](@, hex))
 
   clickHex: (hex) =>
     if hex.selected
@@ -104,20 +115,22 @@ class Crashed.Game
 
   clickBuildButton: (type) ->
     @selectedHexes.forEach (h) =>
-      @build h,'wall'
+      @build h, type
       h.deselect()
 
   clickStart: () =>
     for h in hexUtils.ring(@hexes, @rows)
-      @enemies.push new Enemy(@, @enemyGroup, h)
-
+      @enemies.push new Enemy(@, h)
 
   startAttack: () ->
 
-
+  enemyHit: (body, shapeA, shapeB, equation) ->
+    console.log body.sprite.container#, shapeA, shapeB, equation
+  
   update: () ->
-    for e in @enemies
-      e.update()
+    @physics.arcade.collide(@enemyGroup);
+    e.update() for e in @enemies
+    b.update() for b in @buildings
     # game.physics.arcade.collide @enemyGroup, @enemyGroup
 
     if @cursors.up.isDown

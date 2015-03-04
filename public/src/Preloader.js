@@ -39,6 +39,8 @@ Crashed.Preloader.prototype = {
     this.load.image('wall', 'images/buildings/wall.gif');
     this.load.image('enemy', 'images/units/enemy.gif');
 
+    this.load.image('bullet', 'images/bullet.gif');
+
     this.load.image('start', 'images/ui/start.png');    
 
   },

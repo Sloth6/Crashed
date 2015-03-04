@@ -1,4 +1,5 @@
 Crashed = {}
+Buildings = {}
 
 class Crashed.Boot
   init: () ->
