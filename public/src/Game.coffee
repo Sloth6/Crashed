@@ -20,14 +20,19 @@ class Crashed.Game
     #  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
   create: () ->
+    # Game state
+    @rows = 9
+    @buildingTypes = [ 'collector', 'farm', 'tower', 'wall' ]
+    @modes = 'build' #( attack | build )
+    @enemyCount = 0
+    @level = 0
+
     # Physics
     @game.physics.startSystem Phaser.Physics.P2JS
     @physics.p2.setImpactEvents true
     @physics.p2.restitution = 0.8
 
-    # Game state
-    @rows = 9
-    @buildingTypes = [ 'collector', 'farm', 'tower', 'wall' ]
+
 
     # Hexes
     @hexes = []
@@ -62,7 +67,7 @@ class Crashed.Game
       start.fixedToCamera = true
       start.inputEnabled = true
       start.input.useHandCursor = true
-      start.events.onInputDown.add @clickStart
+      start.events.onInputDown.add @startAttack
 
       for type, i in @buildingTypes
         button = ui.create 10, (i * 100) + 50, type
@@ -111,22 +116,38 @@ class Crashed.Game
       h.deselect()
     @selectedHexes = []
 
-  clickStart: () =>
-    for h in hexUtils.ring(@hexes, @rows)
-      @enemies.push new Enemy(@, h)
+  enemiesPerLevel: (n) ->
+    n ?= @level
+    Math.floor 10 * Math.pow(1.15, n)
 
-  startAttack: () ->
+  endAttack: () =>
+    @mode = 'build'
+    @enemies = []
+    @level += 1
+    console.log 'level over!', @level
+  
+  startAttack: () =>
+    @mode = 'attack'
+    @enemyCount = @enemiesPerLevel()
+    outerRing = hexUtils.ring(@hexes, @rows)
+    for i in [0...@enemyCount] by 1
+      h = outerRing.random()
+      @enemies.push new Enemy(@, h)
+    true
 
   enemyHit: (enemy, sprite) ->
     if sprite.name is 'building'
       sprite.container.kill()
 
   bulletHit: (bulletSprite, sprite) ->
-    sprite.container.damage bulletSprite.container.damage
+    sprite.container.kill()
     bulletSprite.kill()
-
+    @enemyCount -= 1
+    if @enemyCount is 0
+      if (@enemies.reduce ((sum, e) -> sum + e.alive), 0) is 0
+        @endAttack()
+      
   update: () ->
-    @physics.arcade.collide(@enemyGroup);
     e.update() for e in @enemies
     for b in @buildings
       b.update() if b.update

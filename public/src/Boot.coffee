@@ -25,6 +25,9 @@ class Crashed.Boot
       @splice(i, 1) if i > -1
       @
 
+    Array.prototype.random = () ->
+      @[Math.floor(Math.random()*@length)]
+
   preload: () ->
     #  Here we load the assets required for our preloader (in this case a background and a loading bar)
     @load.image('preloaderBackground', 'images/mainmenu/background.gif')

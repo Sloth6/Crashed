@@ -6,7 +6,8 @@ class window.Bullet
 
 		# State
 		@speed = 600
-		@damage = 50
+		@strength = 100
+		@health = 1
 		@sprite.name = 'bullet'
 		@sprite.container = @
 		
@@ -15,11 +16,10 @@ class window.Bullet
 		@sprite.body.setCircle 5
 		@sprite.body.setCollisionGroup @game.bulletCG
 		@sprite.body.collides [ @game.enemyCG ]
+		@sprite.body.collideWorldBounds = true
 		@sprite.body.onBeginContact.add (b) => @game.bulletHit @sprite, b.sprite
 		
 		
 		@sprite.body.rotation = angle
 		@sprite.body.velocity.x = Math.cos(angle) * @speed
 		@sprite.body.velocity.y = Math.sin(angle) * @speed
-
-	kill: () -> @sprite.kill()

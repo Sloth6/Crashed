@@ -7,11 +7,13 @@ class window.Buildings.tower
     # State
     @health = 100
     @alive = true
+    @range = 200
     @target = null #Enemy Object
-    @fireRate = 500
-    @nextFire = 0
     @sprite.name = 'building'
     @sprite.container = @
+
+    @fireRate = 400
+    @nextFire = 0
 
     # Physics
     @game.physics.p2.enable @sprite, false
@@ -19,17 +21,13 @@ class window.Buildings.tower
     @sprite.body.static = true
     @sprite.body.setCollisionGroup @game.buildingCG
     @sprite.body.collides [ @game.enemyCG ]
-    # @sprite.body.onBeginContact.add @game.buildingHit, @
 
-    
-  
   kill: () ->
     @alive = false
     @sprite.kill()
 
   update: () ->
     return unless @alive
-    # console.log @target
     if @target? and @target.alive
       angle = Math.atan2(@target.sprite.y - @sprite.y, @target.sprite.x - @sprite.x)
       @sprite.body.rotation = angle + game.math.degToRad 90
@@ -41,7 +39,7 @@ class window.Buildings.tower
       for e in @game.enemies
         continue unless e.alive
         d = @game.physics.arcade.distanceBetween @sprite, e.sprite
-        if d < minD
+        if d < minD and d < @range 
           minD = d
           @target = e
     true

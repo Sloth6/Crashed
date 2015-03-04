@@ -38,6 +38,7 @@ class window.Enemy
   damage: (n) ->
     @health -= n
     @kill() if @health <= 0
+    @alive
 
   update: () ->
     return unless @alive
