@@ -20,26 +20,26 @@ class Crashed.Game
     #  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
   create: () ->
+
     # Game state
     @rows = 9
     @buildingTypes = [ 'collector', 'farm', 'tower', 'wall' ]
-    @modes = 'build' #( attack | build )
+    @mode = 'build' #( attack | build )
     @enemyCount = 0
     @level = 0
+    @money = 100
 
     # Physics
     @game.physics.startSystem Phaser.Physics.P2JS
     @physics.p2.setImpactEvents true
     @physics.p2.restitution = 0.8
 
-
-
     # Hexes
     @hexes = []
     @hexGroup = game.add.group()
     @selectedHexes = []
 
-    # Enemeis
+    # Enemies
     @enemies = []
     @enemyGroup = game.add.group()
     @enemyCG = game.physics.p2.createCollisionGroup()
@@ -54,8 +54,11 @@ class Crashed.Game
     @buildingCG = game.physics.p2.createCollisionGroup()
 
     # UI
-    ui = game.add.group()
-
+    @buildUi = game.add.group() # ui specific to build phase
+    @fightUi = game.add.group() # ui specific to fight phase
+    @fightUi.visible = false
+    @ui = game.add.group() # static ui
+    
     # View
     @worldScale = 1
     game.world.setBounds -2000, -2000, 4000, 4000
@@ -63,14 +66,14 @@ class Crashed.Game
     @camera.y -= @camera.height/2
 
     createMenu = () =>
-      @startButton = ui.create 10, 400, 'start'
-      @startButton.fixedToCamera = true
-      @startButton.inputEnabled = true
-      @startButton.input.useHandCursor = true
-      @startButton.events.onInputDown.add @startAttack
+      startButton = @buildUi.create 10, 400, 'start'
+      startButton.fixedToCamera = true
+      startButton.inputEnabled = true
+      startButton.input.useHandCursor = true
+      startButton.events.onInputDown.add @startAttack
 
       for type, i in @buildingTypes
-        button = ui.create 10, (i * 100) + 50, type
+        button = @buildUi.create 10, (i * 100) + 50, type
         button.height = 50
         button.width = 50
         button.fixedToCamera = true
@@ -78,7 +81,15 @@ class Crashed.Game
         button.input.useHandCursor = true
         #this monstrousity will wait until I modify phaser library
         button.events.onInputDown.add ((_type)=>(()=>@clickBuildButton(_type)))(type)
-    
+      
+      # var text = "- phaser -\n with a sprinkle of \n pixi dust.";
+      style = { font: "45px Arial" }
+      @statsText = game.add.text 50, 10, "Level: #{@level}. $#{@money}", style
+      @statsText.fixedToCamera = true
+      @remainingText = new Phaser.Text game, 10, game.camera.height - 50, "Enemies remaining: #{@enemyCount}", style      
+      @remainingText.fixedToCamera = true
+      @fightUi.add @remainingText
+
     # Create the hex field
     start = 0
     end = @rows
@@ -122,15 +133,20 @@ class Crashed.Game
 
   endAttack: () =>
     @mode = 'build'
-    @startButton.exists = true
+    @buildUi.visible = true
+    @fightUi.visible = false
+    
     @enemies = []
     @level += 1
-    console.log 'level over!', @level
+    @statsText.setText "Level: #{@level}. $#{@money}"
   
   startAttack: () =>
     @mode = 'attack'
-    @startButton.exists = false
+    @buildUi.visible = false
+    @fightUi.visible = true
+
     @enemyCount = @enemiesPerLevel()
+    @remainingText.setText "Enemies remaining: #{@enemyCount}"
     outerRing = hexUtils.ring(@hexes, @rows)
     for i in [0...@enemyCount] by 1
       h = outerRing.random()
@@ -145,9 +161,11 @@ class Crashed.Game
     sprite.container.kill()
     bulletSprite.kill()
     @enemyCount -= 1
+    @remainingText.setText "Enemies remaining: #{@enemyCount}"
     if @enemyCount is 0
       if (@enemies.reduce ((sum, e) -> sum + e.alive), 0) is 0
         @endAttack()
+    true
       
   update: () ->
     e.update() for e in @enemies
@@ -163,3 +181,4 @@ class Crashed.Game
       game.camera.x -= 8
     else if @cursors.right.isDown
       game.camera.x += 8
+    true
