@@ -91,16 +91,8 @@ class Crashed.Game
 
     createMenu()
     @cursors = game.input.keyboard.createCursorKeys()
-    @game.physics.p2.setPostBroadphaseCallback @collided, @
+    # @game.physics.p2.setPostBroadphaseCallback @collided, @
     
-  collided : (a, b) ->
-    a = a.sprite#.container
-    b = b.sprite#.container
-    # a.alpha = .7
-    # b.alpha = .7
-    true
-
-
   build: (hex, type) ->
     hex.building = type
     @buildings.push(new Buildings[type](@, hex))
@@ -125,19 +117,19 @@ class Crashed.Game
 
   startAttack: () ->
 
-  enemyHit: (body, shapeA, shapeB, equation) ->
-    console.log body.sprite.container#, shapeA, shapeB, equation
-  
-  bulletHit: (body, shapeA, shapeB, equation) ->
-    @kill()
-    body.sprite.container.damage 50
+  enemyHit: (enemy, sprite) ->
+    if sprite.name is 'building'
+      sprite.container.kill()
+
+  bulletHit: (bulletSprite, sprite) ->
+    sprite.container.damage bulletSprite.container.damage
+    bulletSprite.kill()
 
   update: () ->
     @physics.arcade.collide(@enemyGroup);
     e.update() for e in @enemies
     for b in @buildings
       b.update() if b.update
-    # game.physics.arcade.collide @enemyGroup, @enemyGroup
 
     if @cursors.up.isDown
       game.camera.y -= 8

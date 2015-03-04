@@ -5,6 +5,10 @@ class window.Buildings.wall
     @sprite.anchor.set 0.5, 0.5
     @sprite.container = @
     
+    # State
+    @sprite.name = 'wall'
+    @container = @
+
     # physics
     @game.physics.p2.enable @sprite, false
     @sprite.body.setCircle 35
@@ -13,3 +17,4 @@ class window.Buildings.wall
     @sprite.body.collides [ @game.enemyCG ]
 
     # @sprite.boxdy.onBeginContact.add @hit, @
+    
