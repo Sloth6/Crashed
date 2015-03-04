@@ -23,7 +23,7 @@ class Crashed.Game
 
     # Game state
     @rows = 9
-    @buildingTypes = [ 'collector', 'farm', 'tower', 'wall' ]
+    @buildingTypes = [ 'collector', 'power', 'tower', 'wall', 'pylon' ]
     @mode = 'build' #( attack | build )
     @enemyCount = 0
     @level = 0
@@ -66,14 +66,14 @@ class Crashed.Game
     @camera.y -= @camera.height/2
 
     createMenu = () =>
-      startButton = @buildUi.create 10, 400, 'start'
+      startButton = @buildUi.create 10, game.camera.height - 150, 'start'
       startButton.fixedToCamera = true
       startButton.inputEnabled = true
       startButton.input.useHandCursor = true
       startButton.events.onInputDown.add @startAttack
 
       for type, i in @buildingTypes
-        button = @buildUi.create 10, (i * 100) + 50, type
+        button = @buildUi.create 10, (i * 60) + 50, type
         button.height = 50
         button.width = 50
         button.fixedToCamera = true
@@ -103,7 +103,9 @@ class Crashed.Game
         @hexes["#{q}:#{r}"] = hex
       if q < 0 then start-- else end--
 
-    @hexes["0:0"].sprite.alpha = 0.3
+    # @hexes["0:0"].sprite.alpha = 0.3
+    base = game.add.sprite 0, 0, 'base'
+    base.anchor.set 0.5, 0.5
 
     createMenu()
     @cursors = game.input.keyboard.createCursorKeys()

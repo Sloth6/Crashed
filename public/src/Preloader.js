@@ -32,13 +32,16 @@ Crashed.Preloader.prototype = {
 
     this.stage.backgroundColor = '#007236';
     this.load.image('hex', 'images/greenhex.gif');
-    this.load.image('collector', 'images/buildings/collector.png');
-    this.load.image('farm', 'images/buildings/farm2.png');
+    
+    this.load.image('base', 'images/buildings/base.gif');
+    this.load.image('power', 'images/buildings/power.gif');
+    this.load.image('power', 'images/buildings/power.gif');
     this.load.image('pylon', 'images/buildings/pylon.gif');
     this.load.image('tower', 'images/buildings/tower.gif');
     this.load.image('wall', 'images/buildings/wall.gif');
-    this.load.image('enemy', 'images/units/enemy.gif');
+    this.load.image('collector', 'images/buildings/collector.png');
 
+    this.load.image('enemy', 'images/units/enemy.gif');
     this.load.image('bullet', 'images/bullet.gif');
 
     this.load.image('start', 'images/ui/start.png');    
