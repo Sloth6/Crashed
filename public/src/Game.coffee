@@ -26,7 +26,7 @@ class Crashed.Game
     @physics.p2.restitution = 0.8
 
     # Game state
-    @rows = 6
+    @rows = 9
     @buildingTypes = [ 'collector', 'farm', 'tower', 'wall' ]
 
     # Hexes
@@ -117,6 +117,7 @@ class Crashed.Game
     @selectedHexes.forEach (h) =>
       @build h, type
       h.deselect()
+    @selectedHexes = []
 
   clickStart: () =>
     for h in hexUtils.ring(@hexes, @rows)
@@ -127,10 +128,15 @@ class Crashed.Game
   enemyHit: (body, shapeA, shapeB, equation) ->
     console.log body.sprite.container#, shapeA, shapeB, equation
   
+  bulletHit: (body, shapeA, shapeB, equation) ->
+    @kill()
+    body.sprite.container.damage 50
+
   update: () ->
     @physics.arcade.collide(@enemyGroup);
     e.update() for e in @enemies
-    b.update() for b in @buildings
+    for b in @buildings
+      b.update() if b.update
     # game.physics.arcade.collide @enemyGroup, @enemyGroup
 
     if @cursors.up.isDown

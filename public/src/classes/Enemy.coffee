@@ -34,6 +34,10 @@ class window.Enemy
 		@alive = false
 		@sprite.kill()
 
+	damage: (n) ->
+		@health -= n
+		@kill() if @health <= 0
+
 	update: () ->
 		return unless @alive
 		@accelerateToObject(@sprite, @nextHex.sprite, 50)
