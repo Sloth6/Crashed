@@ -194,7 +194,7 @@ class Crashed.Game
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     @money++
     @updateStatsText()
-    if @enemyCount is 0
+    if @enemyCount <= 0
       if (@enemies.reduce ((sum, e) -> sum + e.alive), 0) is 0
         @endAttack()
     true
