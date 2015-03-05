@@ -33,34 +33,29 @@ window.buildingValidator =
 
       if (astar.search aStarOptions).length is 0
         return "Cannot completely wall off base"
-    # else # only applies to non-walls
-    #   # Treat each building as 'true' which allows us to run a simple
-    #   # algorithm checking if each building is connected without actually
-    #   # creating and destroying each building
-    #   selected.forEach (h) -> h.building = true
-    #   isConnected = @isConnected(type, game)
-    #   selected.forEach (h) -> h.building = null
-    #   if not isConnected
-    #     err = "Buildings (not walls) must be adjacent to another building."
-    # if err 
-    #   alert err
-    #   false
-    # else 
+
+    # Treat each building as 'true' which allows us to run a simple
+    # algorithm checking if each building is connected without actually
+    # creating and destroying each building
+    game.selectedHexes.forEach (h) -> h.building = true
+    isConnected = @isConnected game
+    game.selectedHexes.forEach (h) -> h.building = null
+    if not isConnected
+      return "Buildings must be adjacent to another building."
     true
 
-  # isConnected: (game, type) ->
-  #   numSeen = 0
-  #   seen = {}
-  #   # recursively check all neighbors
-  #   checkR = (h) ->
-  #     return if not h.hasBuilding()
-  #     return if seen[h.q+':'+h.r]?
-  #     #record all the buildings we reach from the center.
-  #     seen[h.q+':'+h.r] = true
-  #     numSeen++
-  #     h.neighbors().forEach checkR
+  isConnected: (game) ->
+    numSeen = 0
+    seen = {}
+    # recursively check all neighbors
+    checkR = (h) ->
+      return if not h.building?
+      return if seen[h.q+':'+h.r]?
+      #record all the buildings we reach from the center.
+      seen[h.q+':'+h.r] = true
+      numSeen++
+      hexUtils.neighbors(game.hexes, h).forEach checkR
 
-  #   checkR game.hexGrid.getHex(0,0)
-  #   # ensure we see every buildings thbat will be built.
-  #   numBuildings = game.buildings.get().length-game.buildings.get('wall').length
-  #   numSeen == numBuildings + game.selected.length
+    checkR game.hexes["0:0"]
+    # ensure we see every buildings thbat will be built.
+    numSeen == game.buildings.length + game.selectedHexes.length

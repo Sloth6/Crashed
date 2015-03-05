@@ -29,11 +29,12 @@ class Crashed.Game
     @money = 100
     
     @buildingProperties =
-      collector: { consumption: 1, cost: 10 }
-      reactor: { consumption: -3,cost: 10 }
-      pylon: { consumption: 0, cost: 4 }
-      wall: { consumption: 0, cost: 2 }
-      tower: { consumption: 1, cost: 10 }
+      collector: { consumption:  1, cost: 10 }
+      reactor:   { consumption: -3, cost: 10 }
+      pylon:     { consumption:  0, cost: 4  }
+      wall:      { consumption:  0, cost: 2  }
+      tower:     { consumption:  1, cost: 10 }
+      base:      { consumption:  0, cost: 0  }
 
     # Physics
     @game.physics.startSystem Phaser.Physics.P2JS
@@ -80,6 +81,7 @@ class Crashed.Game
 
       i = 0
       for type, v of @buildingProperties
+        continue if type is 'base' #cant build another base!
         button = @buildUi.create 10, (i * 60) + 50, type
         button.height = 50
         button.width = 50
@@ -112,9 +114,8 @@ class Crashed.Game
         @hexes["#{q}:#{r}"] = hex
       if q < 0 then start-- else end--
 
-    # @hexes["0:0"].sprite.alpha = 0.3
-    base = game.add.sprite 0, 0, 'base'
-    base.anchor.set 0.5, 0.5
+    @hexes["0:0"].building = 'base'
+    @buildings.push(new Buildings.base(@, @hexes["0:0"]))
 
     createMenu()
     @cursors = game.input.keyboard.createCursorKeys()
