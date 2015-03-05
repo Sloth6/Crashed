@@ -21,13 +21,18 @@ window.buildingValidator =
     
     if (game.selectedHexes.some (h) -> h.building?)
       return 'Sell that building first!'
-    true
-    # if type is 'wall' #ensure we don't wall off completly.
-    #   start = game.hexGrid.getOuterRing()[0]
-    #   end = game.hexGrid.getHex 0, 0
-    #   options = {impassable: (h) -> h.isWall() or h.isRocks() or h in selected }
-    #   if astar.search(game.hexGrid, start, end, options).length == 0
-    #     err = "Cannot completely wall off base"
+
+    if type is 'wall' #ensure we don't wall off completly.
+      aStarOptions =
+        graph: game.hexes
+        start: hexUtils.ring(game.hexes, game.rows)[0]
+        end: game.hexes["0:0"]
+        impassable: (h) => h.building is 'wall' or h in game.selectedHexes
+        heuristic: hexUtils.hexDistance
+        neighbors: hexUtils.neighbors
+
+      if (astar.search aStarOptions).length is 0
+        return "Cannot completely wall off base"
     # else # only applies to non-walls
     #   # Treat each building as 'true' which allows us to run a simple
     #   # algorithm checking if each building is connected without actually
@@ -41,7 +46,7 @@ window.buildingValidator =
     #   alert err
     #   false
     # else 
-    # true
+    true
 
   # isConnected: (game, type) ->
   #   numSeen = 0
