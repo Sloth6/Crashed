@@ -16,9 +16,6 @@ app.use coffeeMiddleware {
 }
 
 app.get '/', (req, res) ->
-  res.render 'index', {}
-
-app.get '/phaser', (req, res) ->
   res.render 'phaser', {}
 
 # catch 404 and forward to error handler
