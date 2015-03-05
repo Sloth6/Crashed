@@ -34,6 +34,9 @@ window.buildingValidator =
       if (astar.search aStarOptions).length is 0
         return "Cannot completely wall off base"
 
+    else if type is 'collector'
+      if not game.selectedHexes.every((h) -> h.nature is 'minerals')
+        return "Can only build collectors on minerals"
     # Treat each building as 'true' which allows us to run a simple
     # algorithm checking if each building is connected without actually
     # creating and destroying each building

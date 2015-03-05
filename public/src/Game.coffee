@@ -184,7 +184,7 @@ class Crashed.Game
 
   enemyHit: (enemySprite, sprite) ->
     # if sprite.name is 'building'
-    if sprite.container and !(sprite.container instanceof Enemy)
+    if sprite.container and !(sprite.container instanceof Enemy) and !(sprite.container instanceof Bullet)
       sprite.container.kill()
 
   bulletHit: (bulletSprite, enemySprite) ->

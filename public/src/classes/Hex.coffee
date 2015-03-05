@@ -1,19 +1,27 @@
 class window.Hex
   constructor: ({ game, group, @click, @x, @y, @q, @r }) ->
+    # State
     @building = null #String
-    @buildingSprite = null #Phaser sprite object
-
     @nature = null #String
-    @natureSprite = null #Phaser sprite object
-
+    @minerals = 0
     @selected = false #Boolean
 
+    # view
     @sprite = group.create @x, @y, 'hex'
     @sprite.anchor.set 0.5, 0.5
+    @natureSprite = null #Phaser sprite object
     @sprite.inputEnabled = true
     @sprite.events.onInputDown.add @onInputDown, @
     @sprite.input.pixelPerfectOver = true
     @sprite.input.useHandCursor = true
+
+    if Math.random() < 0.2
+      @nature = 'minerals'
+      @natureSprite = group.create @x, @y, 'minerals'
+      @natureSprite.anchor.set 0.5, 0.5
+
+
+    
 
   getCost: () -> 1
 

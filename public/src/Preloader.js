@@ -32,6 +32,7 @@ Crashed.Preloader.prototype = {
 
     this.stage.backgroundColor = '#007236';
     this.load.image('hex', 'images/greenhex.gif');
+    this.load.image('minerals', 'images/enviornment/minerals.gif');
     
     this.load.image('base', 'images/buildings/base.gif');
     this.load.image('reactor', 'images/buildings/reactor.gif');
