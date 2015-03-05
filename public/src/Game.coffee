@@ -23,11 +23,17 @@ class Crashed.Game
 
     # Game state
     @rows = 9
-    @buildingTypes = [ 'collector', 'power', 'tower', 'wall', 'pylon' ]
     @mode = 'build' #( attack | build )
     @enemyCount = 0
     @level = 0
     @money = 100
+    
+    @buildingProperties =
+      collector: { consumption: 1, cost: 10 }
+      reactor: { consumption: -3,cost: 10 }
+      pylon: { consumption: 0, cost: 4 }
+      wall: { consumption: 0, cost: 2 }
+      tower: { consumption: 1, cost: 10 }
 
     # Physics
     @game.physics.startSystem Phaser.Physics.P2JS
@@ -72,7 +78,8 @@ class Crashed.Game
       startButton.input.useHandCursor = true
       startButton.events.onInputDown.add @startAttack
 
-      for type, i in @buildingTypes
+      i = 0
+      for type, v of @buildingProperties
         button = @buildUi.create 10, (i * 60) + 50, type
         button.height = 50
         button.width = 50
@@ -81,11 +88,13 @@ class Crashed.Game
         button.input.useHandCursor = true
         #this monstrousity will wait until I modify phaser library
         button.events.onInputDown.add ((_type)=>(()=>@clickBuildButton(_type)))(type)
+        i++
       
-      # var text = "- phaser -\n with a sprinkle of \n pixi dust.";
       style = { font: "45px Arial" }
-      @statsText = game.add.text 50, 10, "Level: #{@level}. $#{@money}", style
+      @statsText = game.add.text 50, 10, "", style
       @statsText.fixedToCamera = true
+      @updateStatsText()
+
       @remainingText = new Phaser.Text game, 10, game.camera.height - 50, "Enemies remaining: #{@enemyCount}", style      
       @remainingText.fixedToCamera = true
       @fightUi.add @remainingText
@@ -111,10 +120,6 @@ class Crashed.Game
     @cursors = game.input.keyboard.createCursorKeys()
     # @game.physics.p2.setPostBroadphaseCallback @collided, @
     
-  build: (hex, type) ->
-    hex.building = type
-    @buildings.push(new Buildings[type](@, hex))
-
   clickHex: (hex) =>
     if hex.selected
       @selectedHexes.remove hex
@@ -124,10 +129,26 @@ class Crashed.Game
       hex.select()
 
   clickBuildButton: (type) ->
-    @selectedHexes.forEach (h) =>
-      @build h, type
-      h.deselect()
+    if buildingValidator.canBuild(@, type) != true
+      alert buildingValidator.canBuild @, type
+      @selectedHexes.forEach (h) => h.deselect()
+      @selectedHexes = []
+      return
+
+    @selectedHexes.forEach (hex) =>
+      hex.building = type
+      @buildings.push(new Buildings[type](@, hex))
+      hex.deselect()
+
+    @money -= @selectedHexes.length * @buildingProperties[type].cost
     @selectedHexes = []
+    @updateStatsText()
+
+  updateStatsText: () ->
+    @statsText.setText "Level: #{@level}   Power: #{@power()}    $#{@money}"
+
+  power: () ->
+    @buildings.reduce ((s, b) => s - @buildingProperties[b.sprite.name].consumption ), 0
 
   enemiesPerLevel: (n) ->
     n ?= @level

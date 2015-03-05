@@ -9,9 +9,8 @@ class window.Buildings.tower
     @alive = true
     @range = 200
     @target = null #Enemy Object
-    @sprite.name = 'building'
+    @sprite.name = 'tower'
     @sprite.container = @
-
     @fireRate = 400
     @nextFire = 0
 

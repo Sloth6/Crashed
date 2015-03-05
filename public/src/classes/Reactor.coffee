@@ -1,12 +1,12 @@
-class window.Buildings.power
+class window.Buildings.reactor
   constructor: (@game, hex) ->
     # View
-    @sprite = @game.buildingGroup.create hex.x, hex.y, 'power'
+    @sprite = @game.buildingGroup.create hex.x, hex.y, 'reactor'
     @sprite.anchor.set 0.5, 0.5
     @sprite.container = @
     
     # State
-    @sprite.name = 'power'
+    @sprite.name = 'reactor'
     @container = @
 
     # physics
