@@ -26,8 +26,9 @@ class Crashed.Game
     @mode = 'build' #( attack | build )
     @enemyCount = 0
     @level = 0
-    @money = 100
+    @money = 30
     
+    @collectorIncome = 10
     @buildingProperties =
       collector: { consumption:  1, cost: 10 }
       reactor:   { consumption: -3, cost: 10 }
@@ -162,7 +163,11 @@ class Crashed.Game
     
     @enemies = []
     @level += 1
-    @statsText.setText "Level: #{@level}. $#{@money}"
+    for building in @buildings
+      if building instanceof Buildings.collector
+        @money += @collectorIncome
+    
+    @updateStatsText()
   
   startAttack: () =>
     @mode = 'attack'
@@ -177,15 +182,18 @@ class Crashed.Game
       @enemies.push new Enemy(@, h)
     true
 
-  enemyHit: (enemy, sprite) ->
-    if sprite.name is 'building'
+  enemyHit: (enemySprite, sprite) ->
+    # if sprite.name is 'building'
+    if sprite.container and !(sprite.container instanceof Enemy)
       sprite.container.kill()
 
-  bulletHit: (bulletSprite, sprite) ->
-    sprite.container.kill()
+  bulletHit: (bulletSprite, enemySprite) ->
+    enemySprite.container.kill()
     bulletSprite.kill()
     @enemyCount -= 1
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
+    @money++
+    @updateStatsText()
     if @enemyCount is 0
       if (@enemies.reduce ((sum, e) -> sum + e.alive), 0) is 0
         @endAttack()

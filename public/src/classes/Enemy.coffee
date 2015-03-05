@@ -10,13 +10,13 @@ class window.Enemy
     @speed = 5
     @alive = true
     @sprite.name = 'enemy'
-    
+
     # physics
     @game.physics.p2.enable @sprite, false
     @sprite.body.setCircle 14
     @sprite.body.setCollisionGroup @game.enemyCG
     @sprite.body.collides [ @game.enemyCG, @game.buildingCG, @game.bulletCG ]
-    @sprite.body.onBeginContact.add (b) => @game.enemyHit @, b.sprite
+    @sprite.body.onBeginContact.add (b) => @game.enemyHit @sprite, b.sprite
   
     # Pathing
     options =

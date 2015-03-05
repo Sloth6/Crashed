@@ -15,3 +15,7 @@ class window.Buildings.wall
     @sprite.body.static = true
     @sprite.body.setCollisionGroup @game.buildingCG
     @sprite.body.collides [ @game.enemyCG ]
+
+  kill: () ->
+    @alive = false
+    @sprite.kill()

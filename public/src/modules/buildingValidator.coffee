@@ -14,7 +14,7 @@ window.buildingValidator =
     powerCost = n * game.buildingProperties[type].consumption
     
     if cost > game.money
-      return "Cannot afford #{@n} #{type}s. Costs #{totalCost}g."
+      return "Cannot afford #{@n} #{type}s. Costs #{cost}."
     
     if powerCost > game.power()
       return "Not enough power. Build more reactors."
