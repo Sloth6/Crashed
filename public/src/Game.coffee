@@ -22,7 +22,7 @@ class Crashed.Game
   create: () ->
 
     # Game state
-    @rows = 9
+    @rows = 5
     @mode = 'build' #( attack | build )
     @enemyCount = 0
     @level = 0
@@ -105,14 +105,9 @@ class Crashed.Game
     # Create the hex field
     start = 0
     end = @rows
-    size = (new Phaser.Sprite game, 0, 0, 'hex').width/2
     for q in [-@rows..@rows] by 1
       for r in [start..end] by 1
-        x = q * size * 1.5
-        y = (r * Math.sqrt(3) * size) + (q * Math.sqrt(3)/2 * size)
-        hex = new Hex { game: @, group: @hexGroup, click: @clickHex, x, y, q, r }
-        
-        @hexes["#{q}:#{r}"] = hex
+        @newHex q, r
       if q < 0 then start-- else end--
 
     @hexes["0:0"].building = 'base'
@@ -120,8 +115,29 @@ class Crashed.Game
 
     createMenu()
     @cursors = game.input.keyboard.createCursorKeys()
+    window.foo = @
     # @game.physics.p2.setPostBroadphaseCallback @collided, @
-    
+  
+  newHex: (q, r) ->
+    size = (new Phaser.Sprite game, 0, 0, 'hex').width/2
+    x = q * size * 1.5
+    y = (r * Math.sqrt(3) * size) + (q * Math.sqrt(3)/2 * size)
+    hex = new Hex { game: @, group: @hexGroup, click: @clickHex, x, y, q, r }
+    @hexes["#{q}:#{r}"] = hex
+
+  expandMap: () ->
+    @rows += 1
+    q = -@rows
+    r = @rows
+    directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
+    # @newHex q, r
+    for i in [0...6] by 1
+      for _ in [0...@rows] by 1
+        @newHex q, r
+        q = q + directions[i][0]
+        r = r + directions[i][1]
+    true
+
   clickHex: (hex) =>
     if hex.selected
       @selectedHexes.remove hex
@@ -141,11 +157,16 @@ class Crashed.Game
       hex.building = type
       @buildings.push(new Buildings[type](@, hex))
       hex.deselect()
+      while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 5
+        @expandMap()
+
 
     @money -= @selectedHexes.length * @buildingProperties[type].cost
     @selectedHexes = []
     @updateStatsText()
 
+    #expand map
+    
   updateStatsText: () ->
     @statsText.setText "Level: #{@level}   Power: #{@power()}    $#{@money}"
 
