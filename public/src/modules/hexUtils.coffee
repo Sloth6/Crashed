@@ -2,7 +2,7 @@
 # These are the relative direction to go from any hex
 directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
 
-hexUtils = 
+hexUtils =
   neighbors: ( hexes, {q,r} ) ->
     # console.log hexes, {q,r}
     (directions.map ([ dq, dr ]) => hexes["#{dq+q}:#{dr + r}"])
@@ -10,7 +10,7 @@ hexUtils =
 
   hexDistance: (a, b) ->
     (Math.abs(a.q - b.q) + Math.abs(a.r - b.r) + Math.abs(a.q + a.r - b.q - b.r)) / 2
-
+ 
   ring: (hexes, r) ->
     # c ?= { q: 0, r: 0 }
     hex = hexes["#{-r}:#{r}"]
