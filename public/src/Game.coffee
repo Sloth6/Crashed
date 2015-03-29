@@ -160,12 +160,9 @@ class Crashed.Game
       while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 5
         @expandMap()
 
-
     @money -= @selectedHexes.length * @buildingProperties[type].cost
     @selectedHexes = []
     @updateStatsText()
-
-    #expand map
     
   updateStatsText: () ->
     @statsText.setText "Level: #{@level}   Power: #{@power()}    $#{@money}"
@@ -206,7 +203,10 @@ class Crashed.Game
   enemyHit: (enemySprite, sprite) ->
     # if sprite.name is 'building'
     if sprite.container and !(sprite.container instanceof Enemy) and !(sprite.container instanceof Bullet)
-      sprite.container.kill()
+      building = sprite.container
+      @buildings.remove building
+      building.kill()
+      # building.hex.building = null
 
   bulletHit: (bulletSprite, enemySprite) ->
     enemySprite.container.kill()

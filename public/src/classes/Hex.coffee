@@ -15,7 +15,7 @@ class window.Hex
     @sprite.input.pixelPerfectOver = true
     @sprite.input.useHandCursor = true
 
-    if Math.random() < 0.2
+    if Math.random() < 0.1
       @nature = 'minerals'
       @natureSprite = group.create @x, @y, 'minerals'
       @natureSprite.anchor.set 0.5, 0.5
