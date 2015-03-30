@@ -6,8 +6,8 @@ class window.AoEBullet
 
 		# State
 		@speed = 600
-		@strength = 100
-		@area = 30
+		@strength = 60
+		@area = 60
 		@health = 1
 		@sprite.name = 'aoebullet'
 		@sprite.container = @

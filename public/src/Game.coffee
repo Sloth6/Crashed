@@ -253,19 +253,6 @@ class Crashed.Game
   bulletHit: (bulletSprite, enemySprite) ->
     enemySprite.container.damage bulletSprite.container.strength
     bulletSprite.kill()
-    # knockback = (enemy) ->
-# 
-    # for e in @enemies:
-    #   if (@physics.arcade.distanceBetween e, bulletSprite) < bulletSprite.container.area:
-    #     e.sprite.body.velocity.x 
-    # # knockback(e) for e in @enemies if @game.physics.arcade.distanceBetween e, bulletSprite < bulletSpri
-   # 
-    # @enemyCount -= 1
-    # @remainingText.setText "Enemies remaining: #{@enemyCount}"
-    # @money++
-    # @updateStatsText()
-      # if (@enemies.reduce ((sum, e) -> sum + e.alive), 0) is 0
-      #   @endAttack()
     true
 
   aoeBulletHit: (bulletSprite, enemySprite) ->
@@ -273,17 +260,15 @@ class Crashed.Game
     enemy = enemySprite.container
     enemy.damage bullet.strength
     for e in @enemies
-      if (@physics.arcade.distanceBetween e.sprite, bulletSprite) < bullet.area
-        # console.log(@physics.arcade.distanceBetween e.sprite, bulletSprite)
-        e.sprite.body.velocity.x += 200000   / (e.sprite.x-bullet.sprite.x)**2
-        e.sprite.body.velocity.y += 200000 / (e.sprite.y-bullet.sprite.y)**2
-    # # knockback(e) for e in @enemies if @game.physics.arcade.distanceBetween e, bulletSprite < bulletSpri
-   # 
+      distance = @physics.arcade.distanceBetween e.sprite, bulletSprite
+      if distance < bullet.area
+        force = 1/Math.pow(distance, 2)
+        angle = Math.atan2(e.sprite.x - bullet.sprite.x, e.sprite.y - bullet.sprite.y)
+        e.sprite.body.velocity.x += 800 * Math.cos(angle)# * force
+        e.sprite.body.velocity.y += 800 * Math.sin(angle)# * force
     bulletSprite.kill()
       
   update: () ->
-    # console.log @input.keyboard.G.isDown
-
     upKey = game.input.keyboard.addKey(Phaser.Keyboard.W)
     downKey = game.input.keyboard.addKey(Phaser.Keyboard.S)
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A)
