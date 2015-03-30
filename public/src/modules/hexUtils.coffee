@@ -2,7 +2,7 @@
 # These are the relative direction to go from any hex
 directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
 
-hexUtils = 
+hexUtils =
   neighbors: ( hexes, {q,r} ) ->
     (directions.map ([ dq, dr ]) => hexes["#{dq+q}:#{dr + r}"])
       .filter (elem) -> !!elem
