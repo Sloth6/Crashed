@@ -274,9 +274,9 @@ class Crashed.Game
     enemy.damage bullet.strength
     for e in @enemies
       if (@physics.arcade.distanceBetween e.sprite, bulletSprite) < bullet.area
-        console.log(@physics.arcade.distanceBetween e.sprite, bulletSprite)
+        # console.log(@physics.arcade.distanceBetween e.sprite, bulletSprite)
         e.sprite.body.velocity.x += 200000   / (e.sprite.x-bullet.sprite.x)**2
-        e.sprite.body.velocity.y += 200000 /(e.sprite.x-bullet.sprite.y)**2
+        e.sprite.body.velocity.y += 200000 / (e.sprite.y-bullet.sprite.y)**2
     # # knockback(e) for e in @enemies if @game.physics.arcade.distanceBetween e, bulletSprite < bulletSpri
    # 
     bulletSprite.kill()
