@@ -11,13 +11,9 @@ window.buildingValidator =
     #check price
     n = game.selectedHexes.length
     cost = n * game.buildingProperties[type].cost
-    powerCost = n * game.buildingProperties[type].consumption
     
     if cost > game.money
       return "Cannot afford #{@n} #{type}s. Costs #{cost}."
-    
-    if powerCost > game.power()
-      return "Not enough power. Build more reactors."
     
     if (game.selectedHexes.some (h) -> h.building?)
       return 'Sell that building first!'
@@ -37,14 +33,18 @@ window.buildingValidator =
     else if type is 'collector'
       if not game.selectedHexes.every((h) -> h.nature is 'minerals')
         return "Can only build collectors on minerals"
-    # Treat each building as 'true' which allows us to run a simple
-    # algorithm checking if each building is connected without actually
-    # creating and destroying each building
-    game.selectedHexes.forEach (h) -> h.building = true
-    isConnected = @isConnected game
-    game.selectedHexes.forEach (h) -> h.building = null
-    if not isConnected
-      return "Buildings must be adjacent to another building."
+   
+    # # Treat each building as 'true' which allows us to run a simple
+    # # algorithm checking if each building is connected without actually
+    # # creating and destroying each building
+    # game.selectedHexes.forEach (h) -> h.building = true
+    # isConnected = @isConnected game
+    # game.selectedHexes.forEach (h) -> h.building = null
+    # if not isConnected
+    #   return "Buildings must be adjacent to another building."
+    if game.selectedHexes.some((h) -> !h.powered)
+      return "Buildings must be built on powered tiles"
+    
     true
 
   isConnected: (game) ->
@@ -57,6 +57,7 @@ window.buildingValidator =
       #record all the buildings we reach from the center.
       seen[h.q+':'+h.r] = true
       numSeen++
+
       hexUtils.neighbors(game.hexes, h).forEach checkR
 
     checkR game.hexes["0:0"]

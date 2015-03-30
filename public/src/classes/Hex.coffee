@@ -5,6 +5,7 @@ class window.Hex
     @nature = null #String
     @minerals = 0
     @selected = false #Boolean
+    @powered = false
 
     # view
     @sprite = group.create @x, @y, 'hex'
@@ -14,6 +15,9 @@ class window.Hex
     @sprite.events.onInputDown.add @onInputDown, @
     @sprite.input.pixelPerfectOver = true
     @sprite.input.useHandCursor = true
+
+    @powerSprite = game.add.sprite @x, @y, 'powered'
+    @powerSprite.visible = false
 
     if Math.random() < 0.1
       @nature = 'minerals'

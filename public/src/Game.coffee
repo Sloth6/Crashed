@@ -31,7 +31,6 @@ class Crashed.Game
     @collectorIncome = 10
     @buildingProperties =
       collector: { consumption:  1, cost: 10 }
-      reactor:   { consumption: -3, cost: 10 }
       pylon:     { consumption:  0, cost: 4  }
       wall:      { consumption:  0, cost: 2  }
       tower:     { consumption:  1, cost: 10 }
@@ -43,7 +42,7 @@ class Crashed.Game
     @physics.p2.restitution = 0.8
 
     # Hexes
-    @hexes = []
+    @hexes = {}
     @hexGroup = game.add.group()
     @selectedHexes = []
 
@@ -110,13 +109,29 @@ class Crashed.Game
         @newHex q, r
       if q < 0 then start-- else end--
 
-    @hexes["0:0"].building = 'base'
-    @buildings.push(new Buildings.base(@, @hexes["0:0"]))
+    base = new Buildings.base(@, @hexes["0:0"])
+    @hexes["0:0"].building = base
+    @buildings.push base
 
     createMenu()
     @cursors = game.input.keyboard.createCursorKeys()
-    window.foo = @
+    @markPowered()
     # @game.physics.p2.setPostBroadphaseCallback @collided, @
+  
+  markPowered: () ->
+    for coords, h of @hexes
+      if h instanceof Hex
+        h.powered = false
+        h.powerSprite.visible = false
+    checkR = (h) =>
+      return if h.powered
+      h.powered = true
+      h.powerSprite.visible = true
+      if (h.building instanceof Buildings.pylon) or (h.building instanceof Buildings.base)
+        hexUtils.ring(@hexes, 1, h).forEach checkR
+        hexUtils.ring(@hexes, 2, h).forEach checkR
+        hexUtils.ring(@hexes, 3, h).forEach checkR
+    checkR @hexes["0:0"]
   
   newHex: (q, r) ->
     size = (new Phaser.Sprite game, 0, 0, 'hex').width/2
@@ -154,21 +169,21 @@ class Crashed.Game
       return
 
     @selectedHexes.forEach (hex) =>
-      hex.building = type
-      @buildings.push(new Buildings[type](@, hex))
+      building = new Buildings[type](@, hex)
+      hex.building = building
+      @buildings.push building
       hex.deselect()
       while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 5
         @expandMap()
 
+    if type = 'pylon'
+      @markPowered()
     @money -= @selectedHexes.length * @buildingProperties[type].cost
     @selectedHexes = []
     @updateStatsText()
     
   updateStatsText: () ->
-    @statsText.setText "Level: #{@level}   Power: #{@power()}    $#{@money}"
-
-  power: () ->
-    @buildings.reduce ((s, b) => s - @buildingProperties[b.sprite.name].consumption ), 0
+    @statsText.setText "Level: #{@level}    $#{@money}"
 
   enemiesPerLevel: (n) ->
     n ?= @level
