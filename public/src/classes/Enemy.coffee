@@ -20,7 +20,7 @@ class window.Enemy
     @sprite.body.onBeginContact.add (b) => @game.enemyHit @sprite, b.sprite
   
     # Pathing
-    options =
+    @options =
       graph: @game.hexes
       start: hex
       end: @game.hexes["0:0"]
@@ -28,7 +28,7 @@ class window.Enemy
       heuristic: hexUtils.hexDistance
       neighbors: hexUtils.neighbors
 
-    @path = astar.search options
+    @path = astar.search @options
     @i = 0
     @nextHex = @path[@i]
 
@@ -46,6 +46,18 @@ class window.Enemy
     @kill() if @health <= 0
     @alive
 
+  nearestHex: () ->
+    # qr = hexUtils.XYtoHex @sprite.position.x, @sprite.position.y
+    min = Infinity
+    minHex = null
+
+    for k, hex of @game.hexes
+      distance = (hex.x - @sprite.position.x) + (hex.y - @sprite.position.y)
+      if distance < min
+        min = distance
+        minHex = hex
+    minHex
+
   update: () ->
     return unless @alive
     @accelerateToObject(@sprite, @nextHex.sprite, @speed)
@@ -54,6 +66,13 @@ class window.Enemy
       @i += 1
       @nextHex = @path[@i]
       return @kill() unless @nextHex
+    else if d >= 200
+      console.log 'toofar!'
+      @options.start = @nearestHex()
+      @path = astar.search @options
+      @i = 0
+      @nextHex = @path[@i]
+
     if @path[@i+1]
       d2 = @game.physics.arcade.distanceBetween @sprite, @path[@i+1].sprite
       if d2 < 40 and @path[@i+2]
