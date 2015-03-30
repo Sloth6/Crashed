@@ -11,6 +11,7 @@ class window.Enemy
 
   damage: (n) ->
     @health -= n
+    @sprite.alpha = @health / @maxHealth
     @kill() if @health <= 0
     @alive
 
@@ -51,7 +52,7 @@ class window.Enemy
     obj1.body.rotation = angle
     expectedXVel = Math.cos(angle) * speed
     expectedYVel = Math.sin(angle) * speed
-    fMult = 1
+    fMult = 4
     obj1.body.force.x = (expectedXVel - obj1.body.velocity.x) * fMult + Math.random() * 3 
     obj1.body.force.y = (expectedYVel - obj1.body.velocity.y) * fMult  + Math.random() * 3
     obj1.body.velocity.x = Math.min obj1.body.velocity.x, 50

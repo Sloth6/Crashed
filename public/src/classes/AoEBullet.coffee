@@ -6,7 +6,7 @@ class window.AoEBullet
 
 		# State
 		@speed = 600
-		@strength = 60
+		@strength = 250
 		@area = 60
 		@health = 1
 		@sprite.name = 'aoebullet'
@@ -18,7 +18,7 @@ class window.AoEBullet
 		@sprite.body.setCollisionGroup @game.bulletCG
 		@sprite.body.collides [ @game.enemyCG ]
 		@sprite.body.collideWorldBounds = true
-		@sprite.body.onBeginContact.add (b) => @game.aoeBulletHit @sprite, b.sprite
+		# @sprite.body.onBeginContact.add (b) => @game.aoeBulletHit @sprite, b.sprite
 		
 		
 		@sprite.body.rotation = angle
