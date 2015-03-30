@@ -42,7 +42,7 @@ window.buildingValidator =
     # game.selectedHexes.forEach (h) -> h.building = null
     # if not isConnected
     #   return "Buildings must be adjacent to another building."
-    if game.selectedHexes.some((h) -> !h.powered)
+    if type is not 'wall' and game.selectedHexes.some((h) -> !h.powered)
       return "Buildings must be built on powered tiles"
     
     true
