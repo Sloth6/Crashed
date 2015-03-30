@@ -23,7 +23,7 @@ class window.Enemy
       graph: @game.hexes
       start: hex
       end: @game.hexes["0:0"]
-      impassable: (h) => h.building is 'wall'
+      impassable: (h) => h.building instanceof Buildings.wall
       heuristic: hexUtils.hexDistance
       neighbors: hexUtils.neighbors
 
