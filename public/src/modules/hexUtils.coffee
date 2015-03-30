@@ -3,6 +3,11 @@
 directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
 
 hexUtils =
+  XYtoHex: (x, y) ->
+    q = Math.floor((x * Math.sqrt(3) / 3 - y / 3) / 40)
+    r = Math.floor(y * 2 / 3 / 40)
+    { q, r }
+
   neighbors: ( hexes, {q,r} ) ->
     (directions.map ([ dq, dr ]) => hexes["#{dq+q}:#{dr + r}"])
       .filter (elem) -> !!elem
@@ -22,3 +27,6 @@ hexUtils =
         _r = hex.r+directions[i][1]
         hex = hexes["#{q}:#{_r}"]
     ringHexes
+
+
+# console.log hexUtils.XYtoHex({x: 2, y:3})

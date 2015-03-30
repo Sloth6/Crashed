@@ -21,7 +21,7 @@ class window.Enemy
     @sprite.body.onBeginContact.add (b) => collisionManager.enemyCollision @sprite.container, b.sprite.container
   
     # Pathing
-    options =
+    @options =
       graph: @game.hexes
       start: hex
       end: @game.hexes["0:0"]
@@ -29,7 +29,7 @@ class window.Enemy
       heuristic: hexUtils.hexDistance
       neighbors: hexUtils.neighbors
 
-    @path = astar.search options
+    @path = astar.search @options
     @i = 0
     @nextHex = @path[@i]
 
@@ -39,7 +39,6 @@ class window.Enemy
     @game.enemyCount -= 1
     @game.remainingText.setText "Enemies remaining: #{@game.enemyCount}"
     @game.updateStatsText()
-    @game.money++
     @sprite.kill()
 
   damage: (n) ->
@@ -47,6 +46,17 @@ class window.Enemy
     @sprite.alpha = @health / @maxHealth
     @kill() if @health <= 0
     @alive
+
+  nearestHex: () ->
+    min = Infinity
+    minHex = null
+
+    for k, hex of @game.hexes
+      distance = (hex.x - @sprite.position.x) + (hex.y - @sprite.position.y)
+      if distance < min
+        min = distance
+        minHex = hex
+    minHex
 
   update: () ->
     return unless @alive
@@ -56,6 +66,12 @@ class window.Enemy
       @i += 1
       @nextHex = @path[@i]
       return @kill() unless @nextHex
+    else if d >= 200
+      @options.start = @nearestHex()
+      @path = astar.search @options
+      @i = 0
+      @nextHex = @path[@i]
+
     if @path[@i+1]
       d2 = @game.physics.arcade.distanceBetween @sprite, @path[@i+1].sprite
       if d2 < 40 and @path[@i+2]
