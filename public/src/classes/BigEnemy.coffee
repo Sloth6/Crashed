@@ -6,7 +6,8 @@ class window.BigEnemy extends Enemy
     @sprite.container = @
 
     # State
-    @health = 200
+    @health = 2000
+    @maxHealth = 2000
     @speed = 50
     @alive = true
     @sprite.name = 'enemy'
@@ -17,17 +18,19 @@ class window.BigEnemy extends Enemy
     @sprite.scale.set(0.5, 0.5)
     @sprite.body.setCollisionGroup @game.enemyCG
     @sprite.body.collides [ @game.enemyCG, @game.buildingCG, @game.bulletCG ]
-    @sprite.body.onBeginContact.add (b) => @game.enemyHit @sprite, b.sprite
+    @sprite.body.onBeginContact.add (b) =>
+      collisionManager.enemyCollision @game, @sprite.container, b.sprite.container
   
     # Pathing
     @options =
       graph: @game.hexes
-      start: hex
+      # start: hex
       end: @game.hexes["0:0"]
       impassable: (h) => false
       heuristic: hexUtils.hexDistance
       neighbors: hexUtils.neighbors
 
-    @path = astar.search @options
-    @i = 0
-    @nextHex = @path[@i]
+    # @path = astar.search @options
+    # @i = 0
+    # @nextHex = @path[@i]
+    super(hex)

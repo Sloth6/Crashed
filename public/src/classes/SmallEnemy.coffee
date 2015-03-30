@@ -18,17 +18,15 @@ class window.SmallEnemy extends Enemy
     @sprite.scale.set(0.5, 0.5)
     @sprite.body.setCollisionGroup @game.enemyCG
     @sprite.body.collides [ @game.enemyCG, @game.buildingCG, @game.bulletCG ]
-    @sprite.body.onBeginContact.add (b) => collisionManager.enemyCollision @sprite.container, b.sprite.container
+    @sprite.body.onBeginContact.add (b) =>
+      collisionManager.enemyCollision @game, @sprite.container, b.sprite.container
   
     # Pathing
     @options =
       graph: @game.hexes
-      start: hex
+      # start: hex
       end: @game.hexes["0:0"]
       impassable: (h) => h.building instanceof Buildings.wall
       heuristic: hexUtils.hexDistance
       neighbors: hexUtils.neighbors
-
-    @path = astar.search @options
-    @i = 0
-    @nextHex = @path[@i]
+    super(hex)

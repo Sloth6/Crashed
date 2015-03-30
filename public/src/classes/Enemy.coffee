@@ -1,5 +1,9 @@
 class window.Enemy
-  constructor: () ->
+  constructor: (hex) ->
+    @newPath = false
+    @path = []
+    @i = 0
+    @makePath hex
 
   kill: () ->
     return unless @alive
@@ -15,12 +19,19 @@ class window.Enemy
     @kill() if @health <= 0
     @alive
 
+  makePath: (hex) ->
+    hex ?= @nearestHex()
+    @options.start = hex
+    @path = astar.search @options
+    @i = 0
+    @nextHex = @path[@i]
+    @newPath = false
+
   nearestHex: () ->
     min = Infinity
     minHex = null
-
     for k, hex of @game.hexes
-      distance = (hex.x - @sprite.position.x) + (hex.y - @sprite.position.y)
+      distance = ((hex.x - @sprite.position.x)**2 + (hex.y - @sprite.position.y)**2)**.5
       if distance < min
         min = distance
         minHex = hex
@@ -28,6 +39,8 @@ class window.Enemy
 
   update: () ->
     return unless @alive
+    @makePath() if @newPath
+
     @accelerateToObject(@sprite, @nextHex.sprite, @speed)
     d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite
     if d < 40

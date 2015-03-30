@@ -207,7 +207,7 @@ class Crashed.Game
 
   enemiesPerLevel: (n) ->
     n ?= @level
-    Math.floor 100 * Math.pow(1.4, n)
+    Math.floor 10 * Math.pow(1.4, n)
 
   endAttack: () =>
     @mode = 'build'
@@ -230,11 +230,12 @@ class Crashed.Game
     @enemyCount = @enemiesPerLevel()
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     outerRing = hexUtils.ring(@hexes, @rows)
-    ratio = 1/6
-    for i in [0...(@enemyCount * (1-ratio))] by 1
+    numBig = @enemyCount // 6
+    numSmall = @enemyCount - numBig
+    for i in [0...numSmall] by 1
       h = outerRing.random()
       @enemies.push new SmallEnemy(@, h)
-    for i in [0...@enemyCount*ratio] by 1
+    for i in [0...numBig] by 1
       h = outerRing.random()
       @enemies.push new BigEnemy(@, h)
     true
@@ -252,7 +253,6 @@ class Crashed.Game
     building.kill()
     if building instanceof Buildings.pylon
       @markPowered()
-
 
   bulletHit: (bulletSprite, enemySprite) ->
     enemySprite.container.damage bulletSprite.container.strength
