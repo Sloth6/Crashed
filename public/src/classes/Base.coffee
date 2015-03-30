@@ -19,4 +19,4 @@ class window.Buildings.base
   kill: () ->
     @alive = false
     @sprite.kill()
-    @game.state.start 'Game'
+    # @game.state.start 'Game'

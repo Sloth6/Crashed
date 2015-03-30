@@ -11,7 +11,7 @@ class window.Buildings.tower
     @target = null #Enemy Object
     @sprite.name = 'tower'
     @sprite.container = @
-    @fireRate = 400
+    @fireRate = 2000
     @nextFire = 0
 
     # Physics
@@ -27,7 +27,15 @@ class window.Buildings.tower
 
   update: () ->
     return unless @alive
-    if @target? and @target.alive
+    # Tower control
+    if @hex.selected
+      console.log('selected')
+      angle = Math.atan2(@game.input.worldY - @sprite.y, @game.input.worldX - @sprite.x)
+      @sprite.body.rotation = angle + game.math.degToRad 90
+      if @game.time.now > @nextFire
+        @nextFire = @game.time.now + @fireRate
+        new AoEBullet @game, @sprite.x, @sprite.y, angle
+    else if @target? and @target.alive
       angle = Math.atan2(@target.sprite.y - @sprite.y, @target.sprite.x - @sprite.x)
       @sprite.body.rotation = angle + game.math.degToRad 90
       if @game.time.now > @nextFire
