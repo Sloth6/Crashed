@@ -267,6 +267,7 @@ class Crashed.Game
         e.sprite.body.velocity.x += 800 * Math.cos(angle)# * force
         e.sprite.body.velocity.y += 800 * Math.sin(angle)# * force
     bulletSprite.kill()
+    true
       
   update: () ->
     upKey = game.input.keyboard.addKey(Phaser.Keyboard.W)

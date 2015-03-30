@@ -11,7 +11,7 @@ class window.Buildings.tower
     @target = null #Enemy Object
     @sprite.name = 'tower'
     @sprite.container = @
-    @fireRate = 2000
+    @fireRate = 500
     @nextFire = 0
 
     # Physics
@@ -32,6 +32,7 @@ class window.Buildings.tower
       angle = Math.atan2(@game.input.worldY - @sprite.y, @game.input.worldX - @sprite.x)
       @sprite.body.rotation = angle + game.math.degToRad 90
       if @game.time.now > @nextFire
+        console.log('launching aoe bullet')
         @nextFire = @game.time.now + @fireRate
         new AoEBullet @game, @sprite.x, @sprite.y, angle
     else if @target? and @target.alive

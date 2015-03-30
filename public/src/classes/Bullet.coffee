@@ -3,9 +3,11 @@ class window.Bullet
 		# View
 		@sprite = @game.bulletGroup.create x, y, 'bullet'
 		@sprite.anchor.set 0.5, 0.5
+		@sprite.scale.set(0.4, 0.4)
+
 
 		# State
-		@speed = 600
+		@speed = 1500
 		@strength = 100
 		@health = 1
 		@sprite.name = 'bullet'
@@ -13,11 +15,12 @@ class window.Bullet
 		
 		# Physics
 		@game.physics.p2.enable @sprite, false
-		@sprite.body.setCircle 5
+		@sprite.body.setCircle 2
+
 		@sprite.body.setCollisionGroup @game.bulletCG
 		@sprite.body.collides [ @game.enemyCG ]
 		@sprite.body.collideWorldBounds = true
-		@sprite.body.onBeginContact.add (b) => @game.bulletHit @sprite, b.sprite
+		# @sprite.body.onBeginContact.add (b) => @game.bulletHit @sprite, b.sprite
 		
 		
 		@sprite.body.rotation = angle
