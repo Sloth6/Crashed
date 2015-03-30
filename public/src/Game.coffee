@@ -22,7 +22,7 @@ class Crashed.Game
   create: () ->
 
     # Game state
-    @rows = 5
+    @rows = 7
     @mode = 'build' #( attack | build )
     @enemyCount = 0
     @level = 0
