@@ -36,41 +36,51 @@ class Crashed.Game
       tower:     { consumption:  1, cost: 10 }
       base:      { consumption:  0, cost: 0  }
 
+
+    # View
+    @worldScale = .6
+    width = 1000
+    game.world.setBounds -width, -width, 2*width, 2*width
+    @camera.x -= @camera.width/2
+    @camera.y -= @camera.height/2
+    # @camera.scale.setTo @worldScale, @worldScale
+
     # Physics
     @game.physics.startSystem Phaser.Physics.P2JS
     @physics.p2.setImpactEvents true
     @physics.p2.restitution = 1
 
+    @worldGroup = game.add.group()
+
     # Hexes
     @hexes = {}
     @hexGroup = game.add.group()
     @selectedHexes = []
+    @worldGroup.add @hexGroup
 
     # Enemies
     @enemies = []
     @enemyGroup = game.add.group()
     @enemyCG = game.physics.p2.createCollisionGroup()
+    @worldGroup.add @enemyGroup
 
     # Bullets
     @bulletGroup = game.add.group()
     @bulletCG = game.physics.p2.createCollisionGroup()
+    @worldGroup.add @bulletGroup
     
     # Buildings
     @buildings = []
     @buildingGroup = game.add.group()
     @buildingCG = game.physics.p2.createCollisionGroup()
+    @worldGroup.add @buildingGroup
 
     # UI
     @buildUi = game.add.group() # ui specific to build phase
     @fightUi = game.add.group() # ui specific to fight phase
     @fightUi.visible = false
     @ui = game.add.group() # static ui
-    
-    # View
-    @worldScale = 1
-    game.world.setBounds -2000, -2000, 4000, 4000
-    @camera.x -= @camera.width/2
-    @camera.y -= @camera.height/2
+  
 
     createMenu = () =>
       startButton = @buildUi.create 10, game.camera.height - 150, 'start'
@@ -272,9 +282,15 @@ class Crashed.Game
     bulletSprite.kill()
       
   update: () ->
+    # console.log @input.keyboard.G.isDown
+
+    upKey = game.input.keyboard.addKey(Phaser.Keyboard.W)
+    downKey = game.input.keyboard.addKey(Phaser.Keyboard.S)
+    leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A)
+    rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D)
+    
     # end wave if no more enemies
     if @enemyCount <= 0 and @mode == 'attack'
-      console.log('ending')
       @endAttack()
 
     e.update() for e in @enemies
@@ -282,12 +298,25 @@ class Crashed.Game
       b.update() if b.update
 
     if @cursors.up.isDown
-      game.camera.y -= 8
-    else if @cursors.down.isDown
-      game.camera.y += 8
+      @worldScale += .05
+      @worldScale = Math.min @worldScale, 3
+      @worldGroup.scale.setTo @worldScale, @worldScale
 
-    if @cursors.left.isDown
+      
+    else if @cursors.down.isDown
+      @worldScale -= .05
+      @worldScale = Math.max @worldScale, 0.05
+      @worldGroup.scale.setTo @worldScale, @worldScale
+
+    if upKey.isDown
+      game.camera.y -= 8
+    else if downKey.isDown
+      game.camera.y += 8
+    
+    if leftKey.isDown
       game.camera.x -= 8
-    else if @cursors.right.isDown
+    else if rightKey.isDown
       game.camera.x += 8
+    
+
     true

@@ -29,7 +29,6 @@ class window.Buildings.tower
     return unless @alive
     # Tower control
     if @hex.selected
-      console.log('selected')
       angle = Math.atan2(@game.input.worldY - @sprite.y, @game.input.worldX - @sprite.x)
       @sprite.body.rotation = angle + game.math.degToRad 90
       if @game.time.now > @nextFire

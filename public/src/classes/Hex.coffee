@@ -16,7 +16,7 @@ class window.Hex
     @sprite.input.pixelPerfectOver = true
     @sprite.input.useHandCursor = true
 
-    @powerSprite = game.add.sprite @x, @y, 'powered'
+    @powerSprite = group.create @x, @y, 'powered'
     @powerSprite.visible = false
 
     if Math.random() < 0.1

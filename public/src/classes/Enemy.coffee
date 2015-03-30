@@ -13,7 +13,7 @@ class window.Enemy
 
     # physics
     @game.physics.p2.enable @sprite, false
-    @sprite.body.setCircle 10
+    @sprite.body.setCircle 7
     @sprite.scale.set(0.5, 0.5)
     @sprite.body.setCollisionGroup @game.enemyCG
     @sprite.body.collides [ @game.enemyCG, @game.buildingCG, @game.bulletCG ]
@@ -69,3 +69,5 @@ class window.Enemy
     fMult = 1
     obj1.body.force.x = (expectedXVel - obj1.body.velocity.x) * fMult + Math.random() * 3 
     obj1.body.force.y = (expectedYVel - obj1.body.velocity.y) * fMult  + Math.random() * 3
+    obj1.body.velocity.x = Math.min obj1.body.velocity.x, 100
+    obj1.body.velocity.y = Math.min obj1.body.velocity.y, 100
