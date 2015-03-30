@@ -1,7 +1,7 @@
 class window.Buildings.base
-  constructor: (@game, hex) ->
+  constructor: (@game, @hex) ->
     # View
-    @sprite = @game.buildingGroup.create hex.x, hex.y, 'base'
+    @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'base'
     @sprite.anchor.set 0.5, 0.5
     @sprite.container = @
     
