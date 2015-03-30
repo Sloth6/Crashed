@@ -38,7 +38,6 @@ class window.Enemy
     @game.enemyCount -= 1
     @game.remainingText.setText "Enemies remaining: #{@game.enemyCount}"
     @game.updateStatsText()
-    @game.money++
     @sprite.kill()
 
   damage: (n) ->
@@ -47,7 +46,6 @@ class window.Enemy
     @alive
 
   nearestHex: () ->
-    # qr = hexUtils.XYtoHex @sprite.position.x, @sprite.position.y
     min = Infinity
     minHex = null
 
@@ -67,7 +65,6 @@ class window.Enemy
       @nextHex = @path[@i]
       return @kill() unless @nextHex
     else if d >= 200
-      console.log 'toofar!'
       @options.start = @nearestHex()
       @path = astar.search @options
       @i = 0
