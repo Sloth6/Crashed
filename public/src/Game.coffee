@@ -120,9 +120,8 @@ class Crashed.Game
   
   markPowered: () ->
     for coords, h of @hexes
-      if h instanceof Hex
-        h.powered = false
-        h.powerSprite.visible = false
+      h.powered = false
+      h.powerSprite.visible = false
     checkR = (h) =>
       return if h.powered
       h.powered = true
@@ -219,8 +218,13 @@ class Crashed.Game
     # if sprite.name is 'building'
     if sprite.container and !(sprite.container instanceof Enemy) and !(sprite.container instanceof Bullet)
       building = sprite.container
+      hex = building.hex
+      hex.building = null
       @buildings.remove building
       building.kill()
+
+      if building instanceof Buildings.pylon
+        @markPowered()
       # building.hex.building = null
 
   bulletHit: (bulletSprite, enemySprite) ->
