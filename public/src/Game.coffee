@@ -22,7 +22,7 @@ class Crashed.Game
   create: () ->
 
     # Game state
-    @rows = 7
+    @rows = 9
     @mode = 'build' #( attack | build )
     @enemyCount = 0
     @level = 0
@@ -230,9 +230,13 @@ class Crashed.Game
     @enemyCount = @enemiesPerLevel()
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     outerRing = hexUtils.ring(@hexes, @rows)
-    for i in [0...@enemyCount] by 1
+    ratio = 1/6
+    for i in [0...(@enemyCount * (1-ratio))] by 1
       h = outerRing.random()
-      @enemies.push new Enemy(@, h)
+      @enemies.push new SmallEnemy(@, h)
+    for i in [0...@enemyCount*ratio] by 1
+      h = outerRing.random()
+      @enemies.push new BigEnemy(@, h)
     true
 
   enemyHit: (enemySprite, buildingSprite) ->
