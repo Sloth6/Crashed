@@ -26,7 +26,7 @@ class Crashed.Game
     @mode = 'build' #( attack | build )
     @enemyCount = 0
     @level = 0
-    @money = 30
+    @money = 5000
     
     @collectorIncome = 10
     @buildingProperties =
@@ -40,7 +40,7 @@ class Crashed.Game
     # Physics
     @game.physics.startSystem Phaser.Physics.P2JS
     @physics.p2.setImpactEvents true
-    @physics.p2.restitution = 0.8
+    @physics.p2.restitution = 1
 
     # Hexes
     @hexes = []
@@ -139,12 +139,23 @@ class Crashed.Game
     true
 
   clickHex: (hex) =>
-    if hex.selected
-      @selectedHexes.remove hex
-      hex.deselect()
-    else
-      @selectedHexes.push hex
-      hex.select()
+    if @mode == 'build'
+      if hex.selected
+        @selectedHexes.remove hex
+        hex.deselect()
+      else
+        @selectedHexes.push hex
+        hex.select()
+    else if @mode == 'attack'
+      if hex.selected
+        @selectedHexes = []
+        hex.deselect()
+      else
+        for hex in @selectedHexes
+          hex.deselect()
+        @selectedHexes = [hex]
+        hex.select()
+
 
   clickBuildButton: (type) ->
     if buildingValidator.canBuild(@, type) != true
@@ -172,7 +183,7 @@ class Crashed.Game
 
   enemiesPerLevel: (n) ->
     n ?= @level
-    Math.floor 10 * Math.pow(1.4, n)
+    Math.floor 100 * Math.pow(1.4, n)
 
   endAttack: () =>
     @mode = 'build'
@@ -200,27 +211,56 @@ class Crashed.Game
       @enemies.push new Enemy(@, h)
     true
 
-  enemyHit: (enemySprite, sprite) ->
-    # if sprite.name is 'building'
-    if sprite.container and !(sprite.container instanceof Enemy) and !(sprite.container instanceof Bullet)
-      building = sprite.container
-      @buildings.remove building
-      building.kill()
+  enemyHit: (enemySprite, buildingSprite) ->
+    # if buildingSprite.name is 'building'
+    return unless buildingSprite.container
+    building = buildingSprite.container
+    return unless (building instanceof Buildings.pylon or
+      building instanceof Buildings.reactor or 
+      building instanceof Buildings.tower or
+      building instanceof Buildings.base or
+      building instanceof Buildings.collector)
+    @buildings.remove building
+    building.kill()
       # building.hex.building = null
 
   bulletHit: (bulletSprite, enemySprite) ->
-    enemySprite.container.kill()
+    enemySprite.container.damage bulletSprite.container.strength
     bulletSprite.kill()
-    @enemyCount -= 1
-    @remainingText.setText "Enemies remaining: #{@enemyCount}"
-    @money++
-    @updateStatsText()
-    if @enemyCount <= 0
-      if (@enemies.reduce ((sum, e) -> sum + e.alive), 0) is 0
-        @endAttack()
+    # knockback = (enemy) ->
+# 
+    # for e in @enemies:
+    #   if (@physics.arcade.distanceBetween e, bulletSprite) < bulletSprite.container.area:
+    #     e.sprite.body.velocity.x 
+    # # knockback(e) for e in @enemies if @game.physics.arcade.distanceBetween e, bulletSprite < bulletSpri
+   # 
+    # @enemyCount -= 1
+    # @remainingText.setText "Enemies remaining: #{@enemyCount}"
+    # @money++
+    # @updateStatsText()
+      # if (@enemies.reduce ((sum, e) -> sum + e.alive), 0) is 0
+      #   @endAttack()
     true
+
+  aoeBulletHit: (bulletSprite, enemySprite) ->
+    bullet = bulletSprite.container
+    enemy = enemySprite.container
+    enemy.damage bullet.strength
+    for e in @enemies
+      if (@physics.arcade.distanceBetween e.sprite, bulletSprite) < bullet.area
+        console.log(@physics.arcade.distanceBetween e.sprite, bulletSprite)
+        e.sprite.body.velocity.x += 200000   / (e.sprite.x-bullet.sprite.x)**2
+        e.sprite.body.velocity.y += 200000 /(e.sprite.x-bullet.sprite.y)**2
+    # # knockback(e) for e in @enemies if @game.physics.arcade.distanceBetween e, bulletSprite < bulletSpri
+   # 
+    bulletSprite.kill()
       
   update: () ->
+    # end wave if no more enemies
+    if @enemyCount <= 0 and @mode == 'attack'
+      console.log('ending')
+      @endAttack()
+
     e.update() for e in @enemies
     for b in @buildings
       b.update() if b.update
