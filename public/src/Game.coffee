@@ -68,6 +68,8 @@ class Crashed.Game
     @bulletCG = game.physics.p2.createCollisionGroup()
     @worldGroup.add @bulletGroup
     
+    @bombs = []
+
     # Buildings
     @buildings = []
     @buildingGroup = game.add.group()
@@ -282,6 +284,8 @@ class Crashed.Game
       @endAttack()
 
     e.update() for e in @enemies
+    b?.update() for b in @bombs
+
     for b in @buildings
       b.update() if b.update
 

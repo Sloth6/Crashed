@@ -30,11 +30,12 @@ class window.Buildings.tower
     # Tower control
     if @hex.selected
       angle = Math.atan2(@game.input.worldY - @sprite.y, @game.input.worldX - @sprite.x)
+      dist = ((@game.input.worldY - @sprite.y)**2 +  (@game.input.worldX - @sprite.x)**2)**.5
       @sprite.body.rotation = angle + game.math.degToRad 90
       if @game.time.now > @nextFire
-        console.log('launching aoe bullet')
+        console.log('launching bomb')
         @nextFire = @game.time.now + @fireRate
-        new AoEBullet @game, @sprite.x, @sprite.y, angle
+        new Bomb @game, @sprite.x, @sprite.y, angle, dist
     else if @target? and @target.alive
       d = @game.physics.arcade.distanceBetween @sprite, @target.sprite
       if d > @range

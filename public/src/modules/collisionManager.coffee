@@ -27,17 +27,10 @@ window.collisionManager =
       # console.log('collision with bullet')
       enemy.damage bullet.strength
       bullet.sprite.kill()
-    enemyWithAoEBullet = (enemy, bullet) ->
-      # console.log('collision withAoEBullet')
+    enemyWithBomb = (enemy, bullet) ->
+      # console.log('collision withBomb')
       enemy.damage bullet.strength
-      for e in game.enemies
-        distance = game.physics.arcade.distanceBetween e.sprite, bullet.sprite
-        if distance < bullet.area
-          force = 1/Math.pow(distance, 2)
-          angle = Math.atan2(e.sprite.x - bullet.sprite.x, e.sprite.y - bullet.sprite.y)
-          e.sprite.body.velocity.x += 800 * Math.cos(angle)# * force
-          e.sprite.body.velocity.y += 800 * Math.sin(angle)# * force
-      bullet.sprite.kill()
+      bullet.explode()
 
     if collider instanceof Enemy
       enemyWithEnemy(enemy, collider)
@@ -50,6 +43,6 @@ window.collisionManager =
       enemyWithWall enemy, collider
     else if collider instanceof Bullet
       enemyWithBullet(enemy, collider)
-    else if collider instanceof AoEBullet
-      enemyWithAoEBullet(enemy, collider)
+    else if collider instanceof Bomb
+      enemyWithBomb(enemy, collider)
     true
