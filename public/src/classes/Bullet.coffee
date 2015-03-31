@@ -8,7 +8,7 @@ class window.Bullet
 
 		# State
 		@speed = 1500
-		@strength = 100
+		@strength = 50
 		@health = 1
 		@sprite.name = 'bullet'
 		@sprite.container = @

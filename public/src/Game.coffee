@@ -26,7 +26,7 @@ class Crashed.Game
     @mode = 'build' #( attack | build )
     @enemyCount = 0
     @level = 0
-    @money = 5000
+    @money = 200
     
     @collectorIncome = 10
     @buildingProperties =
@@ -35,7 +35,6 @@ class Crashed.Game
       wall:      { consumption:  0, cost: 2  }
       tower:     { consumption:  1, cost: 10 }
       base:      { consumption:  0, cost: 0  }
-
 
     # View
     @worldScale = .6
@@ -180,7 +179,6 @@ class Crashed.Game
         @selectedHexes = [hex]
         hex.select()
 
-
   clickBuildButton: (type) ->
     if buildingValidator.canBuild(@, type) != true
       alert buildingValidator.canBuild @, type
@@ -207,7 +205,7 @@ class Crashed.Game
 
   enemiesPerLevel: (n) ->
     n ?= @level
-    Math.floor 10 * Math.pow(1.4, n)
+    Math.floor 20 * Math.pow(1.4, n)
 
   endAttack: () =>
     @mode = 'build'
@@ -291,7 +289,6 @@ class Crashed.Game
       @worldScale += .05
       @worldScale = Math.min @worldScale, 3
       @worldGroup.scale.setTo @worldScale, @worldScale
-
       
     else if @cursors.down.isDown
       @worldScale -= .05

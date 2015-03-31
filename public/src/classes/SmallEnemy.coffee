@@ -4,8 +4,8 @@ class window.SmallEnemy extends Enemy
     @sprite = @game.enemyGroup.create hex.x, hex.y, 'enemy'
 
     # State
-    @health = 1000
-    @maxHealth = 1000
+    @health = 100
+    @maxHealth = 100
     @speed = 50
     @alive = true
     @sprite.name = 'enemy'

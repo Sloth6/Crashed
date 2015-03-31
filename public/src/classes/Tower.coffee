@@ -36,11 +36,15 @@ class window.Buildings.tower
         @nextFire = @game.time.now + @fireRate
         new AoEBullet @game, @sprite.x, @sprite.y, angle
     else if @target? and @target.alive
-      angle = Math.atan2(@target.sprite.y - @sprite.y, @target.sprite.x - @sprite.x)
-      @sprite.body.rotation = angle + game.math.degToRad 90
-      if @game.time.now > @nextFire
-        @nextFire = @game.time.now + @fireRate
-        new Bullet @game, @sprite.x, @sprite.y, angle
+      d = @game.physics.arcade.distanceBetween @sprite, @target.sprite
+      if d > @range
+        @target = null
+      else
+        angle = Math.atan2(@target.sprite.y - @sprite.y, @target.sprite.x - @sprite.x)
+        @sprite.body.rotation = angle + game.math.degToRad 90
+        if @game.time.now > @nextFire
+          @nextFire = @game.time.now + @fireRate
+          new Bullet @game, @sprite.x, @sprite.y, angle
     else
       minD = Infinity
       for e in @game.enemies
