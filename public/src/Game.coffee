@@ -230,10 +230,11 @@ class Crashed.Game
     @enemyCount = @enemiesPerLevel()
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     outerRing = hexUtils.ring(@hexes, @rows)
-    numBig = @enemyCount // 6
+    numBig = @enemyCount // 12
     numSmall = @enemyCount - numBig
+    h = outerRing.random()
     for i in [0...numSmall] by 1
-      h = outerRing.random()
+      
       @enemies.push new SmallEnemy(@, h)
     for i in [0...numBig] by 1
       h = outerRing.random()
