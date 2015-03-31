@@ -1,5 +1,17 @@
 class window.Enemy
   constructor: (hex) ->
+    #view
+    @sprite.anchor.set 0.5, 0.5
+    @sprite.container = @
+
+    #physics
+    @sprite.scale.set(0.5, 0.5)
+    @sprite.body.setCollisionGroup @game.enemyCG
+    @sprite.body.collides [ @game.enemyCG, @game.buildingCG, @game.bulletCG ]
+    @sprite.body.onBeginContact.add (b) =>
+      collisionManager.enemyCollision @game, @sprite.container, b.sprite.container
+  
+    #pathfinding
     @newPath = false
     @path = []
     @i = 0
