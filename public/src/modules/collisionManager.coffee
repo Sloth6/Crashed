@@ -2,10 +2,10 @@ window.collisionManager =
   enemyCollision: (game, enemy, collider) ->
     enemyWithEnemy = (enemy1, enemy2) ->
       # console.log(enemy1.sprite.body, enemy2.sprite.body)
-      damage = Math.sqrt((enemy1.sprite.body.velocity.x - enemy2.sprite.body.velocity.x)**2 + (enemy1.sprite.body.velocity.y - enemy2.sprite.body.velocity.y)**2)
+      # damage = Math.sqrt((enemy1.sprite.body.velocity.x - enemy2.sprite.body.velocity.x)**2 + (enemy1.sprite.body.velocity.y - enemy2.sprite.body.velocity.y)**2)
       # console.log('enemy to enemy collision did', damage)
-      enemy1.damage damage/20
-      enemy2.damage damage/20
+      # enemy1.damage damage/20
+      # enemy2.damage damage/20
     
     enemyWithBuilding = (enemy, building) ->
       return unless building
@@ -29,7 +29,7 @@ window.collisionManager =
       bullet.sprite.kill()
     enemyWithBomb = (enemy, bullet) ->
       # console.log('collision withBomb')
-      enemy.damage bullet.strength
+      # enemy.damage bullet.strength
       bullet.explode()
 
     if collider instanceof Enemy

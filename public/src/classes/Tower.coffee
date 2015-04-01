@@ -7,7 +7,7 @@ class window.Buildings.tower
     # State
     @health = 100
     @alive = true
-    @range = 200
+    @range = 300
     @target = null #Enemy Object
     @sprite.name = 'tower'
     @sprite.container = @

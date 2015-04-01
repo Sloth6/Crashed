@@ -1,5 +1,5 @@
 class window.BigEnemy extends Enemy
-  constructor: (@game, hex) ->
+  constructor: (@game, hex, healthModifier) ->
     # View
     @sprite = @game.enemyGroup.create hex.x, hex.y, 'bigEnemy'
 
@@ -22,4 +22,4 @@ class window.BigEnemy extends Enemy
       heuristic: hexUtils.hexDistance
       neighbors: hexUtils.neighbors
 
-    super(hex)
+    super(hex, healthModifier)

@@ -27,8 +27,8 @@ class Crashed.Game
     @enemyCount = 0
     @level = 0
     @money = 200
-    
     @collectorIncome = 10
+
     @buildingProperties =
       collector: { consumption:  1, cost: 10 }
       pylon:     { consumption:  0, cost: 4  }
@@ -193,11 +193,12 @@ class Crashed.Game
       hex.building = building
       @buildings.push building
       hex.deselect()
-      while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 5
+      while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 6
         @expandMap()
 
     if type = 'pylon'
       @markPowered()
+    console.log type, @buildingProperties[type].cost
     @money -= @selectedHexes.length * @buildingProperties[type].cost
     @selectedHexes = []
     @updateStatsText()
@@ -228,17 +229,18 @@ class Crashed.Game
     @fightUi.visible = true
 
     @enemyCount = @enemiesPerLevel()
+    enemyHealthModifier = Math.pow(1.4, @level)
+
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     outerRing = hexUtils.ring(@hexes, @rows)
     numBig = @enemyCount // 12
     numSmall = @enemyCount - numBig
-    h = outerRing.random()
+    hex = outerRing.random()
     for i in [0...numSmall] by 1
-      
-      @enemies.push new SmallEnemy(@, h)
+      @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
     for i in [0...numBig] by 1
       h = outerRing.random()
-      @enemies.push new BigEnemy(@, h)
+      @enemies.push new BigEnemy(@, hex, enemyHealthModifier)
     true
 
   enemyHit: (enemySprite, buildingSprite) ->

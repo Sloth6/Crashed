@@ -1,5 +1,9 @@
 class window.Enemy
-  constructor: (hex) ->
+  constructor: (hex, healthModifier) ->
+    #state
+    @health *= healthModifier
+    @maxHealth *= healthModifier
+
     #view
     @sprite.anchor.set 0.5, 0.5
     @sprite.container = @
