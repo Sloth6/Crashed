@@ -100,7 +100,7 @@ class Crashed.Game
         button.inputEnabled = true
         button.input.useHandCursor = true
         #this monstrousity will wait until I modify phaser library
-        button.events.onInputDown.add ((_type)=>(()=>@clickBuildButton(_type)))(type)
+        button.events.onInputDown.add ((_type)=> (()=> @clickBuildButton _type))(type)
         i++
       
       style = { font: "45px Arial" }
@@ -196,7 +196,7 @@ class Crashed.Game
       while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 6
         @expandMap()
 
-    if type = 'pylon'
+    if type == 'pylon'
       @markPowered()
     console.log type, @buildingProperties[type].cost
     @money -= @selectedHexes.length * @buildingProperties[type].cost
