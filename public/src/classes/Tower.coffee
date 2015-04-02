@@ -28,7 +28,7 @@ class window.Buildings.tower
   update: () ->
     return unless @alive
     # Tower control
-    if @hex.selected
+    if @hex.selected and @game.mode == 'attack'
       angle = Math.atan2(@game.input.worldY - @sprite.y, @game.input.worldX - @sprite.x)
       @sprite.body.rotation = angle + game.math.degToRad 90
       if @game.time.now > @nextFire
