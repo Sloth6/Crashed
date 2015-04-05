@@ -6,6 +6,8 @@ class window.Buildings.wall
     @sprite.container = @
     
     # State
+    @health = 100
+    @maxHealth = 100
     @sprite.name = 'wall'
     @container = @
 
@@ -19,3 +21,12 @@ class window.Buildings.wall
   kill: () ->
     @alive = false
     @sprite.kill()
+    @game.buildings.remove @
+    @hex.building = null
+    true
+
+  damage: (n) ->
+    @health -= n
+    @sprite.alpha = @health / @maxHealth
+    @kill() if @health <= 0
+    @alive

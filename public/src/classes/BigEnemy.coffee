@@ -8,6 +8,7 @@ class window.BigEnemy extends Enemy
     @maxHealth = 200
     @speed = 50
     @alive = true
+    @strength = 50
     @sprite.name = 'enemy'
 
     # physics

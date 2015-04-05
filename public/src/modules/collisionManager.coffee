@@ -17,11 +17,11 @@ window.collisionManager =
     
     enemyWithWall = (enemy, wall) ->
       return unless enemy instanceof BigEnemy
-      game.buildings.remove wall
-      wall.hex.building = null
-      wall.kill()
-      game.enemies.forEach (e) -> 
-        e.newPath = true if e instanceof SmallEnemy
+      destroyed = wall.damage(enemy.strength)
+      if destroyed
+        game.enemies.forEach (e) -> 
+          e.newPath = true if e instanceof SmallEnemy
+      true
 
     enemyWithBullet = (enemy, bullet) ->
       # console.log('collision with bullet')
