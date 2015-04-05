@@ -1,4 +1,4 @@
-class window.Buildings.BombTower2 extends tower
+class window.Buildings.BombTower2 extends Buildings.tower
   constructor: (@game, @hex) ->
     super()
     #set sprite here
