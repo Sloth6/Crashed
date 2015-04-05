@@ -1,4 +1,4 @@
-class Crashed.Game  
+class Crashed.Game
     #  When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
     # game      #  a reference to the currently running game (Phaser.Game)
     # @add       #  used to add sprites, text, groups, etc (Phaser.GameObjectFactory)
@@ -108,7 +108,7 @@ class Crashed.Game
       @statsText.fixedToCamera = true
       @updateStatsText()
 
-      @remainingText = new Phaser.Text game, 10, game.camera.height - 50, "Enemies remaining: #{@enemyCount}", style      
+      @remainingText = new Phaser.Text game, 10, game.camera.height - 50, "Enemies remaining: #{@enemyCount}", style
       @remainingText.fixedToCamera = true
       @fightUi.add @remainingText
 
@@ -222,6 +222,7 @@ class Crashed.Game
         @money += @collectorIncome
     
     @updateStatsText()
+    @selectedHexes.forEach (h) => h.deselect()
   
   startAttack: () =>
     @mode = 'attack'
