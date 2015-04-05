@@ -52,7 +52,7 @@ class window.Buildings.tower
       if d > @range
         @target = null
       else
-      fire()
+      @fire()
     else
-      findTarget()
+      @findTarget()
     true
