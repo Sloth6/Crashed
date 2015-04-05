@@ -1,4 +1,4 @@
-class window.bombBullet extends Bullet
+class window.BombBullet extends Bullet
   constructor: (@game, @x, @y, angle, @dist) ->
     super(@game, @x, @y, angle)
     @sprite.scale.set(1, 1)
