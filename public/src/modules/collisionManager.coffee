@@ -17,8 +17,8 @@ window.collisionManager =
     
     enemyWithWall = (enemy, wall) ->
       return unless enemy instanceof BigEnemy
-      destroyed = wall.damage(enemy.strength)
-      if destroyed
+      wall_alive = wall.damage enemy.strength
+      if not wall_alive
         game.enemies.forEach (e) -> 
           e.newPath = true if e instanceof SmallEnemy
       true

@@ -6,6 +6,7 @@ class window.Buildings.wall
     @sprite.container = @
     
     # State
+    @alive = true
     @health = 100
     @maxHealth = 100
     @sprite.name = 'wall'
