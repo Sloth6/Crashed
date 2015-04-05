@@ -24,12 +24,9 @@ window.collisionManager =
       true
 
     enemyWithBullet = (enemy, bullet) ->
-      # console.log('collision with bullet')
       enemy.damage bullet.strength
       bullet.sprite.kill()
     enemyWithBomb = (enemy, bullet) ->
-      # console.log('collision withBomb')
-      # enemy.damage bullet.strength
       bullet.explode()
 
     if collider instanceof Enemy
