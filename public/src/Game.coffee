@@ -223,7 +223,7 @@ class Crashed.Game
     
     @updateStatsText()
     @selectedHexes.forEach (h) => h.deselect()
-  
+    @selectedHexes = []  
   startAttack: () =>
     @mode = 'attack'
     @buildUi.visible = false
