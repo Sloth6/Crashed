@@ -19,6 +19,7 @@ class window.Bullet
 
 		@sprite.body.setCollisionGroup @game.bulletCG
 		@sprite.body.collides [ @game.enemyCG ]
+		@sprite.body.data.shapes[0].sensor = true
 		@sprite.body.collideWorldBounds = true
 		# @sprite.body.onBeginContact.add (b) => @game.bulletHit @sprite, b.sprite
 		
