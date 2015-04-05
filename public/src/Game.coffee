@@ -222,7 +222,7 @@ class Crashed.Game
         @money += @collectorIncome
     
     @updateStatsText()
-    @selectedHexes.forEach (h) => h.deselect()
+    h.deselect() for h in @selectedHexes
     @selectedHexes = []  
   startAttack: () =>
     @mode = 'attack'
