@@ -30,11 +30,11 @@ class Crashed.Game
     @collectorIncome = 10
 
     @buildingProperties =
-      collector: { consumption:  1, cost: 10 }
-      pylon:     { consumption:  0, cost: 4  }
-      wall:      { consumption:  0, cost: 2  }
-      tower:     { consumption:  1, cost: 10 }
-      base:      { consumption:  0, cost: 0  }
+      collector:   { consumption:  1, cost: 10 }
+      pylon:       { consumption:  0, cost: 4  }
+      wall:        { consumption:  0, cost: 2  }
+      BasicTower1: { consumption:  1, cost: 10 }
+      base:        { consumption:  0, cost: 0  }
 
     # View
     @worldScale = .6
@@ -198,7 +198,6 @@ class Crashed.Game
 
     if type == 'pylon'
       @markPowered()
-    console.log type, @buildingProperties[type].cost
     @money -= @selectedHexes.length * @buildingProperties[type].cost
     @selectedHexes = []
     @updateStatsText()

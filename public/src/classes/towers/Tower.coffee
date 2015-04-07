@@ -1,7 +1,6 @@
 class window.Buildings.tower
   constructor: (@game, @hex) ->
     # View
-    @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'tower'
     @sprite.anchor.set 0.5, 0.5
 
     # State
@@ -13,6 +12,11 @@ class window.Buildings.tower
     @sprite.container = @
     @fireRate = 500
     @nextFire = 0
+    @bullet or= null
+    @bulletSpeed or= null 
+    @bulletStrength or= null 
+    @controlledBullet or= null
+    @controlled = false
 
     # Physics
     @game.physics.p2.enable @sprite, false
@@ -25,7 +29,6 @@ class window.Buildings.tower
     @alive = false
     @sprite.kill()
 
-  # Each tower shouldn't have to implement this
   findTarget: () ->
     minD = Infinity
     for e in @game.enemies
@@ -34,25 +37,29 @@ class window.Buildings.tower
       if d < minD and d < @range 
         minD = d
         @target = e
+    true
 
-  # This should be an empty method that each tower implements
-  controlledFire: () ->
-    true
-  # This should be an empty method that each tower implements
+  aim: () ->
+    if @controlled
+      angle = Math.atan2(@game.input.worldY - @sprite.y, @game.input.worldX - @sprite.x)
+    else
+      if @target? and @target.alive
+        d = @game.physics.arcade.distanceBetween @sprite, @target.sprite
+        @findTarget() if d > @range
+        angle = Math.atan2(@target.sprite.y - @sprite.y, @target.sprite.x - @sprite.x)
+      else
+        @findTarget()
+    @sprite.body.rotation = angle
+
   fire: () ->
-    true
-  # Each tower shouldn't have to impelement this    
+    @nextFire = @game.time.now + @fireRate
+    bullet = if @controlled then @controlledBullet else @bullet
+    new bullet @game, @sprite.x, @sprite.y, @sprite.body.rotation, @bulletSpeed, @bulletStrength, @range
+
   update: () ->
     return unless @alive
-    # Tower control
-    if @hex.selected and @game.mode == 'attack'
-      controlledFire()
-    else if @target? and @target.alive
-      d = @game.physics.arcade.distanceBetween @sprite, @target.sprite
-      if d > @range
-        @target = null
-      else
-      @fire()
-    else
-      @findTarget()
-    true
+    @controlled = @hex.selected and @game.mode == 'attack'
+    if @game.mode == 'attack'
+      @aim()
+      if @game.time.now > @nextFire
+        @fire()
