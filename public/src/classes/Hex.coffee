@@ -1,7 +1,7 @@
 class window.Hex
   constructor: ({ game, group, @click, @x, @y, @q, @r }) ->
     # State
-    @building = null #String
+    @building = null #Object
     @nature = null #String
     @minerals = 0
     @selected = false #Boolean
