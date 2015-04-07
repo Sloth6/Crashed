@@ -30,12 +30,19 @@ class Crashed.Game
     @collectorIncome = 10
 
     @buildingProperties =
-      collector:   { consumption:  1, cost: 10 }
-      pylon:       { consumption:  0, cost: 4  }
-      wall:        { consumption:  0, cost: 2  }
-      FireTower1: { consumption:  1, cost: 10 }
-      base:        { consumption:  0, cost: 0  }
+      collector:   { consumption:  1, cost: 10, upgrades: {} }
+      pylon:       { consumption:  0, cost: 4, upgrades: {}  }
+      wall:        { consumption:  0, cost: 2, upgrades: {}  }
+      base:        { consumption:  0, cost: 0, upgrades: {}  }
+      BasicTower1: consumption: 1, cost: 10, upgrades:
+        bombTower1: consumption: 1, cost: 10, upgrades:
+          fireTower1: { cost: 10, consumption: 10, upgrades: {} }
+          bombTower2: { cost: 10, consumption: 10, upgrades: {} }
+        basicTower2: consumption: 1, cost: 10, upgrades:
+          wallTower: { cost: 10, consumption: 10, upgrades: {} }
+          basicTower3: { cost: 10, consumption: 10, upgrades: {} }
 
+    console.log @buildingProperties
     # View
     @worldScale = .6
     width = 1000
