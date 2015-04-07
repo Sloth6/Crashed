@@ -44,18 +44,14 @@ class window.Enemy
     @newPath = false
 
   nearestHex: () ->
-    min = Infinity
-    minHex = null
-    for k, hex of @game.hexes
-      distance = ((hex.x - @sprite.position.x)**2 + (hex.y - @sprite.position.y)**2)**.5
-      if distance < min
-        min = distance
-        minHex = hex
-    minHex
+    hexUtils.nearestHex(@game, @sprite.position.x, @sprite.position.y)
 
   update: () ->
     return unless @alive
     @makePath() if @newPath
+
+    #do damage from burning hexes
+    @damage @nearestHex().burnDamage
 
     @accelerateToObject(@sprite, @nextHex.sprite, @speed)
     d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite

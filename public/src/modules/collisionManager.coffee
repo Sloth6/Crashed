@@ -24,8 +24,7 @@ window.collisionManager =
       true
 
     enemyWithBullet = (enemy, bullet) ->
-      enemy.damage bullet.strength
-      bullet.sprite.kill()
+      bullet.hitEnemy(enemy)
     enemyWithBomb = (enemy, bullet) ->
       bullet.explode()
 

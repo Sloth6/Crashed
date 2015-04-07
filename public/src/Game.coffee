@@ -33,7 +33,7 @@ class Crashed.Game
       collector:   { consumption:  1, cost: 10 }
       pylon:       { consumption:  0, cost: 4  }
       wall:        { consumption:  0, cost: 2  }
-      BasicTower1: { consumption:  1, cost: 10 }
+      FireTower1: { consumption:  1, cost: 10 }
       base:        { consumption:  0, cost: 0  }
 
     # View

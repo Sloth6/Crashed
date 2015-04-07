@@ -39,6 +39,11 @@ class window.Buildings.tower
         @target = e
     true
 
+  ###
+  # Points the tower toward the next target
+  # Returns true if sucessful
+  # Returns false if there are not yet enemies to aim at
+  ###
   aim: () ->
     if @controlled
       angle = Math.atan2(@game.input.worldY - @sprite.y, @game.input.worldX - @sprite.x)
@@ -49,7 +54,9 @@ class window.Buildings.tower
         angle = Math.atan2(@target.sprite.y - @sprite.y, @target.sprite.x - @sprite.x)
       else
         @findTarget()
-    @sprite.body.rotation = angle
+        return false
+    @sprite.body.rotation = angle or @sprite.body.rotation
+    true
 
   fire: () ->
     @nextFire = @game.time.now + @fireRate
@@ -60,6 +67,5 @@ class window.Buildings.tower
     return unless @alive
     @controlled = @hex.selected and @game.mode == 'attack'
     if @game.mode == 'attack'
-      @aim()
-      if @game.time.now > @nextFire
+      if @aim() and @game.time.now > @nextFire
         @fire()
