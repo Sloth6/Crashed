@@ -6,7 +6,7 @@ class window.Hex
     @minerals = 0
     @selected = false #Boolean
     @powered = false
-    @burning = false
+    @burnDamage = 0
 
     # view
     @sprite = group.create @x, @y, 'hex'

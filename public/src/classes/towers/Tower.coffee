@@ -67,6 +67,5 @@ class window.Buildings.tower
     return unless @alive
     @controlled = @hex.selected and @game.mode == 'attack'
     if @game.mode == 'attack'
-      #
       if @aim() and @game.time.now > @nextFire
         @fire()

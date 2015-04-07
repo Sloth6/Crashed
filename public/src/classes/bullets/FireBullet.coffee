@@ -2,20 +2,20 @@ class window.FireBullet extends Bullet
   constructor: (@game, x, y, angle, @speed, @strength, @range) ->
     @sprite = @game.bulletGroup.create x, y, 'bullet'
     @sprite.scale.set(1.2, 1.2)
+    console.log("made a bullet")
     super(@game, x, y, angle, @speed, @strength, @range)
 
   explode: () ->
-    (XYToHex @sprite.x, @sprite.y).burn
-
-    for e in @game.enemies
-      distance = @game.physics.arcade.distanceBetween e.sprite, @sprite
-      if distance < @area
-        angle = Math.atan2(e.sprite.x - @sprite.x, e.sprite.y - @sprite.y)
-        e.sprite.body.velocity.x += 100 * Math.cos(angle)
-        e.sprite.body.velocity.y += 100 * Math.sin(angle)
-        e.damage(@strength)
-    @game.bombs.remove @
+    burningHex = hexUtils.nearestHex(@game, @sprite.x, @sprite.y)
+    console.log(burningHex)
+    burningHex.burnDamage = @strength
+    burningHex.sprite.alpha = 0.25
+    setTimeout ( ()=>
+      burningHex.burnDamage = 0
+      burningHex.sprite.alpha = 1
+    ), 5000
   hitEnemy: (enemy) ->
+    console.log("here")
     @explode()
     super(enemy)
 
