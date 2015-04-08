@@ -45,6 +45,9 @@ Crashed.Preloader.prototype = {
     this.load.image('BombTower1', 'images/buildings/bombTower.gif');
     this.load.image('BombTower2', 'images/buildings/bombTower.gif');
 
+    this.load.image('WallTower1', 'images/buildings/walltower.gif');
+    this.load.image('FireTower1', 'images/buildings/firetower.gif');
+
     this.load.image('Wall', 'images/buildings/wall.gif');
     this.load.image('Collector', 'images/buildings/collector.png');
 
