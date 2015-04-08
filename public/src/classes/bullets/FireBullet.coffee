@@ -6,7 +6,7 @@ class window.FireBullet extends Bullet
     super(@game, x, y, angle, @speed, @strength, @range)
 
   explode: () ->
-    burningHex = hexUtils.nearestHex(@game, @sprite.x, @sprite.y)
+    burningHex = hexUtils.nearestHex(@game.hexes, @sprite.x, @sprite.y)
     console.log(burningHex)
     burningHex.burnDamage = @strength
     burningHex.sprite.alpha = 0.25

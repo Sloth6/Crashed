@@ -9,8 +9,8 @@ hexUtils =
     { q, r }
 
   neighbors: ( hexes, {q,r} ) ->
-    (directions.map ([ dq, dr ]) => hexes["#{dq+q}:#{dr + r}"])
-      .filter (elem) -> !!elem
+    mapped = (hexes["#{dq+q}:#{dr+r}"] for [dq, dr] in directions)
+    filetered = (item for item in mapped when !!item)
 
 
   hexDistance: (a, b) ->
@@ -28,10 +28,10 @@ hexUtils =
         _r = hex.r+directions[i][1]
         hex = hexes["#{q}:#{_r}"]
     ringHexes
-  nearestHex: (game, x, y) ->
+  nearestHex: (hexes, x, y) ->
     min = Infinity
     minHex = null
-    for k, hex of game.hexes
+    for k, hex of hexes
       distance = ((hex.x - x)**2 + (hex.y - y)**2)**.5
       if distance < min
         min = distance

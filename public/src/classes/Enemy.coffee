@@ -1,5 +1,5 @@
 class window.Enemy
-  constructor: (hex, healthModifier) ->
+  constructor: (@hex, healthModifier) ->
     #state
     @health *= healthModifier
     @maxHealth *= healthModifier
@@ -45,14 +45,18 @@ class window.Enemy
     @newPath = false
 
   nearestHex: () ->
-    hexUtils.nearestHex(@game, @sprite.position.x, @sprite.position.y)
+    # if it is on a hex, only checks the neighbors
+    if @hex?
+      nearest = hexUtils.nearestHex (hexUtils.neighbors @game.hexes, @hex.q, @hex.r), @sprite.position.x, @sprite.position.y
+    # If that doesn't work, goes through all the hexes
+    nearest or= hexUtils.nearestHex @game.hexes, @sprite.position.x, @sprite.position.y
+    return nearest
 
   update: () ->
     return unless @alive
     @makePath() if @newPath
 
-    #do damage from burning hexes
-    @damage @nearestHex().burnDamage
+    @damage @hex.burnDamage
 
     if @nextHex.sprite
       @accelerateToObject(@sprite, @nextHex.sprite, @speed)
@@ -72,7 +76,7 @@ class window.Enemy
       if d2 < 40 and @path[@i+2]
         @i += 2
         @nextHex = @path[@i]
-    
+     
   accelerateToObject: (obj1, obj2, speed) ->
     angle = Math.atan2(obj2.y - obj1.y, obj2.x - obj1.x);
     obj1.body.rotation = angle
@@ -81,5 +85,5 @@ class window.Enemy
     fMult = 4
     obj1.body.force.x = (expectedXVel - obj1.body.velocity.x) * fMult + Math.random() * 3 
     obj1.body.force.y = (expectedYVel - obj1.body.velocity.y) * fMult  + Math.random() * 3
-    obj1.body.velocity.x = Math.min obj1.body.velocity.x, (@maxSpeed / @nearestHex().getCost())
-    obj1.body.velocity.y = Math.min obj1.body.velocity.y, (@maxSpeed / @nearestHex().getCost())
+    obj1.body.velocity.x = Math.min obj1.body.velocity.x, (@maxSpeed / @hex.getCost())
+    obj1.body.velocity.y = Math.min obj1.body.velocity.y, (@maxSpeed / @hex.getCost())
