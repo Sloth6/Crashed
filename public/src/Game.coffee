@@ -157,7 +157,7 @@ class Crashed.Game
     size = (new Phaser.Sprite game, 0, 0, 'hex').width/2
     x = q * size * 1.5
     y = (r * Math.sqrt(3) * size) + (q * Math.sqrt(3)/2 * size)
-    hex = new Hex { game: @, group: @hexGroup, click: @clickHex, x, y, q, r }
+    hex = new Hex { game: @, group: @hexGroup, click: @clickHex, x, y, q, r}
     @hexes["#{q}:#{r}"] = hex
 
   expandMap: () ->
