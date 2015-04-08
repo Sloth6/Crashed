@@ -174,6 +174,11 @@ class Crashed.Game
     true
 
   clickHex: (hex) =>
+    console.log(hex.nature)
+    console.log(hex.nature isnt 'trees')
+    return unless hex.nature isnt 'trees'
+    console.log("didn't return")
+
     if @hexMenu?
       @hexMenu.remove()
       @hexMenu = null
