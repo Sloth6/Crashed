@@ -1,12 +1,12 @@
-class window.Buildings.pylon
+class window.Buildings.Pylon
   constructor: (@game, @hex) ->
     # View
-    @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'pylon'
+    @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'Pylon'
     @sprite.anchor.set 0.5, 0.5
     @sprite.container = @
     
     # State
-    @sprite.name = 'pylon'
+    @name = 'Pylon'
     @container = @
 
     # physics

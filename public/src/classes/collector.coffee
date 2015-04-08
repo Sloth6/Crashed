@@ -1,12 +1,12 @@
-class window.Buildings.collector
+class window.Buildings.Collector
   constructor: (@game, @hex) ->
     # View
-    @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'collector'
+    @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'Collector'
     @sprite.anchor.set 0.5, 0.5
     @sprite.container = @
     
     # State
-    @sprite.name = 'collector'
+    @name = 'Collector'
     @container = @
 
     # physics

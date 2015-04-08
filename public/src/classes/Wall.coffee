@@ -1,7 +1,7 @@
-class window.Buildings.wall
+class window.Buildings.Wall
   constructor: (@game, @hex) ->
     # View
-    @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'wall'
+    @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'Wall'
     @sprite.anchor.set 0.5, 0.5
     @sprite.container = @
     
@@ -9,7 +9,7 @@ class window.Buildings.wall
     @alive = true
     @health = 100
     @maxHealth = 100
-    @sprite.name = 'wall'
+    @name = 'Wall'
     @container = @
 
     # physics

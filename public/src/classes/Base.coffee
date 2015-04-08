@@ -1,12 +1,12 @@
-class window.Buildings.base
+class window.Buildings.Base
   constructor: (@game, @hex) ->
     # View
-    @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'base'
+    @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'Base'
     @sprite.anchor.set 0.5, 0.5
     @sprite.container = @
     
     # State
-    @sprite.name = 'base'
+    @name = 'Base'
     @container = @
 
     # physics

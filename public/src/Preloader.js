@@ -34,19 +34,24 @@ Crashed.Preloader.prototype = {
     this.load.image('hex', 'images/greenhex.gif');
     this.load.image('minerals', 'images/enviornment/minerals.gif');
     
-    this.load.image('base', 'images/buildings/base.gif');
-    this.load.image('reactor', 'images/buildings/reactor.gif');
-    this.load.image('pylon', 'images/buildings/pylon.gif');
-    this.load.image('tower', 'images/buildings/tower.gif');
+    this.load.image('Base', 'images/buildings/base.gif');
+    this.load.image('Pylon', 'images/buildings/pylon.gif');
     this.load.image('BasicTower1', 'images/buildings/tower.gif');
-    this.load.image('wall', 'images/buildings/wall.gif');
-    this.load.image('collector', 'images/buildings/collector.png');
+    this.load.image('BasicTower2', 'images/buildings/tower.gif');
+    this.load.image('BasicTower3', 'images/buildings/tower.gif');
+
+    this.load.image('BombTower1', 'images/buildings/bombTower.gif');
+    this.load.image('Wall', 'images/buildings/wall.gif');
+    this.load.image('Collector', 'images/buildings/collector.png');
 
     this.load.image('powered', 'images/PowerSymbol.jpg');
+    this.load.image('hexMenu', 'images/ui/hexMenu.gif');
+    this.load.image('sell', 'images/ui/sell.gif');
 
     this.load.image('enemy', 'images/units/enemy.gif');
     this.load.image('bigEnemy', 'images/units/bigEnemy.gif');
-    this.load.image('bullet', 'images/bullet.gif');
+    this.load.image('bullet', 'images/ammo/bullet.gif');
+    this.load.image('bomb', 'images/ammo/bomb.gif');
 
     this.load.image('start', 'images/ui/start.png');    
 

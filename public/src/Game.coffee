@@ -30,19 +30,22 @@ class Crashed.Game
     @collectorIncome = 10
 
     @buildingProperties =
-      collector:   { consumption:  1, cost: 10, upgrades: {} }
-      pylon:       { consumption:  0, cost: 4, upgrades: {}  }
-      wall:        { consumption:  0, cost: 2, upgrades: {}  }
-      base:        { consumption:  0, cost: 0, upgrades: {}  }
-      BasicTower1: consumption: 1, cost: 10, upgrades:
-        bombTower1: consumption: 1, cost: 10, upgrades:
-          fireTower1: { cost: 10, consumption: 10, upgrades: {} }
-          bombTower2: { cost: 10, consumption: 10, upgrades: {} }
-        basicTower2: consumption: 1, cost: 10, upgrades:
-          wallTower: { cost: 10, consumption: 10, upgrades: {} }
-          basicTower3: { cost: 10, consumption: 10, upgrades: {} }
+      Collector:   { consumption:  1, cost: 10, upgrades: [] }
+      Pylon:       { consumption:  0, cost: 4, upgrades: []  }
+      Wall:        { consumption:  0, cost: 2, upgrades: []  }
+      Base:        { consumption:  0, cost: 0, upgrades: []  }
+      BasicTower1:
+        consumption: 1, cost: 10, upgrades: ['BombTower1', 'BasicTower2']
+      BombTower1:
+        consumption: 1, cost: 10, upgrades: ['FireTower1', 'BombTower2']
+      FireTower1: { cost: 10, consumption: 10, upgrades: [] }
+      BombTower2: { cost: 10, consumption: 10, upgrades: [] } 
+      BasicTower2:
+        consumption: 1, cost: 10, upgrades: ['WallTower', 'BasicTower3']
+      WallTower: { cost: 10, consumption: 10, upgrades: [] }
+      BasicTower3: { cost: 10, consumption: 10, upgrades: [] }
 
-    console.log @buildingProperties
+    # console.log @buildingProperties
     # View
     @worldScale = .6
     width = 1000
@@ -56,6 +59,7 @@ class Crashed.Game
     @physics.p2.setImpactEvents true
     @physics.p2.restitution = 1
 
+    @hexMenu = null
     @worldGroup = game.add.group()
 
     # Hexes
@@ -98,9 +102,8 @@ class Crashed.Game
       startButton.events.onInputDown.add @startAttack
 
       i = 0
-      for type, v of @buildingProperties
-        continue if type is 'base' #cant build another base!
-        button = @buildUi.create 10, (i * 60) + 50, type
+      for type in ['Wall', 'Collector', 'Pylon' , 'BasicTower1']
+        button = @buildUi.create 10, (i * 60) + 150, type
         button.height = 50
         button.width = 50
         button.fixedToCamera = true
@@ -127,7 +130,7 @@ class Crashed.Game
         @newHex q, r
       if q < 0 then start-- else end--
 
-    base = new Buildings.base(@, @hexes["0:0"])
+    base = new Buildings.Base(@, @hexes["0:0"])
     @hexes["0:0"].building = base
     @buildings.push base
 
@@ -144,7 +147,7 @@ class Crashed.Game
       return if h.powered
       h.powered = true
       h.powerSprite.visible = true
-      if (h.building instanceof Buildings.pylon) or (h.building instanceof Buildings.base)
+      if (h.building instanceof Buildings.Pylon) or (h.building instanceof Buildings.Base)
         hexUtils.ring(@hexes, 1, h).forEach checkR
         hexUtils.ring(@hexes, 2, h).forEach checkR
         hexUtils.ring(@hexes, 3, h).forEach checkR
@@ -171,11 +174,17 @@ class Crashed.Game
     true
 
   clickHex: (hex) =>
+    if @hexMenu?
+      @hexMenu.remove()
+      @hexMenu = null
+      return
     if @mode == 'build'
       if hex.selected
         @selectedHexes.remove hex
         hex.deselect()
       else
+        if hex.building?
+          @hexMenu = new HexMenu @, hex
         @selectedHexes.push hex
         hex.select()
     else if @mode == 'attack'
@@ -187,6 +196,12 @@ class Crashed.Game
           hex.deselect()
         @selectedHexes = [hex]
         hex.select()
+
+  clickUpgradeButton: (hex, type) ->
+    console.log 'upgrading to:', type
+    hex.building.kill()
+    hex.building = null
+    @clickBuildButton type
 
   clickBuildButton: (type) ->
     if buildingValidator.canBuild(@, type) != true
@@ -203,7 +218,7 @@ class Crashed.Game
       while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 6
         @expandMap()
 
-    if type == 'pylon'
+    if type == 'Pylon'
       @markPowered()
     @money -= @selectedHexes.length * @buildingProperties[type].cost
     @selectedHexes = []
@@ -224,7 +239,7 @@ class Crashed.Game
     @enemies = []
     @level += 1
     for building in @buildings
-      if building instanceof Buildings.collector
+      if building instanceof Buildings.Collector
         @money += @collectorIncome
     
     @updateStatsText()
@@ -254,14 +269,14 @@ class Crashed.Game
     # if buildingSprite.name is 'building'
     return unless buildingSprite.container
     building = buildingSprite.container
-    return unless (building instanceof Buildings.pylon or
-      building instanceof Buildings.tower or
-      building instanceof Buildings.base or
-      building instanceof Buildings.collector)
+    return unless (building instanceof Buildings.Pylon or
+      building instanceof Buildings.Tower or
+      building instanceof Buildings.Base or
+      building instanceof Buildings.Collector)
     @buildings.remove building
     building.hex.building = null
     building.kill()
-    if building instanceof Buildings.pylon
+    if building instanceof Buildings.Pylon
       @markPowered()
 
   bulletHit: (bulletSprite, enemySprite) ->

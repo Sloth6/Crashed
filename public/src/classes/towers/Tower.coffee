@@ -1,4 +1,4 @@
-class window.Buildings.tower
+class window.Buildings.Tower
   constructor: (@game, @hex) ->
     # View
     @sprite.anchor.set 0.5, 0.5
@@ -8,7 +8,6 @@ class window.Buildings.tower
     @alive = true
     @range = 300
     @target = null #Enemy Object
-    @sprite.name = 'tower'
     @sprite.container = @
     @fireRate = 500
     @nextFire = 0

@@ -53,7 +53,8 @@ class window.Enemy
     #do damage from burning hexes
     @damage @nearestHex().burnDamage
 
-    @accelerateToObject(@sprite, @nextHex.sprite, @speed)
+    if @nextHex.sprite
+      @accelerateToObject(@sprite, @nextHex.sprite, @speed)
     d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite
     if d < 40
       @i += 1
