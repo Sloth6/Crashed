@@ -174,7 +174,7 @@ class Crashed.Game
     true
 
   clickHex: (hex) =>
-    return unless hex.nature isnt 'trees'
+    return if hex.nature is 'trees'
     if @hexMenu?
       @hexMenu.remove()
       @hexMenu = null
