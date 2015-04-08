@@ -1,11 +1,12 @@
 class window.BombBullet extends Bullet
   constructor: (@game, @x, @y, angle, @speed, @strength, @range) ->
-    super(@game, @x, @y, angle, @speed, @strength)
+    @sprite = @game.bulletGroup.create x, y, 'bomb'
     @sprite.scale.set(1, 1)
     @area = 60
-    @sprite.name = 'bomb'
-    @sprite.body.setCircle 5
+    @name = 'bomb'
+    # @sprite.body.setCircle 5
     @game.bombs.push @
+    super(@game, @x, @y, angle, @speed, @strength)
   explode: () ->
     for e in @game.enemies
       distance = @game.physics.arcade.distanceBetween e.sprite, @sprite

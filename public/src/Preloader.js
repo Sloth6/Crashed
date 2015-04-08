@@ -37,11 +37,14 @@ Crashed.Preloader.prototype = {
     
     this.load.image('Base', 'images/buildings/base.gif');
     this.load.image('Pylon', 'images/buildings/pylon.gif');
+
     this.load.image('BasicTower1', 'images/buildings/tower.gif');
     this.load.image('BasicTower2', 'images/buildings/tower.gif');
     this.load.image('BasicTower3', 'images/buildings/tower.gif');
 
     this.load.image('BombTower1', 'images/buildings/bombTower.gif');
+    this.load.image('BombTower2', 'images/buildings/bombTower.gif');
+
     this.load.image('Wall', 'images/buildings/wall.gif');
     this.load.image('Collector', 'images/buildings/collector.png');
 
