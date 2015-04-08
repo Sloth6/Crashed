@@ -178,7 +178,7 @@ class Crashed.Game
     if @hexMenu?
       @hexMenu.remove()
       @hexMenu = null
-      return
+      # return
     if @mode == 'build'
       if hex.selected
         @selectedHexes.remove hex
