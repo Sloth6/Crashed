@@ -45,7 +45,7 @@ class window.Buildings.Tower
   ###
   aim: () ->
     if @controlled
-      angle = Math.atan2(@game.input.worldY - @sprite.y, @game.input.worldX - @sprite.x)
+      angle = Math.atan2(@game.mouse.y - @sprite.y, @game.mouse.x - @sprite.x)
     else
       if @target? and @target.alive
         d = @game.physics.arcade.distanceBetween @sprite, @target.sprite

@@ -311,12 +311,16 @@ class Crashed.Game
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A)
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D)
     
+    @mouse = @input.getLocalPosition @worldGroup, game.input.activePointer
+    # console.log game.mouse
     # end wave if no more enemies
     if @enemyCount <= 0 and @mode == 'attack'
       @endAttack()
 
     e.update() for e in @enemies
     b?.update() for b in @bombs
+
+    
 
     for b in @buildings
       b.update() if b.update
