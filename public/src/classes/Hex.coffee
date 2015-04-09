@@ -14,7 +14,7 @@ class window.Hex
     @natureSprite = null #Phaser sprite object
     @sprite.inputEnabled = true
     @sprite.events.onInputDown.add @onInputDown, @
-    @sprite.input.pixelPerfectOver = true
+    @sprite.input.pixelPerfectClick = true
     @sprite.input.useHandCursor = true
 
     @powerSprite = group.create @x, @y, 'powered'
