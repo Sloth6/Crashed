@@ -8,17 +8,19 @@ window.buildingValidator =
     true
 
   canBuild: (game, type) ->
-    #check price
     n = game.selectedHexes.length
     cost = n * game.buildingProperties[type].cost
-    
+
     if cost > game.money
       return "Cannot afford #{@n} #{type}s. Costs #{cost}."
     
     if (game.selectedHexes.some (h) -> h.building?)
       return 'Sell that building first!'
 
-    if type is 'wall' #ensure we don't wall off completly.
+    if type != 'Wall' and game.selectedHexes.some((h) -> !h.powered)
+      return "Buildings must be built on powered tiles"
+
+    if type is 'Wall' #ensure we don't wall off completly.
       aStarOptions =
         graph: game.hexes
         start: hexUtils.ring(game.hexes, game.rows)[0]
@@ -33,18 +35,7 @@ window.buildingValidator =
     else if type is 'collector'
       if not game.selectedHexes.every((h) -> h.nature is 'minerals')
         return "Can only build collectors on minerals"
-   
-    # # Treat each building as 'true' which allows us to run a simple
-    # # algorithm checking if each building is connected without actually
-    # # creating and destroying each building
-    # game.selectedHexes.forEach (h) -> h.building = true
-    # isConnected = @isConnected game
-    # game.selectedHexes.forEach (h) -> h.building = null
-    # if not isConnected
-    #   return "Buildings must be adjacent to another building."
-    if type is not 'wall' and game.selectedHexes.some((h) -> !h.powered)
-      return "Buildings must be built on powered tiles"
-    
+  
     true
 
   isConnected: (game) ->
