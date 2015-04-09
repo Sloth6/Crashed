@@ -8,14 +8,14 @@ class window.HexMenu
     
     a = -90
     r = 60
-    @sprite = game.buildUi.create hex.x, hex.y, 'hexMenu'
+    @sprite = game.worldGroup.create hex.x, hex.y, 'hexMenu'
     @sprite.anchor.set 0.5, 0.5
     @sprite.alpha = .6
     for option in options
       x = Math.cos(a * Math.PI/180) * r
       y = Math.sin(a * Math.PI/180) * r
       a += 40
-      button = game.buildUi.create hex.x+x, hex.y+y, option
+      button = game.worldGroup.create hex.x+x, hex.y+y, option
       button.anchor.set 0.5, 0.5
       button.height = 20
       button.width = 20
