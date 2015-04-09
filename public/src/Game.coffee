@@ -255,15 +255,21 @@ class Crashed.Game
     enemyHealthModifier = Math.pow(1.4, @level)
 
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
+    
+    numGroups = @enemyCount // 20
+    console.log {numGroups}
     outerRing = hexUtils.ring(@hexes, @rows)
-    numBig = @enemyCount // 12
-    numSmall = @enemyCount - numBig
-    hex = outerRing.random()
-    for i in [0...numSmall] by 1
-      @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
-    for i in [0...numBig] by 1
-      h = outerRing.random()
+    starts = (outerRing.random() for i in [0...numGroups])
+
+    for i in [0...numGroups] by 1
+      hex = starts[i]
       @enemies.push new BigEnemy(@, hex, enemyHealthModifier)
+
+    numSmall = @enemyCount - numGroups
+    for i in [0...numSmall] by 1
+      hex = starts[i%numGroups]
+      @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
+    
     true
 
   enemyHit: (enemySprite, buildingSprite) ->
