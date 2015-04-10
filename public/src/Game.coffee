@@ -226,7 +226,12 @@ class Crashed.Game
     @updateStatsText()
     
   updateStatsText: () ->
-    @statsText.setText "Level: #{@level}    $#{@money}"
+    console.log 'income', @income()
+    @statsText.setText "Level: #{@level}  Income:#{@income()}  $#{@money} "
+
+  income: () ->
+    @buildings.reduce ((sum, b) ->
+          sum + (if b instanceof Buildings.Collector then 10 else 0)), 0
 
   enemiesPerLevel: (n) ->
     n ?= @level
@@ -239,9 +244,7 @@ class Crashed.Game
     
     @enemies = []
     @level += 1
-    for building in @buildings
-      if building instanceof Buildings.Collector
-        @money += @collectorIncome
+    @money += @income()
     
     @updateStatsText()
     h.deselect() for h in @selectedHexes
