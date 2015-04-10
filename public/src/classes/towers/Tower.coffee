@@ -12,8 +12,8 @@ class window.Buildings.Tower
     @fireRate = 500
     @nextFire = 0
     @bullet or= null
-    @bulletSpeed or= null 
-    @bulletStrength or= null 
+    @bulletSpeed or= null
+    @bulletStrength or= null
     @controlledBullet or= null
     @controlled = false
 
@@ -33,7 +33,7 @@ class window.Buildings.Tower
     for e in @game.enemies
       continue unless e.alive
       d = @game.physics.arcade.distanceBetween @sprite, e.sprite
-      if d < minD and d < @range 
+      if d < minD and d < @range
         minD = d
         @target = e
     true

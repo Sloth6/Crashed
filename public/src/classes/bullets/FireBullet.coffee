@@ -10,7 +10,7 @@ class window.FireBullet extends Bullet
     console.log(burningHex)
     burningHex.burnDamage = @strength
     burningHex.sprite.alpha = 0.25
-    setTimeout ( ()=>
+    setTimeout ( ()->
       burningHex.burnDamage = 0
       burningHex.sprite.alpha = 1
     ), 5000

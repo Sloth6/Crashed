@@ -19,7 +19,7 @@ class window.BigEnemy extends Enemy
     @options =
       graph: @game.hexes
       end: @game.hexes["0:0"]
-      impassable: (h) => false
+      impassable: (h) -> false
       heuristic: hexUtils.hexDistance
       neighbors: hexUtils.neighbors
 

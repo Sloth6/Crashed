@@ -29,7 +29,7 @@ class window.Hex
       @natureSprite = group.create @x, @y, 'trees'
       @natureSprite.anchor.set 0.5, 0.5
       @natureSprite.scale.set 0.15, 0.2
-  getCost: () -> 
+  getCost: () ->
     if @nature is 'trees' then 3 else 1
 
   onInputDown: () ->

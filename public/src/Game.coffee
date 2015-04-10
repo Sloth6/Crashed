@@ -39,7 +39,7 @@ class Crashed.Game
       BombTower1:
         consumption: 1, cost: 10, upgrades: ['FireTower1', 'BombTower2']
       FireTower1: { cost: 10, consumption: 10, upgrades: [] }
-      BombTower2: { cost: 10, consumption: 10, upgrades: [] } 
+      BombTower2: { cost: 10, consumption: 10, upgrades: [] }
       BasicTower2:
         consumption: 1, cost: 10, upgrades: ['WallTower', 'BasicTower3']
       WallTower: { cost: 10, consumption: 10, upgrades: [] }
@@ -207,7 +207,7 @@ class Crashed.Game
   clickBuildButton: (type) ->
     if buildingValidator.canBuild(@, type) != true
       alert buildingValidator.canBuild @, type
-      @selectedHexes.forEach (h) => h.deselect()
+      @selectedHexes.forEach (h) -> h.deselect()
       @selectedHexes = []
       return
 
@@ -245,7 +245,8 @@ class Crashed.Game
     
     @updateStatsText()
     h.deselect() for h in @selectedHexes
-    @selectedHexes = []  
+    @selectedHexes = []
+  
   startAttack: () =>
     @mode = 'attack'
     @buildUi.visible = false

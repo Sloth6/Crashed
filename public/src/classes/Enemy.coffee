@@ -78,12 +78,12 @@ class window.Enemy
         @nextHex = @path[@i]
      
   accelerateToObject: (obj1, obj2, speed) ->
-    angle = Math.atan2(obj2.y - obj1.y, obj2.x - obj1.x);
+    angle = Math.atan2 obj2.y - obj1.y, obj2.x - obj1.x
     obj1.body.rotation = angle
     expectedXVel = Math.cos(angle) * speed
     expectedYVel = Math.sin(angle) * speed
     fMult = 4
-    obj1.body.force.x = (expectedXVel - obj1.body.velocity.x) * fMult + Math.random() * 3 
+    obj1.body.force.x = (expectedXVel - obj1.body.velocity.x) * fMult + Math.random() * 3
     obj1.body.force.y = (expectedYVel - obj1.body.velocity.y) * fMult  + Math.random() * 3
     obj1.body.velocity.x = Math.min obj1.body.velocity.x, (@maxSpeed / @hex.getCost())
     obj1.body.velocity.y = Math.min obj1.body.velocity.y, (@maxSpeed / @hex.getCost())

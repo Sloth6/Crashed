@@ -25,7 +25,7 @@ window.buildingValidator =
         graph: game.hexes
         start: hexUtils.ring(game.hexes, game.rows)[0]
         end: game.hexes["0:0"]
-        impassable: (h) => h.building is 'wall' or h in game.selectedHexes
+        impassable: (h) -> h.building is 'wall' or h in game.selectedHexes
         heuristic: hexUtils.hexDistance
         neighbors: hexUtils.neighbors
 

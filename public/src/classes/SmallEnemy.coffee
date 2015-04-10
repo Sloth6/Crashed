@@ -18,7 +18,7 @@ class window.SmallEnemy extends Enemy
     @options =
       graph: @game.hexes
       end: @game.hexes["0:0"]
-      impassable: (h) => h.building instanceof Buildings.Wall
+      impassable: (h) -> h.building instanceof Buildings.Wall
       heuristic: hexUtils.hexDistance
       neighbors: hexUtils.neighbors
 
