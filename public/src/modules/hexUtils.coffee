@@ -10,7 +10,7 @@ hexUtils =
 
   neighbors: ( hexes, {q,r} ) ->
     mapped = (hexes["#{dq+q}:#{dr+r}"] for [dq, dr] in directions)
-    filetered = (item for item in mapped when !!item)
+    (item for item in mapped when !!item)
 
 
   hexDistance: (a, b) ->
