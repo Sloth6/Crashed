@@ -93,7 +93,7 @@ class Crashed.Game
     @fightUi.visible = false
     @ui = game.add.group() # static ui
   
-
+    window.foo = @
     createMenu = () =>
       startButton = @buildUi.create 10, game.camera.height - 150, 'start'
       startButton.fixedToCamera = true
@@ -351,3 +351,18 @@ class Crashed.Game
     
 
     true
+
+
+  toString: () ->
+    hexes = []
+    for qr, hex of @hexes
+      hexes.push hex.export()
+      # ...
+    
+    JSON.stringify({
+      rows: @rows
+      level: @level
+      money: @money
+      # buildings: buildings.map (b) -> b.toString()
+      hexes: hexes
+    })

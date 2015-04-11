@@ -42,3 +42,12 @@ class window.Hex
   deselect: () ->
     @selected = false
     @sprite.alpha = 1.0
+
+  # Export a non circular json structure for saving
+  export: () -> 
+    x: @x
+    y:@y
+    q:@q
+    r:@r
+    nature: @nature
+    building: building?.name
