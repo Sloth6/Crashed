@@ -1,6 +1,6 @@
 class Crashed.MainMenu
   constructor: (game) ->
-    # this.music = null;
+    # @music = null;
     @playButton = null
 
   create: () ->
@@ -9,18 +9,26 @@ class Crashed.MainMenu
     # Here all we're doing is playing some music and adding a picture and button
     # Naturally I expect you to do something significantly better :)
 
-    # this.music = this.add.audio('titleMusic');
-    # this.music.play();
+    # @music = @add.audio('titleMusic');
+    # @music.play();
+    [ cx, cy ] = [ @game.width/ 2, @game.height / 2 ]
+    [ w, h ] = [ 326, 287 ]
+    @add.sprite 0, 0, 'titlepage'
+    
+    @playButton = @add.button(cx - (3*w/4), cy, 'playButton', @startGame, @, 'buttonOver', 'buttonOut', 'buttonOver');
+    @playButton.anchor.set 0.5, 0.5
 
-    this.add.sprite 0, 0, 'titlepage'
-    this.playButton = this.add.button(this.game.width/2, this.game.height - 150, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');
-    this.playButton.anchor.set 0.5, 0.5
+    @loadButton = @add.button(cx, cy - h/2, 'loadButton', @savedGames, @, 'buttonOver', 'buttonOut', 'buttonOver');
+    @loadButton.anchor.set 0.5, 0.5
 
   update: () ->
     # Do some nice funky main menu effect here
 
+  savedGames: () ->
+    @state.start 'SavedGames'
+
   startGame: (pointer) ->
     # Ok, the Play Button has been clicked or touched, so let's stop the music (otherwise it'll carry on playing)
-    # this.music.stop();
+    # @music.stop();
     # And start the actual game
-    this.state.start 'Game'
+    @state.start 'Game'

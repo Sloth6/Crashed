@@ -27,6 +27,7 @@ Crashed.Preloader.prototype = {
     this.load.image('titlepage', 'images/mainmenu/background.gif');
     // this.load.atlas('playButton', 'images/play_button.png', 'images/play_button.json');
     this.load.image('playButton', 'images/mainmenu/New.gif');
+    this.load.image('loadButton', 'images/mainmenu/load.gif');
     
     // this.load.audio('titleMusic', ['audio/One_More_Time.m4a']);
 
@@ -61,7 +62,7 @@ Crashed.Preloader.prototype = {
     this.load.image('bullet', 'images/ammo/bullet.gif');
     this.load.image('bomb', 'images/ammo/bomb.gif');
 
-    this.load.image('start', 'images/ui/start.png');    
+    this.load.image('start', 'images/ui/start.png');
 
   },
 
