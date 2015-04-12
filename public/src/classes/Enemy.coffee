@@ -14,6 +14,7 @@ class window.Enemy
     @sprite.body.setCollisionGroup @game.enemyCG
     @sprite.body.collides [ @game.enemyCG, @game.buildingCG, @game.bulletCG ]
     @sprite.body.onBeginContact.add (b) =>
+      return unless b
       collisionManager.enemyCollision @game, @sprite.container, b.sprite.container
   
     #pathfinding
