@@ -116,7 +116,8 @@ class Crashed.Game
       save.input.useHandCursor = true
       save.fixedToCamera = true
       save.events.onInputDown.add () =>
-        window.saveManager.save @export()
+        name = prompt "Please give a name", "My saved game."
+        window.saveManager.save name, @export() if name
 
     createMenu()
   
@@ -376,7 +377,6 @@ class Crashed.Game
     for qr, hex of @hexes
       hexes.push hex.export()
     
-    name: Date.now()
     rows: @rows
     level: @level
     money: @money

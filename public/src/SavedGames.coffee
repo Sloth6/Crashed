@@ -10,7 +10,7 @@ class Crashed.SavedGames
       saves.forEach (save) =>
         # save = JSON.parse save
         return unless save.name
-        new window.LabelButton @game, 100, y+=100, 'start', save.name, () =>
+        new window.LabelButton @game, game.world.centerX, y+=100, 'foo', save.name, () =>
           this.state.start 'Game', true, false, save
         # text = game.add.text game.world.centerX, game.world.centerY, save.name
         # @playButton = @add.button(cx - (3*w/4), cy, 'playButton', @startGame, @, 'buttonOver', 'buttonOut', 'buttonOver');
