@@ -138,14 +138,19 @@ class Crashed.Game
     # Laod the hex field
     if @savedGame
       for hexState in @savedGame.hexes
-        hex = @newHex hexState.q, hexState.r
+        hex = @newHex hexState.q, hexState.r, hexState.nature
         @build hex, hexState.building if hexState.building
 
     else # Or generate new hex grid
       [start, end] = [0, @rows]
       for q in [-@rows..@rows] by 1
         for r in [start..end] by 1
-          @newHex q, r
+          nature = null
+          if Math.random() < 0.1
+            nature = 'minerals'
+          else if Math.random() < 0.1
+            nature = 'trees'
+          @newHex q, r, nature
         if q < 0 then start-- else end--
 
       @build @hexes["0:0"], 'Base'
@@ -169,11 +174,11 @@ class Crashed.Game
         hexUtils.ring(@hexes, 3, h).forEach checkR
     checkR @hexes["0:0"]
   
-  newHex: (q, r) ->
+  newHex: (q, r, nature) ->
     size = (new Phaser.Sprite game, 0, 0, 'hex').width/2
     x = q * size * 1.5
     y = (r * Math.sqrt(3) * size) + (q * Math.sqrt(3)/2 * size)
-    hex = new Hex { game: @, group: @hexGroup, click: @clickHex, x, y, q, r}
+    hex = new Hex { game: @, group: @hexGroup, click: @clickHex, x, y, q, r, nature}
     @hexes["#{q}:#{r}"] = hex
     hex
 
