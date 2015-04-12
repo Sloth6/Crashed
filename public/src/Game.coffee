@@ -285,12 +285,7 @@ class Crashed.Game
     outerRing = hexUtils.ring(@hexes, @rows)
     starts = (outerRing.random() for i in [0...numGroups])
 
-    for i in [0...numGroups] by 1
-      hex = starts[i]
-      @enemies.push new BigEnemy(@, hex, enemyHealthModifier)
-
-    numSmall = @enemyCount - numGroups
-    for i in [0...numSmall] by 1
+    for i in [0...@enemyCount] by 1
       hex = starts[i%numGroups]
       @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
     
