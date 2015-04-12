@@ -50,4 +50,4 @@ class window.Hex
     q:@q
     r:@r
     nature: @nature
-    building: building?.name
+    building: if @building then @building.name else null

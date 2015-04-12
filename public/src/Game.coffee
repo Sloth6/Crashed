@@ -18,17 +18,13 @@ class Crashed.Game
     # @rnd       #  the repeatable random number generator (Phaser.RandomDataGenerator)
     #  You can use any of these from any function within this State.
     #  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
+  init: (@savedGame) ->
+    # Physics
+    @game.physics.startSystem Phaser.Physics.P2JS
+    @physics.p2.setImpactEvents true
+    @physics.p2.restitution = 1
 
-  create: () ->
-
-    # Game state
-    @rows = 9
-    @mode = 'build' #( attack | build )
-    @enemyCount = 0
-    @level = 0
-    @money = 200
     @collectorIncome = 10
-
     @buildingProperties =
       Collector:   { consumption:  1, cost: 10, upgrades: [] }
       Pylon:       { consumption:  0, cost: 4, upgrades: []  }
@@ -45,19 +41,13 @@ class Crashed.Game
       WallTower: { cost: 10, consumption: 10, upgrades: [] }
       BasicTower3: { cost: 10, consumption: 10, upgrades: [] }
 
-    # console.log @buildingProperties
     # View
     @worldScale = .6
     width = 1000
     game.world.setBounds -width, -width, 2*width, 2*width
     @camera.x -= @camera.width/2
     @camera.y -= @camera.height/2
-    # @camera.scale.setTo @worldScale, @worldScale
-
-    # Physics
-    @game.physics.startSystem Phaser.Physics.P2JS
-    @physics.p2.setImpactEvents true
-    @physics.p2.restitution = 1
+    
 
     @hexMenu = null
     @worldGroup = game.add.group()
@@ -92,8 +82,7 @@ class Crashed.Game
     @fightUi = game.add.group() # ui specific to fight phase
     @fightUi.visible = false
     @ui = game.add.group() # static ui
-  
-    window.foo = @
+
     createMenu = () =>
       startButton = @buildUi.create 10, game.camera.height - 150, 'start'
       startButton.fixedToCamera = true
@@ -116,29 +105,55 @@ class Crashed.Game
       style = { font: "45px Arial" }
       @statsText = game.add.text 50, 10, "", style
       @statsText.fixedToCamera = true
-      @updateStatsText()
+      
 
       @remainingText = new Phaser.Text game, 10, game.camera.height - 50, "Enemies remaining: #{@enemyCount}", style
       @remainingText.fixedToCamera = true
       @fightUi.add @remainingText
 
-    # Create the hex field
-    start = 0
-    end = @rows
-    for q in [-@rows..@rows] by 1
-      for r in [start..end] by 1
-        @newHex q, r
-      if q < 0 then start-- else end--
-
-    base = new Buildings.Base(@, @hexes["0:0"])
-    @hexes["0:0"].building = base
-    @buildings.push base
+      save = @buildUi.create game.width - 200, 10, 'save'
+      save.inputEnabled = true
+      save.input.useHandCursor = true
+      save.fixedToCamera = true
+      save.events.onInputDown.add () =>
+        window.saveManager.save @export()
 
     createMenu()
+  
+  create: () ->
+    # Game state
+    @mode = 'build' #( attack | build )
+    @enemyCount = 0
+
+    if @savedGame
+      @rows = @savedGame.rows
+      @level = @savedGame.level
+      @money = @savedGame.money
+    else
+      @rows = 9
+      @level = 0
+      @money = 200
+
+    # Laod the hex field
+    if @savedGame
+      for hexState in @savedGame.hexes
+        hex = @newHex hexState.q, hexState.r
+        @build hex, hexState.building if hexState.building
+
+    else # Or generate new hex grid
+      [start, end] = [0, @rows]
+      for q in [-@rows..@rows] by 1
+        for r in [start..end] by 1
+          @newHex q, r
+        if q < 0 then start-- else end--
+
+      @build @hexes["0:0"], 'Base'
+
+    
     @cursors = game.input.keyboard.createCursorKeys()
     @markPowered()
-    # @game.physics.p2.setPostBroadphaseCallback @collided, @
-  
+    @updateStatsText()
+
   markPowered: () ->
     for coords, h of @hexes
       h.powered = false
@@ -159,6 +174,7 @@ class Crashed.Game
     y = (r * Math.sqrt(3) * size) + (q * Math.sqrt(3)/2 * size)
     hex = new Hex { game: @, group: @hexGroup, click: @clickHex, x, y, q, r}
     @hexes["#{q}:#{r}"] = hex
+    hex
 
   expandMap: () ->
     @rows += 1
@@ -204,6 +220,11 @@ class Crashed.Game
     hex.building = null
     @clickBuildButton type
 
+  build: (hex, type) ->
+    building = new Buildings[type](@, hex)
+    hex.building = building
+    @buildings.push building
+
   clickBuildButton: (type) ->
     if buildingValidator.canBuild(@, type) != true
       alert buildingValidator.canBuild @, type
@@ -212,9 +233,7 @@ class Crashed.Game
       return
 
     @selectedHexes.forEach (hex) =>
-      building = new Buildings[type](@, hex)
-      hex.building = building
-      @buildings.push building
+      @build hex, type
       hex.deselect()
       while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 6
         @expandMap()
@@ -352,17 +371,14 @@ class Crashed.Game
 
     true
 
-
-  toString: () ->
+  export: () ->
     hexes = []
     for qr, hex of @hexes
       hexes.push hex.export()
-      # ...
     
-    JSON.stringify({
-      rows: @rows
-      level: @level
-      money: @money
-      # buildings: buildings.map (b) -> b.toString()
-      hexes: hexes
-    })
+    name: Date.now()
+    rows: @rows
+    level: @level
+    money: @money
+    # buildings: buildings.map (b) -> b.toString()
+    hexes: hexes
