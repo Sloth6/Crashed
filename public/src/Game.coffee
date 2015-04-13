@@ -159,6 +159,7 @@ class Crashed.Game
     @cursors = game.input.keyboard.createCursorKeys()
     @markPowered()
     @updateStatsText()
+    window.gameinstance = @
 
   markPowered: () ->
     for coords, h of @hexes
@@ -230,6 +231,9 @@ class Crashed.Game
     building = new Buildings[type](@, hex)
     hex.building = building
     @buildings.push building
+    if type is 'Collector'
+      pathfinding.run @
+    null
 
   clickBuildButton: (type) ->
     if buildingValidator.canBuild(@, type) != true
@@ -259,6 +263,7 @@ class Crashed.Game
           sum + (if b instanceof Buildings.Collector then 10 else 0)), 0
 
   enemiesPerLevel: (n) ->
+    n = 5
     n ?= @level
     Math.floor 20 * Math.pow(1.4, n)
 
@@ -279,6 +284,8 @@ class Crashed.Game
     @mode = 'attack'
     @buildUi.visible = false
     @fightUi.visible = true
+
+    pathfinding.run @
 
     @enemyCount = @enemiesPerLevel()
     enemyHealthModifier = Math.pow(1.4, @level)

@@ -17,11 +17,7 @@ class window.Enemy
       return unless b
       collisionManager.enemyCollision @game, @sprite.container, b.sprite.container
   
-    #pathfinding
-    @newPath = false
-    @path = []
-    @i = 0
-    @makePath hex
+    @nextHex = @hex.closestNeighbor
 
   kill: () ->
     return unless @alive
@@ -37,14 +33,6 @@ class window.Enemy
     @kill() if @health <= 0
     @alive
 
-  makePath: (hex) ->
-    hex ?= @nearestHex()
-    @options.start = hex
-    @path = astar.search @options
-    @i = 0
-    @nextHex = @path[@i]
-    @newPath = false
-
   nearestHex: () ->
     # if it is on a hex, only checks the neighbors
     if @hex?
@@ -55,7 +43,8 @@ class window.Enemy
 
   update: () ->
     return unless @alive
-    @makePath() if @newPath
+    @nextHex = @nearestHex() if !@nextHex
+    return unless @nextHex
 
     @damage @hex.burnDamage
 
@@ -63,21 +52,10 @@ class window.Enemy
       @accelerateToObject(@sprite, @nextHex.sprite, @speed)
     d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite
     if d < 40
-      @i += 1
-      @nextHex = @path[@i]
-      return @kill() unless @nextHex
+      @nextHex = @nextHex.closestNeighbor
     else if d >= 200
-      @options.start = @nearestHex()
-      @path = astar.search @options
-      @i = 0
-      @nextHex = @path[@i]
+      @nextHex = @nearestHex()
 
-    if @path[@i+1]
-      d2 = @game.physics.arcade.distanceBetween @sprite, @path[@i+1].sprite
-      if d2 < 40 and @path[@i+2]
-        @i += 2
-        @nextHex = @path[@i]
-     
   accelerateToObject: (obj1, obj2, speed) ->
     angle = Math.atan2 obj2.y - obj1.y, obj2.x - obj1.x
     obj1.body.rotation = angle
