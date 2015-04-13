@@ -111,7 +111,7 @@ class Crashed.Game
       @remainingText.fixedToCamera = true
       @fightUi.add @remainingText
 
-      save = @buildUi.create game.width - 200, 10, 'save'
+      save = @buildUi.create 10, game.camera.height - 300, 'save'
       save.inputEnabled = true
       save.input.useHandCursor = true
       save.fixedToCamera = true
