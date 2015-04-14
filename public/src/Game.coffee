@@ -24,7 +24,7 @@ class Crashed.Game
     @physics.p2.setImpactEvents true
     @physics.p2.restitution = 1
 
-    @collectorIncome = 10
+    @collectorIncome = 2
     @buildingProperties =
       Collector:   { consumption:  1, cost: 10, upgrades: [] }
       Pylon:       { consumption:  0, cost: 4, upgrades: []  }
@@ -92,7 +92,13 @@ class Crashed.Game
 
       i = 0
       for type in ['Wall', 'Collector', 'Pylon' , 'BasicTower1']
-        button = @buildUi.create 10, (i * 60) + 150, type
+        y = (i * 60) + 150
+        button = @buildUi.create 10, y, type
+        
+        price = new Phaser.Text game, 60, y, "$"+@buildingProperties[type].cost
+        price.fixedToCamera = true
+        @buildUi.add price
+
         button.height = 50
         button.width = 50
         button.fixedToCamera = true
@@ -133,7 +139,7 @@ class Crashed.Game
     else
       @rows = 9
       @level = 0
-      @money = 200
+      @money = 100
 
     # Laod the hex field
     if @savedGame
@@ -260,10 +266,9 @@ class Crashed.Game
 
   income: () ->
     @buildings.reduce ((sum, b) ->
-          sum + (if b instanceof Buildings.Collector then 10 else 0)), 0
+      sum + (if b instanceof Buildings.Collector then 4 else 0)), 0
 
   enemiesPerLevel: (n) ->
-    n = 5
     n ?= @level
     Math.floor 20 * Math.pow(1.4, n)
 
@@ -274,7 +279,7 @@ class Crashed.Game
     
     @enemies = []
     @level += 1
-    @money += @income()
+    @money += @income() + 2*@level()
     
     @updateStatsText()
     h.deselect() for h in @selectedHexes
@@ -301,39 +306,6 @@ class Crashed.Game
       hex = starts[i%numGroups]
       @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
     
-    true
-
-  enemyHit: (enemySprite, buildingSprite) ->
-    # if buildingSprite.name is 'building'
-    return unless buildingSprite.container
-    building = buildingSprite.container
-    return unless (building instanceof Buildings.Pylon or
-      building instanceof Buildings.Tower or
-      building instanceof Buildings.Base or
-      building instanceof Buildings.Collector)
-    @buildings.remove building
-    building.hex.building = null
-    building.kill()
-    if building instanceof Buildings.Pylon
-      @markPowered()
-
-  bulletHit: (bulletSprite, enemySprite) ->
-    enemySprite.container.damage bulletSprite.container.strength
-    bulletSprite.kill()
-    true
-
-  aoeBulletHit: (bulletSprite, enemySprite) ->
-    bullet = bulletSprite.container
-    enemy = enemySprite.container
-    enemy.damage bullet.strength
-    for e in @enemies
-      distance = @physics.arcade.distanceBetween e.sprite, bulletSprite
-      if distance < bullet.area
-        force = 1/Math.pow(distance, 2)
-        angle = Math.atan2(e.sprite.x - bullet.sprite.x, e.sprite.y - bullet.sprite.y)
-        e.sprite.body.velocity.x += 800 * Math.cos(angle)# * force
-        e.sprite.body.velocity.y += 800 * Math.sin(angle)# * force
-    bulletSprite.kill()
     true
       
   update: () ->
