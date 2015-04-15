@@ -5,8 +5,8 @@ class window.Buildings.BombTower1 extends Buildings.Tower
     @controlledBullet = BombBullet
 
     @name = 'BombTower1'
-    @range = 300
-    @fireRate = 500
+    @range = 150
+    @fireRate = 1000
     @bulletSpeed = 600
     @bulletStrength = 60
     super(@game, @hex)

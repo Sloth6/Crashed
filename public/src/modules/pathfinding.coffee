@@ -31,7 +31,7 @@ window.pathfinding =
             closestNeighbor = _hex
         hex._d = min + 1
         hex.closestNeighbor = closestNeighbor
-        # game.add.text hex.x, hex.y, "#{hex._d}"
+        # game.add.text hex.x, hex.y, ""+hex._d
 
         # Move the frontier one step out. Dont add hexes that have already
         # been examined.

@@ -6,7 +6,7 @@ class window.SmallEnemy extends Enemy
     # State
     @health = 50
     @maxHealth = 50
-    @speed = 30
+    @speed = 60
     @alive = true
     @sprite.name = 'enemy'
 

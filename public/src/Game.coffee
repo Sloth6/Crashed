@@ -33,13 +33,13 @@ class Crashed.Game
       BasicTower1:
         consumption: 1, cost: 10, upgrades: ['BombTower1', 'BasicTower2']
       BombTower1:
-        consumption: 1, cost: 10, upgrades: ['FireTower1', 'BombTower2']
-      FireTower1: { cost: 10, consumption: 10, upgrades: [] }
-      BombTower2: { cost: 10, consumption: 10, upgrades: [] }
+        consumption: 1, cost: 30, upgrades: ['FireTower1', 'BombTower2']
+      FireTower1: { cost: 100, consumption: 10, upgrades: [] }
+      BombTower2: { cost: 100, consumption: 10, upgrades: [] }
       BasicTower2:
-        consumption: 1, cost: 10, upgrades: ['WallTower', 'BasicTower3']
-      WallTower: { cost: 10, consumption: 10, upgrades: [] }
-      BasicTower3: { cost: 10, consumption: 10, upgrades: [] }
+        consumption: 1, cost: 30, upgrades: ['WallTower', 'BasicTower3']
+      WallTower: { cost: 100, consumption: 10, upgrades: [] }
+      BasicTower3: { cost: 100, consumption: 10, upgrades: [] }
 
     # View
     @worldScale = .6
@@ -237,8 +237,6 @@ class Crashed.Game
     building = new Buildings[type](@, hex)
     hex.building = building
     @buildings.push building
-    if type is 'Collector'
-      pathfinding.run @
     null
 
   clickBuildButton: (type) ->
@@ -261,7 +259,6 @@ class Crashed.Game
     @updateStatsText()
     
   updateStatsText: () ->
-    console.log 'income', @income()
     @statsText.setText "Level: #{@level}  Income:#{@income()}  $#{@money} "
 
   income: () ->
@@ -270,7 +267,7 @@ class Crashed.Game
 
   enemiesPerLevel: (n) ->
     n ?= @level
-    Math.floor 20 * Math.pow(1.4, n)
+    Math.floor 10 * Math.pow(1.4, n)
 
   endAttack: () =>
     @mode = 'build'
@@ -279,7 +276,7 @@ class Crashed.Game
     
     @enemies = []
     @level += 1
-    @money += @income() + 2*@level()
+    @money += @income() + 2*@level
     
     @updateStatsText()
     h.deselect() for h in @selectedHexes
@@ -293,11 +290,11 @@ class Crashed.Game
     pathfinding.run @
 
     @enemyCount = @enemiesPerLevel()
-    enemyHealthModifier = Math.pow(1.4, @level)
+    enemyHealthModifier = Math.pow(1.2, @level)
 
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     
-    numGroups = @enemyCount // 20
+    numGroups = @enemyCount // 10
     console.log {numGroups}
     outerRing = hexUtils.ring(@hexes, @rows)
     starts = (outerRing.random() for i in [0...numGroups])
