@@ -4,13 +4,13 @@ window.pathfinding =
     open = []
     # Initialize all hexes based off their building type
     for _, hex of game.hexes
-      hex._closestNeighbor = null
+      hex.closestNeighbor = null
       if hex.building instanceof Buildings.Collector or hex.building instanceof Buildings.Base
         hex._d = 0
         # Add all neighbors to the frontier
         open = open.concat hexUtils.neighbors(game.hexes, hex)
       else if hex.building instanceof Buildings.Wall
-        d = Infinity
+        hex._d = Infinity
       else
         hex._d = null
   
