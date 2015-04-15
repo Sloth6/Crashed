@@ -131,37 +131,16 @@ class Crashed.Game
     # Game state
     @mode = 'build' #( attack | build )
     @enemyCount = 0
-
-    if @savedGame
-      @rows = @savedGame.rows
-      @level = @savedGame.level
-      @money = @savedGame.money
-    else
-      @rows = 9
-      @level = 0
-      @money = 100
-
-    # Laod the hex field
-    if @savedGame
-      for hexState in @savedGame.hexes
-        hex = @newHex hexState.q, hexState.r, hexState.nature
-        @build hex, hexState.building if hexState.building
-
-    else # Or generate new hex grid
-      [start, end] = [0, @rows]
-      for q in [-@rows..@rows] by 1
-        for r in [start..end] by 1
-          nature = null
-          if Math.random() < 0.1
-            nature = 'minerals'
-          else if Math.random() < 0.1
-            nature = 'trees'
-          @newHex q, r, nature
-        if q < 0 then start-- else end--
-
-      @build @hexes["0:0"], 'Base'
-
+    @savedGame = @savedGame or window.defaultStart
     
+    @rows = @savedGame.rows
+    @level = @savedGame.level
+    @money = @savedGame.money
+
+    for hexState in @savedGame.hexes
+      hex = @newHex hexState.q, hexState.r, hexState.nature
+      @build hex, hexState.building if hexState.building
+
     @cursors = game.input.keyboard.createCursorKeys()
     @markPowered()
     @updateStatsText()
