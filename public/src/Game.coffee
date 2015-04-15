@@ -218,6 +218,12 @@ class Crashed.Game
     @buildings.push building
     null
 
+  sell: (hex) ->
+    hex.building.kill()
+    hex.deselect()
+    @selectedHexes = []
+    null
+
   clickBuildButton: (type) ->
     if buildingValidator.canBuild(@, type) != true
       alert buildingValidator.canBuild @, type

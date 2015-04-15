@@ -22,9 +22,13 @@ class window.HexMenu
       button.inputEnabled = true
       button.input.useHandCursor = true
       button.events.onInputDown.add ((_type)=> (()=>
+        if _type is 'sell'
+          game.sell hex
+        else
+          game.clickUpgradeButton hex, _type
         @remove()
-        game.clickUpgradeButton hex, _type
       ))(option)
+
       @buttons.push button
 
   remove: () ->
