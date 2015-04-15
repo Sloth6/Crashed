@@ -21,11 +21,12 @@ window.buildingValidator =
       return "Buildings must be built on powered tiles"
 
     if type is 'Wall' #ensure we don't wall off completly.
+      console.log 'a wall'
       aStarOptions =
         graph: game.hexes
         start: hexUtils.ring(game.hexes, game.rows)[0]
         end: game.hexes["0:0"]
-        impassable: (h) -> h.building is 'wall' or h in game.selectedHexes
+        impassable: (h) -> h.building instanceof Buildings.Wall or h in game.selectedHexes
         heuristic: hexUtils.hexDistance
         neighbors: hexUtils.neighbors
 
