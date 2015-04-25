@@ -21,7 +21,6 @@ window.buildingValidator =
       return "Buildings must be built on powered tiles"
 
     if type is 'Wall' #ensure we don't wall off completly.
-      console.log 'a wall'
       aStarOptions =
         graph: game.hexes
         start: hexUtils.ring(game.hexes, game.rows)[0]
