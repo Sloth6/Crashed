@@ -9,7 +9,7 @@ window.pathfinding =
         hex._d = 0
         # Add all neighbors to the frontier
         open = open.concat hexUtils.neighbors(game.hexes, hex)
-      else if hex.building instanceof Buildings.Wall
+      else if hex.building instanceof Buildings.Wall or hex.building is 'planned_wall'
         hex._d = Infinity
       else
         hex._d = null
@@ -31,10 +31,15 @@ window.pathfinding =
             closestNeighbor = _hex
         hex._d = min + 1
         hex.closestNeighbor = closestNeighbor
-        # game.add.text hex.x, hex.y, ""+hex._d
-
         # Move the frontier one step out. Dont add hexes that have already
         # been examined.
         newOpen = newOpen.concat(neighbors.filter((hex) -> hex? and hex._d is null))
       open = newOpen
-    null
+
+    for _, hex of game.hexes
+      # hex.setText ''+hex._d
+      if hex._d is null
+        return false
+        
+    true
+    # null

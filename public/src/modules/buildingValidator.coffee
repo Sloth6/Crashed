@@ -21,16 +21,14 @@ window.buildingValidator =
       return "Buildings must be built on powered tiles"
 
     if type is 'Wall' #ensure we don't wall off completly.
-      aStarOptions =
-        graph: game.hexes
-        start: hexUtils.ring(game.hexes, game.rows)[0]
-        end: game.hexes["0:0"]
-        impassable: (h) -> h.building instanceof Buildings.Wall or h in game.selectedHexes
-        heuristic: hexUtils.hexDistance
-        neighbors: hexUtils.neighbors
-
-      if (astar.search aStarOptions).length is 0
-        return "Cannot completely wall off base"
+      for hex in game.selectedHexes
+        hex.building = 'planned_wall'
+      can_path_everywhere = pathfinding.run game
+      for hex in game.selectedHexes
+        hex.building = null
+      
+      if !can_path_everywhere
+        return 'Cannot completely wall off part of the base!'
 
     else if type is 'collector'
       if not game.selectedHexes.every((h) -> h.nature is 'minerals')

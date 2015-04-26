@@ -19,6 +19,8 @@ class window.Hex
     @powerSprite = group.create @x, @y, 'powered'
     @powerSprite.visible = false
 
+    @mytext = game.add.text @x, @y, ""
+
     switch @nature
       when 'minerals'
         @natureSprite = group.create @x, @y, 'minerals'
@@ -27,6 +29,9 @@ class window.Hex
         @natureSprite = group.create @x, @y, 'trees'
         @natureSprite.anchor.set 0.5, 0.5
         @natureSprite.scale.set 0.15, 0.2
+  
+  setText: (s) ->
+    @mytext.setText s
 
   getCost: () ->
     if @nature is 'trees' then 3 else 1

@@ -18,7 +18,6 @@ class window.BombBullet extends Bullet
         e.damage(@strength)
     @game.bombs.remove @
   update: () ->
-    console.log 'update', @range
     d = ((@sprite.position.x - @x)**2 + (@sprite.position.y - @y)**2)**.5
     # console.log 'explode', d, @
     if d >= @range
