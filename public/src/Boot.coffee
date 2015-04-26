@@ -34,8 +34,8 @@ class Crashed.Boot
   preload: () ->
     #  Here we load the assets required for our preloader (in this case a
     #  background and a loading bar)
-    @load.image('preloaderBackground', 'images/mainmenu/background.gif')
-    @load.image('preloaderBar', 'images/mainmenu/Scores.gif')
+    @load.image('background', 'images/mainmenu/background.png')
+    @load.image('loadingBar', 'images/loading.png')
 
   create: () ->
     #  By this point the preloader assets have loaded to the cache, we've set
