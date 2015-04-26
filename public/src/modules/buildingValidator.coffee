@@ -30,7 +30,7 @@ window.buildingValidator =
       if !can_path_everywhere
         return 'Cannot completely wall off part of the base!'
 
-    else if type is 'collector'
+    else if type is 'Collector'
       if not game.selectedHexes.every((h) -> h.nature is 'minerals')
         return "Can only build collectors on minerals"
   
