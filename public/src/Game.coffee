@@ -186,50 +186,62 @@ class Crashed.Game
     if @hexMenu?
       @hexMenu.remove()
       @hexMenu = null
-      # return
     if @mode == 'build'
       if hex.selected
         @selectedHexes.remove hex
         hex.deselect()
       else
-        if hex.building?
+        if hex.building
+          @clearSelected()
           @hexMenu = new HexMenu @, hex
+        
         @selectedHexes.push hex
         hex.select()
-    else if @mode == 'attack'
-      if hex.selected
-        @selectedHexes = []
-        hex.deselect()
-      else
-        for hex in @selectedHexes
-          hex.deselect()
-        @selectedHexes = [hex]
-        hex.select()
+    # else if @mode == 'attack'
+    #   if hex.selected
+    #     @selectedHexes = []
+    #     hex.deselect()
+    #   else
+    #     for hex in @selectedHexes
+    #       hex.deselect()
+    #     @selectedHexes = [hex]
+    #     hex.select()
+  
+  clearSelected: () ->
+    for hex in @selectedHexes
+      hex.deselect()
+    @selectedHexes = []
+
 
   clickUpgradeButton: (hex, type) ->
-    console.log 'upgrading to:', type
-    hex.building.kill()
-    hex.building = null
-    @clickBuildButton type
+    @selectedHexes.forEach (h) -> h.deselect()
+    if @buildingProperties[type].cost > @money
+      alert "Cannot affort that, costs #{@buildingProperties[type].cost}"
+      return false
+    @build hex, type
+    @money -= @selectedHexes.length * @buildingProperties[type].cost
+    @selectedHexes = []
+    @updateStatsText()
+
 
   build: (hex, type) ->
     building = new Buildings[type](@, hex)
+    hex.building?.kill
     hex.building = building
     @buildings.push building
     null
 
   sell: (hex) ->
     hex.building.kill()
-    hex.deselect()
-    @selectedHexes = []
-    null
+    @clearSelected()
+    true
 
   clickBuildButton: (type) ->
     if buildingValidator.canBuild(@, type) != true
       alert buildingValidator.canBuild @, type
       @selectedHexes.forEach (h) -> h.deselect()
       @selectedHexes = []
-      return
+      return false
 
     @selectedHexes.forEach (hex) =>
       @build hex, type
