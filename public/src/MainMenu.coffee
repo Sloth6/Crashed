@@ -2,6 +2,7 @@ class Crashed.MainMenu
   constructor: (game) ->
     # @music = null;
     @playButton = null
+    window.history.pushState "MainMenu", "", "/"
 
   create: () ->
 

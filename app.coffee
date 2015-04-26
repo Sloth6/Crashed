@@ -20,9 +20,10 @@ app.get '/', (req, res) ->
 
 # catch 404 and forward to error handler
 app.get '*', (req, res, next) ->
-  err = new Error 'Not Found'
-  err.status = 404
-  next err
+  res.redirect '/'
+  # err = new Error 'Not Found'
+  # err.status = 404
+  # next err
 
 
 # development error handler

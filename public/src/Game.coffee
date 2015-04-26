@@ -128,6 +128,7 @@ class Crashed.Game
     createMenu()
   
   create: () ->
+    window.history.pushState "Game", "", "/game"
     # Game state
     @mode = 'build' #( attack | build )
     @enemyCount = 0

@@ -2,6 +2,7 @@ class Crashed.SavedGames
   constructor: (@game) ->
 
   create: () ->
+    window.history.pushState "SavedGames", "", "/saves"
     # @add.sprite 0, 0, 'titlepage'
     saves = saveManager.loadAll()
     # console.log saves

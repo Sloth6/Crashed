@@ -40,4 +40,10 @@ class Crashed.Boot
   create: () ->
     #  By this point the preloader assets have loaded to the cache, we've set
     #  the game settings So now let's start the real preloader going.
-    @state.start 'Preloader'
+    state = @state
+    window.onpopstate = (e) ->
+      console.log e.state
+      if e.state
+        state.start e.state
+  
+    state.start 'Preloader'

@@ -14,4 +14,4 @@ window.saveManager =
     localStorage.setItem key, JSON.stringify(files)
     # console.log localStorage.getItem key
 
-console.log window.saveManager.loadAll()
+# console.log window.saveManager.loadAll()
