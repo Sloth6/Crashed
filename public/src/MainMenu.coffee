@@ -14,22 +14,28 @@ class Crashed.MainMenu
     # @music.play();
     [ cx, cy ] = [ @game.width/ 2, @game.height / 2 ]
     [ w, h ] = [ 326, 287 ]
-    @add.sprite 0, 0, 'titlepage'
-    
-    @playButton = @add.button(cx - (3*w/4), cy, 'playButton', @startGame, @, 'buttonOver', 'buttonOut', 'buttonOver');
+    # @add.sprite 0, 0, 'titlepage'
+    # @add.tilemap 0,0, 642, 437, 'titlepage'
+    # console.log add.tileSprite
+    # new Phaser.Tilemap(@, 'background', tileWidth, tileHeight, width, height)
+
+    @add.tileSprite 0, 0, 3000,3000, 'background'
+    # new Phaser.TileSprite(game, 0, 0, 642, 437,'background')
+
+    @playButton = @add.button(cx - (3*w/4), cy, 'playButton', @startGame, @, 1, 0, 1)
     @playButton.input.pixelPerfectClick = true
     @playButton.input.useHandCursor = true
     @playButton.anchor.set 0.5, 0.5
 
-    @loadButton = @add.button(cx, cy - h/2, 'loadButton', @savedGames, @, 'buttonOver', 'buttonOut', 'buttonOver');
+    @loadButton = @add.button(cx, cy - h/2, 'loadButton', @savedGames, @, 1, 0, 1)
     @loadButton.input.pixelPerfectClick = true
     @loadButton.input.useHandCursor = true
     @loadButton.anchor.set 0.5, 0.5
 
-    @instrutions = @add.button(cx, cy + h/2, 'instructions', @instructions, @, 'buttonOver', 'buttonOut', 'buttonOver');
-    @instrutions.input.pixelPerfectClick = true
-    @instrutions.input.useHandCursor = true
-    @instrutions.anchor.set 0.5, 0.5
+    instrutions = @add.button(cx, cy + h/2, 'instructionsButton', @instructions, @, 1, 0, 1)
+    instrutions.input.pixelPerfectClick = true
+    instrutions.input.useHandCursor = true
+    instrutions.anchor.set 0.5, 0.5
 
   update: () ->
     # Do some nice funky main menu effect here

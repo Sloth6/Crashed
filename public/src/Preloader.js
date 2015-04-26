@@ -24,12 +24,14 @@ Crashed.Preloader.prototype = {
 
     //  Here we load the rest of the assets our game needs.
     //  As this is just a Project Template I've not provided these assets, swap them for your own.
-    this.load.image('titlepage', 'images/mainmenu/background.gif');
+    this.load.image('background', 'images/mainmenu/background.png');
     // this.load.atlas('playButton', 'images/play_button.png', 'images/play_button.json');
-    this.load.image('playButton', 'images/mainmenu/New.gif');
-    this.load.image('loadButton', 'images/mainmenu/load.gif');
-    this.load.image('instructions', 'images/mainmenu/Instructions.gif');
+    this.load.spritesheet('playButton', 'images/mainmenu/playButton.png', 326, 287, 2);
+    this.load.spritesheet('loadButton', 'images/mainmenu/loadButton.png', 326, 287, 2);
+
+    this.load.spritesheet('instructionsButton', 'images/mainmenu/instructionsButton.png', 326, 287, 2);
     
+
     // this.load.audio('titleMusic', ['audio/One_More_Time.m4a']);
 
     this.stage.backgroundColor = '#007236';
