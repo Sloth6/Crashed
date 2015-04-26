@@ -280,7 +280,6 @@ class Crashed.Game
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     
     numGroups = @enemyCount // 10
-    console.log {numGroups}
     outerRing = hexUtils.ring(@hexes, @rows)
     starts = (outerRing.random() for i in [0...numGroups])
 

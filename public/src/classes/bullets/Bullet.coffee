@@ -1,6 +1,6 @@
 class window.Bullet
 
-  constructor: (@game, x, y, angle, @speed, @strength, @range) ->
+  constructor: (@game, x, y, angle, @speed, @strength) ->
     # View
     @sprite.anchor.set 0.5, 0.5
 
