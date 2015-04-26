@@ -126,7 +126,8 @@ class Crashed.Game
         window.saveManager.save name, @export() if name
 
     createMenu()
-  
+    @time.advancedTiming = true
+
   create: () ->
     window.history.pushState "Game", "", "/game"
     # Game state
@@ -341,8 +342,8 @@ class Crashed.Game
       game.camera.x -= 8
     else if rightKey.isDown
       game.camera.x += 8
-    
-
+    console.log @time.fps
+    game.debug.text game.time.fps, 2, 14, "#00ff00"
     true
 
   export: () ->
