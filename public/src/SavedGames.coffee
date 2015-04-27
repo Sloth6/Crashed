@@ -5,13 +5,25 @@ class Crashed.SavedGames
     window.history.pushState "SavedGames", "", "/saves"
     # @add.sprite 0, 0, 'titlepage'
     saves = saveManager.loadAll()
-    # console.log saves
+
     y = 0
+    monthNames = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
+    ]
+
     if saves.length > 0
       saves.forEach (save) =>
         # save = JSON.parse save
         return unless save.name
-        new window.LabelButton @game, game.world.centerX, y+=100, 'foo', save.name, () =>
+        date = new Date(save.date)
+        day = date.getDate()
+        month = monthNames[date.getMonth()]
+
+        title = "#{save.name} : #{day} #{month}"
+        new window.LabelButton @game, game.world.centerX, y+=100, 'foo', title, () =>
           this.state.start 'Game', true, false, save
         # text = game.add.text game.world.centerX, game.world.centerY, save.name
         # @playButton = @add.button(cx - (3*w/4), cy, 'playButton', @startGame, @, 'buttonOver', 'buttonOut', 'buttonOver');

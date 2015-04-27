@@ -19,7 +19,7 @@ class Crashed.Boot
       #  In this case we're saying "scale the game, no lower than 480x260 and
       # no higher than 1024x768"
       @scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
-      @scale.setMinMax 480, 260, 1024, 768
+      # @scale.setMinMax 480, 260, 1024, 768
       @scale.forceLandscape = true
       @scale.pageAlignHorizontally = true
 
@@ -41,8 +41,8 @@ class Crashed.Boot
     #  By this point the preloader assets have loaded to the cache, we've set
     #  the game settings So now let's start the real preloader going.
     state = @state
+    # game = @game
     window.onpopstate = (e) ->
-      console.log e.state
       if e.state
         state.start e.state
   

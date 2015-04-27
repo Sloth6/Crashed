@@ -1,5 +1,7 @@
 $ ->
+  # console.log $('#gameContainer').css('height')
   window.game = new Phaser.Game window.innerWidth, window.innerHeight, Phaser.AUTO, $('#gameContainer')[0]
+  # console.log $('#gameContainer').css('height')
   #Add the States your game has.
   game.state.add 'Boot', Crashed.Boot
   game.state.add 'Preloader', Crashed.Preloader
