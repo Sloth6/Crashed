@@ -19,7 +19,7 @@ class Crashed.Boot
       #  In this case we're saying "scale the game, no lower than 480x260 and
       # no higher than 1024x768"
       @scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
-      # @scale.setMinMax 480, 260, 1024, 768
+      @scale.setMinMax 480, 260, 1024, 768
       @scale.forceLandscape = true
       @scale.pageAlignHorizontally = true
 
