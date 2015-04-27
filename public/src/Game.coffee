@@ -134,6 +134,8 @@ class Crashed.Game
     @mode = 'build' #( attack | build )
     @enemyCount = 0
     @savedGame = @savedGame or window.defaultStart
+    @tree_proability = 0.1
+    @mineral_proability = 0.1
     
     @rows = @savedGame.rows
     @level = @savedGame.level
@@ -175,10 +177,12 @@ class Crashed.Game
     q = -@rows
     r = @rows
     directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
-    # @newHex q, r
     for i in [0...6] by 1
       for _ in [0...@rows] by 1
-        @newHex q, r
+        nature = null
+        nature = 'trees' if Math.random() < 0.1
+        nature = 'minerals' if Math.random() < 0.1
+        @newHex q, r, nature
         q = q + directions[i][0]
         r = r + directions[i][1]
     true
@@ -342,7 +346,6 @@ class Crashed.Game
       game.camera.x -= 8
     else if rightKey.isDown
       game.camera.x += 8
-    console.log @time.fps
     game.debug.text game.time.fps, 2, 14, "#00ff00"
     true
 
