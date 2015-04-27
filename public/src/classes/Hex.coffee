@@ -28,7 +28,7 @@ class window.Hex
       when 'trees'
         @natureSprite = group.create @x, @y, 'trees'
         @natureSprite.anchor.set 0.5, 0.5
-        @natureSprite.scale.set 0.15, 0.2
+        # @natureSprite.scale.set 0.15, 0.2
   
   setText: (s) ->
     @mytext.setText s

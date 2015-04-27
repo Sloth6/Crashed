@@ -126,6 +126,13 @@ class Crashed.Game
         window.saveManager.save name, @export() if name
 
     createMenu()
+
+    # Control
+    @upKey = game.input.keyboard.addKey Phaser.Keyboard.W
+    @downKey = game.input.keyboard.addKey Phaser.Keyboard.S
+    @leftKey = game.input.keyboard.addKey Phaser.Keyboard.A
+    @rightKey = game.input.keyboard.addKey Phaser.Keyboard.D
+
     @time.advancedTiming = true
 
   create: () ->
@@ -218,7 +225,6 @@ class Crashed.Game
       hex.deselect()
     @selectedHexes = []
 
-
   clickUpgradeButton: (hex, type) ->
     @selectedHexes.forEach (h) -> h.deselect()
     if @buildingProperties[type].cost > @money
@@ -228,7 +234,6 @@ class Crashed.Game
     @money -= @selectedHexes.length * @buildingProperties[type].cost
     @selectedHexes = []
     @updateStatsText()
-
 
   build: (hex, type) ->
     building = new Buildings[type](@, hex)
@@ -307,22 +312,15 @@ class Crashed.Game
     
     true
       
-  update: () ->
-    upKey = game.input.keyboard.addKey(Phaser.Keyboard.W)
-    downKey = game.input.keyboard.addKey(Phaser.Keyboard.S)
-    leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A)
-    rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D)
-    
+  update: () ->    
     @mouse = @input.getLocalPosition @worldGroup, game.input.activePointer
-    # console.log game.mouse
+
     # end wave if no more enemies
     if @enemyCount <= 0 and @mode == 'attack'
       @endAttack()
 
     e.update() for e in @enemies
     b?.update() for b in @bombs
-
-    
 
     for b in @buildings
       b.update() if b.update
@@ -337,14 +335,14 @@ class Crashed.Game
       @worldScale = Math.max @worldScale, 0.05
       @worldGroup.scale.setTo @worldScale, @worldScale
 
-    if upKey.isDown
+    if @upKey.isDown
       game.camera.y -= 8
-    else if downKey.isDown
+    else if @downKey.isDown
       game.camera.y += 8
     
-    if leftKey.isDown
+    if @leftKey.isDown
       game.camera.x -= 8
-    else if rightKey.isDown
+    else if @rightKey.isDown
       game.camera.x += 8
     game.debug.text game.time.fps, 2, 14, "#00ff00"
     true
@@ -357,5 +355,4 @@ class Crashed.Game
     rows: @rows
     level: @level
     money: @money
-    # buildings: buildings.map (b) -> b.toString()
     hexes: hexes
