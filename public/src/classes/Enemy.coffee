@@ -49,7 +49,8 @@ class window.Enemy
     @damage @hex.burnDamage
 
     if @nextHex.sprite
-      @accelerateToObject(@sprite, @nextHex.sprite, @speed)
+      speed = if @nextHex.nature is 'trees' then @speed/2 else @speed
+      @accelerateToObject(@sprite, @nextHex.sprite, speed)
     d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite
     if d < 40
       @nextHex = @nextHex.closestNeighbor

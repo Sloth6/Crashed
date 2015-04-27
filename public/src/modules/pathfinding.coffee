@@ -29,7 +29,7 @@ window.pathfinding =
           if _hex._d < min
             min = _hex._d
             closestNeighbor = _hex
-        console.log 'trees' if hex.nature is 'trees'
+        # console.log 'trees' if hex.nature is 'trees'
         hex._d = min + (if hex.nature is 'trees' then 2 else 1)
         hex.closestNeighbor = closestNeighbor
         # Move the frontier one step out. Dont add hexes that have already
@@ -38,7 +38,7 @@ window.pathfinding =
       open = newOpen
 
     for _, hex of game.hexes
-      hex.setText ''+hex._d
+      # hex.setText ''+hex._d
       if hex._d is null
         return false
         
