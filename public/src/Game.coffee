@@ -43,7 +43,7 @@ class Crashed.Game
 
     # View
     @worldScale = .6
-    width = 1000
+    width = 2000
     game.world.setBounds -width, -width, 2*width, 2*width
     @camera.x -= @camera.width/2
     @camera.y -= @camera.height/2
@@ -314,7 +314,6 @@ class Crashed.Game
       
   update: () ->    
     @mouse = @input.getLocalPosition @worldGroup, game.input.activePointer
-
     # end wave if no more enemies
     if @enemyCount <= 0 and @mode == 'attack'
       @endAttack()
