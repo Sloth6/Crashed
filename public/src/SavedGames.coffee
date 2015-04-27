@@ -3,32 +3,42 @@ class Crashed.SavedGames
 
   create: () ->
     window.history.pushState "SavedGames", "", "/saves"
-    # @add.sprite 0, 0, 'titlepage'
+    
     saves = saveManager.loadAll()
-
+    saveGroup = game.add.group()
     y = 0
+
+    height = (saves.length * 100) + 50
+    $(game.canvas).css 'height', height
+    game.height = height
+    game.renderer.resize game.width, height
+
     monthNames = [
-        "January", "February", "March",
-        "April", "May", "June", "July",
-        "August", "September", "October",
-        "November", "December"
-    ]
+      "January", "February", "March","April", "May", "June", "July",
+      "August", "September", "October", "November", "December"]
 
-    if saves.length > 0
-      saves.forEach (save) =>
-        # save = JSON.parse save
-        return unless save.name
-        date = new Date(save.date)
-        day = date.getDate()
-        month = monthNames[date.getMonth()]
+    if saves.length is 0
+      game.add.text game.world.centerX, game.world.centerY, "No saves"
+      return
 
-        title = "#{save.name} : #{day} #{month}"
-        new window.LabelButton @game, game.world.centerX, y+=100, 'foo', title, () =>
-          this.state.start 'Game', true, false, save
+    saves.forEach (save) =>
+      return unless save.name
+      date = new Date(save.date)
+      day = date.getDate()
+      month = monthNames[date.getMonth()]
+
+      title = "#{save.name} : #{day} #{month}"
+      button = new window.LabelButton @game, game.world.centerX, y+=100, 'foo', title, () =>
+        this.state.start 'Game', true, false, save
+      saveGroup.add button
         # text = game.add.text game.world.centerX, game.world.centerY, save.name
         # @playButton = @add.button(cx - (3*w/4), cy, 'playButton', @startGame, @, 'buttonOver', 'buttonOut', 'buttonOver');
-    else
-      game.add.text game.world.centerX, game.world.centerY, "No saves"
+      
+  shutdown: () ->
+    console.log 'shitdown'
+    game.height = window.innerHeight
+    $(game.canvas).css 'height', window.innerHeight
+    game.renderer.resize game.width, window.innerHeight
 
     
   # update: () ->
