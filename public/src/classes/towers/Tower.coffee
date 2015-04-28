@@ -30,6 +30,7 @@ class window.Buildings.Tower
 
   findTarget: () ->
     minD = Infinity
+    @target = null
     for e in @game.enemies
       continue unless e.alive
       d = @game.physics.arcade.distanceBetween @sprite, e.sprite
@@ -44,16 +45,13 @@ class window.Buildings.Tower
   # Returns false if there are not yet enemies to aim at
   ###
   aim: () ->
-    if @controlled
-      angle = Math.atan2(@game.mouse.y - @sprite.y, @game.mouse.x - @sprite.x)
+    if @target? and @target.alive
+      d = @game.physics.arcade.distanceBetween @sprite, @target.sprite
+      @findTarget() if d > @range
+      angle = Math.atan2(@target.sprite.y - @sprite.y, @target.sprite.x - @sprite.x)
     else
-      if @target? and @target.alive
-        d = @game.physics.arcade.distanceBetween @sprite, @target.sprite
-        @findTarget() if d > @range
-        angle = Math.atan2(@target.sprite.y - @sprite.y, @target.sprite.x - @sprite.x)
-      else
-        @findTarget()
-        return false
+      @findTarget()
+      return false
     @sprite.body.rotation = angle or @sprite.body.rotation
     true
 
