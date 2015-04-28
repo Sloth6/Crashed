@@ -13,6 +13,7 @@ class Crashed.Boot
 
     if @game.device.desktop
       #  If you have any desktop specific settings, they can go in here
+      # @scale.setMinMax 480, 260, 1024, 768
       @scale.pageAlignHorizontally = true
     else
       #  Same goes for mobile settings.

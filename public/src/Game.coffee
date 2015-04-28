@@ -237,7 +237,7 @@ class Crashed.Game
 
   build: (hex, type) ->
     building = new Buildings[type](@, hex)
-    hex.building?.kill
+    hex.building?.kill()
     hex.building = building
     @buildings.push building
     null
