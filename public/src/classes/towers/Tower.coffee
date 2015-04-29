@@ -63,7 +63,7 @@ class window.Buildings.Tower
   fire: () ->
     @nextFire = @game.time.now + @fireRate
     bullet = if @controlled then @controlledBullet else @bullet
-    new bullet @game, @sprite.x, @sprite.y, @sprite.body.rotation, @bulletSpeed, @bulletStrength, @target
+    new bullet @game, @sprite.x, @sprite.y, @sprite.body.rotation, @bulletSpeed, @bulletStrength, @target, @bulletScale
 
   update: () ->
     return unless @alive

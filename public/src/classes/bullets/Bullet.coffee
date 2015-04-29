@@ -1,8 +1,10 @@
 class window.Bullet
 
-  constructor: (@game, x, y, angle, @speed, @strength) ->
+  constructor: (@game, x, y, angle, @speed, @strength, @target, @size) ->
     # View
     @sprite.anchor.set 0.5, 0.5
+    @size ?= 1.0
+    @sprite.scale.set @size, @size
 
     # State
     @health = 1
@@ -11,7 +13,7 @@ class window.Bullet
     
     # Physics
     @game.physics.p2.enable @sprite, false
-    @sprite.body.setCircle 2
+    @sprite.body.setCircle 2 * @size
 
     @sprite.body.setCollisionGroup @game.bulletCG
     @sprite.body.collides [ @game.enemyCG ]

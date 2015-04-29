@@ -275,7 +275,8 @@ class Crashed.Game
 
   enemiesPerLevel: (n) ->
     n ?= @level
-    Math.floor 10 * Math.pow(1.15, n)
+    # Math.floor 10 * Math.pow(1.15, n)
+    Math.floor (10 + 1.3* Math.pow(n, 1.3))
 
   endAttack: () =>
     @mode = 'build'
@@ -298,11 +299,11 @@ class Crashed.Game
     pathfinding.run @
 
     @enemyCount = @enemiesPerLevel()
-    enemyHealthModifier = Math.pow(1.4, @level)
+    enemyHealthModifier = Math.pow(@level, 1.3)
 
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     
-    numGroups = @enemyCount // 10
+    numGroups = @enemyCount // 5
     outerRing = hexUtils.ring(@hexes, @rows)
     starts = (outerRing.random() for i in [0...numGroups])
 
