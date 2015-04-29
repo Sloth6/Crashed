@@ -37,8 +37,8 @@ class Crashed.Game
       FireTower1: { cost: 100, consumption: 10, upgrades: [] }
       BombTower2: { cost: 100, consumption: 10, upgrades: [] }
       BasicTower2:
-        consumption: 1, cost: 30, upgrades: ['WallTower', 'BasicTower3']
-      WallTower: { cost: 100, consumption: 10, upgrades: [] }
+        consumption: 1, cost: 30, upgrades: ['BasicTower3'] #'WallTower', 
+      # WallTower: { cost: 100, consumption: 10, upgrades: [] }
       BasicTower3: { cost: 100, consumption: 10, upgrades: [] }
 
     # View

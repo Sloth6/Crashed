@@ -7,7 +7,7 @@ class window.Buildings.BombTower2 extends Buildings.Tower
 
     @name = 'BombTower2'
     @range = 300
-    @dps = 5000 / 5 #DPS is the same as basicTower 2 when we hit 5 enemies.
+    @dps = 4000 / 5 #DPS is the same as basicTower 2 when we hit 5 enemies.
     @fireRate = 1500
 
     @bulletStrength = @dps / (1000/@fireRate)

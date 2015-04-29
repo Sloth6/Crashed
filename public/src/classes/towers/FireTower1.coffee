@@ -6,7 +6,7 @@ class window.Buildings.FireTower1 extends Buildings.Tower
 
     @name = 'FireTower1'
     @range = 300
-    @fireRate = 3000
+    @fireRate = 2500
     @bulletSpeed = 500
     @bulletStrength = 5
     super(@game, @hex)
