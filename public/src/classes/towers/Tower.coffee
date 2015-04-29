@@ -63,11 +63,11 @@ class window.Buildings.Tower
   fire: () ->
     @nextFire = @game.time.now + @fireRate
     bullet = if @controlled then @controlledBullet else @bullet
-    new bullet @game, @sprite.x, @sprite.y, @sprite.body.rotation, @bulletSpeed, @bulletStrength, @range
+    new bullet @game, @sprite.x, @sprite.y, @sprite.body.rotation, @bulletSpeed, @bulletStrength, @target
 
   update: () ->
     return unless @alive
     @controlled = @hex.selected and @game.mode == 'attack'
     if @game.mode == 'attack'
-      if @aim() and @game.time.now > @nextFire
+      if @game.time.now > @nextFire and @aim()
         @fire()

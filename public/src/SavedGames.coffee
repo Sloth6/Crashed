@@ -35,7 +35,6 @@ class Crashed.SavedGames
         # @playButton = @add.button(cx - (3*w/4), cy, 'playButton', @startGame, @, 'buttonOver', 'buttonOut', 'buttonOver');
       
   shutdown: () ->
-    console.log 'shitdown'
     game.height = window.innerHeight
     $(game.canvas).css 'height', window.innerHeight
     game.renderer.resize game.width, window.innerHeight
