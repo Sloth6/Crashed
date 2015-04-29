@@ -9,6 +9,13 @@ class window.BombBullet extends Bullet
     @game.bombs.push @
     super(@game, @x, @y, angle, @speed, @strength)
   explode: () ->
+
+    explosion = @game.bulletGroup.create 0, 0, 'explosion'
+    explosion.anchor.set 0.5, 0.5
+    explosion.position = @sprite.position
+    explosion.animations.add 'explode'
+    explosion.animations.play 'explode', 50, false, true
+
     for e in @game.enemies
       distance = @game.physics.arcade.distanceBetween e.sprite, @sprite
       if distance < @area

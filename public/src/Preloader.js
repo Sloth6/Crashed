@@ -65,8 +65,10 @@ Crashed.Preloader.prototype = {
 
     this.load.image('enemy', 'images/units/enemy.gif');
     this.load.image('bigEnemy', 'images/units/bigEnemy.gif');
+
     this.load.image('bullet', 'images/ammo/bullet.gif');
     this.load.image('bomb', 'images/ammo/bomb.gif');
+    this.load.spritesheet('explosion', 'images/ammo/explosion.png', 64, 64, 25);
 
     this.load.image('start', 'images/ui/start.png');
     this.load.image('save', 'images/ui/save.png');

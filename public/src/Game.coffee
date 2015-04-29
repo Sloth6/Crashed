@@ -275,7 +275,7 @@ class Crashed.Game
 
   enemiesPerLevel: (n) ->
     n ?= @level
-    Math.floor 10 * Math.pow(1.2, n)
+    Math.floor 10 * Math.pow(1.15, n)
 
   endAttack: () =>
     @mode = 'build'

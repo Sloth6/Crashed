@@ -45,15 +45,20 @@ class window.Buildings.Tower
   # Returns false if there are not yet enemies to aim at
   ###
   aim: () ->
-    if @target? and @target.alive
-      d = @game.physics.arcade.distanceBetween @sprite, @target.sprite
-      @findTarget() if d > @range
+    haveTarget = @target?.alive
+    targetInRange = false
+    if haveTarget
+      dist = @game.physics.arcade.distanceBetween @sprite, @target.sprite
+      targetInRange = (dist <= @range)
+
+    if targetInRange
       angle = Math.atan2(@target.sprite.y - @sprite.y, @target.sprite.x - @sprite.x)
+      @sprite.body.rotation = angle or @sprite.body.rotation
+      return true
     else
       @findTarget()
-      return false
-    @sprite.body.rotation = angle or @sprite.body.rotation
-    true
+      return false  
+    
 
   fire: () ->
     @nextFire = @game.time.now + @fireRate
