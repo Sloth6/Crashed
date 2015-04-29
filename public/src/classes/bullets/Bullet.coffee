@@ -13,7 +13,7 @@ class window.Bullet
     
     # Physics
     @game.physics.p2.enable @sprite, false
-    @sprite.body.setCircle 2 * @size
+    @sprite.body.setCircle 8 * @size
 
     @sprite.body.setCollisionGroup @game.bulletCG
     @sprite.body.collides [ @game.enemyCG ]

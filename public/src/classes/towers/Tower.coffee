@@ -6,16 +6,10 @@ class window.Buildings.Tower
     # State
     @health = 100
     @alive = true
-    @range = 300
     @target = null #Enemy Object
     @sprite.container = @
-    @fireRate = 500
     @nextFire = 0
-    @bullet or= null
-    @bulletSpeed or= null
-    @bulletStrength or= null
     @controlledBullet or= null
-    @controlled = false
 
     # Physics
     @game.physics.p2.enable @sprite, false

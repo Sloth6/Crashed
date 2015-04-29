@@ -5,8 +5,12 @@ class window.Buildings.BombTower1 extends Buildings.Tower
     @controlledBullet = BombBullet
 
     @name = 'BombTower1'
-    @range = 150
-    @fireRate = 2500
-    @bulletSpeed = 400
-    @bulletStrength = 60
+    @range = 200
+    @dps = 1000 / 5 #DPS is the same as basicTower 2 when we hit 5 enemies.
+    @fireRate = 1500
+
+
+    @bulletStrength = @dps / (1000/@fireRate)
+    @bulletSpeed = 10 * @range
+
     super(@game, @hex)

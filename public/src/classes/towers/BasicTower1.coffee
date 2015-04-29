@@ -7,7 +7,11 @@ class window.Buildings.BasicTower1 extends Buildings.Tower
 
     @name = 'BasicTower1'
     @range = 200
+    @dps = 300
     @fireRate = 500
-    @bulletSpeed = 2000
-    @bulletStrength = 200
+    @bulletScale = .5
+
+    @bulletStrength = @dps / (1000/@fireRate)
+    @bulletSpeed = 10 * @range
+    
     super(@game, @hex)

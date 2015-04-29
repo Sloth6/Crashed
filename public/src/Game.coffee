@@ -299,7 +299,7 @@ class Crashed.Game
     pathfinding.run @
 
     @enemyCount = @enemiesPerLevel()
-    enemyHealthModifier = Math.pow(@level, 1.3)
+    enemyHealthModifier = Math.pow(@level, 1.5)
 
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     
