@@ -7,7 +7,7 @@ class window.Buildings.BasicTower2 extends Buildings.Tower
 
     @name = 'BasicTower2'
     @range = 300
-    @dps = 1500
+    @dps = 600
     @fireRate = 400
     @bulletScale = 0.75
     

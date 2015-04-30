@@ -298,7 +298,8 @@ class Crashed.Game
     pathfinding.run @
 
     @enemyCount = @enemiesPerLevel()
-    enemyHealthModifier = Math.pow(@level, 1.6) / 20
+    enemyHealthModifier = Math.pow(@level, 2) / 20
+    console.log {enemyHealthModifier, enemyCount: @enemyCount}
 
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     
@@ -311,7 +312,6 @@ class Crashed.Game
     for i in [0...@enemyCount] by 1
       # hex = starts[i%numGroups]
       hex = outerRing[(i*step)%outerRing.length]
-      console.log i*step, outerRing.length
       @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
     
     true
