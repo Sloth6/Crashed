@@ -21,7 +21,7 @@ class window.Buildings.Wall
 
   kill: () ->
     @alive = false
-    @sprite.kill()
+    @sprite.destroy()
     @game.buildings.remove @
     @hex.building = null
     true

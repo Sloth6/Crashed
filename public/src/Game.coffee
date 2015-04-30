@@ -64,18 +64,17 @@ class Crashed.Game
     @enemyCG = game.physics.p2.createCollisionGroup()
     @worldGroup.add @enemyGroup
 
-    # Bullets
-    @bulletGroup = game.add.group()
-    @bulletCG = game.physics.p2.createCollisionGroup()
-    @worldGroup.add @bulletGroup
-    
-    @bombs = []
-
     # Buildings
     @buildings = []
     @buildingGroup = game.add.group()
     @buildingCG = game.physics.p2.createCollisionGroup()
     @worldGroup.add @buildingGroup
+
+    # Bullets
+    @bulletGroup = game.add.group()
+    @bulletCG = game.physics.p2.createCollisionGroup()
+    @worldGroup.add @bulletGroup
+    @bombs = []
 
     # UI
     @buildUi = game.add.group() # ui specific to build phase
@@ -276,7 +275,7 @@ class Crashed.Game
   enemiesPerLevel: (n) ->
     n ?= @level
     # Math.floor 10 * Math.pow(1.15, n)
-    Math.floor (10 + 1.3* Math.pow(n, 1.3))
+    Math.floor (10 + Math.pow(n, 1.6))
 
   endAttack: () =>
     @mode = 'build'
@@ -299,16 +298,20 @@ class Crashed.Game
     pathfinding.run @
 
     @enemyCount = @enemiesPerLevel()
-    enemyHealthModifier = Math.pow(@level, 1.5)
+    enemyHealthModifier = Math.pow(@level, 1.6) / 20
 
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     
-    numGroups = @enemyCount // 5
+    groupSize = @level
+    numGroups = @enemyCount // groupSize
     outerRing = hexUtils.ring(@hexes, @rows)
-    starts = (outerRing.random() for i in [0...numGroups])
+    step = (outerRing.length // numGroups) - 1
+    # starts = (outerRing.random() for i in [0...numGroups])
 
     for i in [0...@enemyCount] by 1
-      hex = starts[i%numGroups]
+      # hex = starts[i%numGroups]
+      hex = outerRing[(i*step)%outerRing.length]
+      console.log i*step, outerRing.length
       @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
     
     true
@@ -351,7 +354,6 @@ class Crashed.Game
     hexes = []
     for qr, hex of @hexes
       hexes.push hex.export()
-    
     rows: @rows
     level: @level
     money: @money

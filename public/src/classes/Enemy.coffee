@@ -1,10 +1,10 @@
 class window.Enemy
   constructor: (@hex, healthModifier) ->
     #state
-    @health *= healthModifier
-    @maxHealth *= healthModifier
+    @health = 100 * (1+healthModifier)
+    @maxHealth = 100 * (1+healthModifier)
     @maxSpeed = 50
-
+    
     #view
     @sprite.anchor.set 0.5, 0.5
     @sprite.container = @

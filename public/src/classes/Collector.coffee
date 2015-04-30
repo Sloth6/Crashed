@@ -20,4 +20,7 @@ class window.Buildings.Collector
   kill: () ->
     @alive = false
     @sprite.kill()
+    @game.buildings.remove @
+    @hex.building = null
     pathfinding.run @game
+    true

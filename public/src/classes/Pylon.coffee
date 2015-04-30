@@ -18,4 +18,7 @@ class window.Buildings.Pylon
 
   kill: () ->
     @alive = false
-    @sprite.kill()
+    @sprite.destroy()
+    @game.buildings.remove @
+    @hex.building = null
+    true
