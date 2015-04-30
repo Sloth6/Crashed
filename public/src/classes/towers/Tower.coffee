@@ -3,7 +3,7 @@ class window.Buildings.Tower
     # View
     @sprite.anchor.set 0.5, 0.5
     graphics = game.add.graphics 0, 0
-    graphics.lineStyle 1, 0xFF0000, .6
+    graphics.lineStyle 1, 0xFF0000, .2
     graphics.drawCircle 0,0, @range*2 / @sprite.scale.x
     @sprite.addChild graphics
 

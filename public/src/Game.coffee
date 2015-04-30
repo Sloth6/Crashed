@@ -256,7 +256,7 @@ class Crashed.Game
     @selectedHexes.forEach (hex) =>
       @build hex, type
       hex.deselect()
-      while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 6
+      while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
         @expandMap()
 
     if type == 'Pylon'
