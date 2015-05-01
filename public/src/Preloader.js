@@ -58,7 +58,7 @@ Crashed.Preloader.prototype = {
     this.load.image('Wall', 'images/buildings/wall.gif');
     this.load.image('Collector', 'images/buildings/collector.png');
 
-    this.load.image('powered', 'images/PowerSymbol.jpg');
+    this.load.image('powered', 'images/powered.png');
     this.load.image('hexMenu', 'images/ui/hexMenu.gif');
     this.load.image('menuPartition', 'images/ui/menuPartition.gif');
     this.load.image('sell', 'images/ui/sell.gif');

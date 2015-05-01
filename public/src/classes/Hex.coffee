@@ -18,6 +18,8 @@ class window.Hex
 
     @powerSprite = group.create @x, @y, 'powered'
     @powerSprite.visible = false
+    @powerSprite.alpha = 0.4
+    @powerSprite.anchor.set 0.5, 0.5
 
     @mytext = game.add.text @x, @y, ""
 
