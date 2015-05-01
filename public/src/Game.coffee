@@ -132,7 +132,7 @@ class Crashed.Game
     @leftKey = game.input.keyboard.addKey Phaser.Keyboard.A
     @rightKey = game.input.keyboard.addKey Phaser.Keyboard.D
 
-    # @time.advancedTiming = true
+    @time.advancedTiming = true
     @rangeDisplay = new TowerRangeDisplay @
 
   create: () ->
