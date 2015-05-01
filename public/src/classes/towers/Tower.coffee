@@ -2,10 +2,10 @@ class window.Buildings.Tower
   constructor: (@game, @hex) ->
     # View
     @sprite.anchor.set 0.5, 0.5
-    graphics = game.add.graphics 0, 0
-    graphics.lineStyle 1, 0xFF0000, .2
-    graphics.drawCircle 0,0, @range*2 / @sprite.scale.x
-    @sprite.addChild graphics
+    # graphics = game.add.graphics 0, 0
+    # graphics.lineStyle 1, 0xFF0000, .2
+    # graphics.drawCircle 0,0, @range*2 / @sprite.scale.x
+    # @sprite.addChild graphics
 
     # State
     @health = 100
@@ -24,14 +24,16 @@ class window.Buildings.Tower
 
   kill: () ->
     @alive = false
-    @sprite.kill()
+    @sprite.destroy()
+    @game.buildings.remove @
+    @hex.building = null
+    true
 
   findTarget: () ->
     minD = Infinity
     @target = null
     for e in @game.enemies
       continue unless e.alive
-      # console.log @game.physics.P2.distanceBetween @sprite, e.sprite
       d = @game.physics.arcade.distanceBetween @sprite, e.sprite
       if d < minD and d <= @range
         minD = d

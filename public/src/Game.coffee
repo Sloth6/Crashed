@@ -132,7 +132,8 @@ class Crashed.Game
     @leftKey = game.input.keyboard.addKey Phaser.Keyboard.A
     @rightKey = game.input.keyboard.addKey Phaser.Keyboard.D
 
-    @time.advancedTiming = true
+    # @time.advancedTiming = true
+    @rangeDisplay = new TowerRangeDisplay @
 
   create: () ->
     window.history.pushState "Game", "", "/game"
@@ -232,6 +233,7 @@ class Crashed.Game
     @build hex, type
     @money -= @selectedHexes.length * @buildingProperties[type].cost
     @selectedHexes = []
+    @rangeDisplay.update()
     @updateStatsText()
 
   build: (hex, type) ->
@@ -259,8 +261,11 @@ class Crashed.Game
       while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
         @expandMap()
 
-    if type == 'Pylon'
+    if type is 'Pylon'
       @markPowered()
+    if type is 'BasicTower1'
+      @rangeDisplay.update()
+
     @money -= @selectedHexes.length * @buildingProperties[type].cost
     @selectedHexes = []
     @updateStatsText()
