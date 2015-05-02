@@ -144,14 +144,15 @@ class Crashed.Game
     @tree_proability = 0.1
     @mineral_proability = 0.1
     
-    @rows = @savedGame.rows
+    @rows = 5#@savedGame.rows
     @level = @savedGame.level
     @money = @savedGame.money
 
     for hexState in @savedGame.hexes
-      hex = @newHex hexState.q, hexState.r, hexState.nature
-      @build hex, hexState.building if hexState.building
-
+      if hexUtils.hexDistance(hexState, {q:0, r:0 }) < 6
+        hex = @newHex hexState.q, hexState.r, hexState.nature
+        @build hex, hexState.building if hexState.building
+    @expandMap() for i in [0..4]
     @cursors = game.input.keyboard.createCursorKeys()
     @markPowered()
     @updateStatsText()
@@ -187,7 +188,7 @@ class Crashed.Game
     for i in [0...6] by 1
       for _ in [0...@rows] by 1
         nature = null
-        nature = 'trees' if Math.random() < 0.1
+        nature = 'trees' if Math.random() < 1- Math.E**(-@rows/25) #0.1
         nature = 'minerals' if Math.random() < 0.1
         @newHex q, r, nature
         q = q + directions[i][0]
@@ -289,7 +290,7 @@ class Crashed.Game
     
     @enemies = []
     @level += 1
-    @money += @income() + 2*@level
+    @money += @income()# + 2*@level
     
     @updateStatsText()
     h.deselect() for h in @selectedHexes
@@ -304,19 +305,18 @@ class Crashed.Game
 
     @enemyCount = @enemiesPerLevel()
     enemyHealthModifier = Math.pow(@level, 2) / 20
-    console.log {enemyHealthModifier, enemyCount: @enemyCount}
+    # console.log {enemyHealthModifier, enemyCount: @enemyCount}
 
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     
-    groupSize = @level
+    groupSize = @level * 3
     numGroups = @enemyCount // groupSize
     outerRing = hexUtils.ring(@hexes, @rows)
     step = (outerRing.length // numGroups) - 1
-    # starts = (outerRing.random() for i in [0...numGroups])
+    starts = ((i*step)%outerRing.length for i in [0...numGroups])
 
     for i in [0...@enemyCount] by 1
-      # hex = starts[i%numGroups]
-      hex = outerRing[(i*step)%outerRing.length]
+      hex = outerRing.random()# outerRing[starts[i%numGroups]]
       @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
     
     true
