@@ -302,9 +302,10 @@ class Crashed.Game
     @fightUi.visible = true
 
     pathfinding.run @
+    @clearSelected()  
 
     @enemyCount = @enemiesPerLevel()
-    enemyHealthModifier = Math.pow(@level, 2) / 20
+    enemyHealthModifier = Math.pow(@level, 2) / 37
     # console.log {enemyHealthModifier, enemyCount: @enemyCount}
 
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
