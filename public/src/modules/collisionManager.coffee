@@ -8,10 +8,12 @@ window.collisionManager =
       # enemy2.damage damage/20
     
     enemyWithBuilding = (enemy, building) ->
-      return unless building
+      enemy.attacking = true
+      # console.log 'enemy with building'
+      # return unless building
       # game.buildings.remove building
       # building.hex.building = null
-      building.damage enemy.strength
+      # building.damage enemy.strength
       # if building instanceof Buildings.Pylon
       #   game.markPowered()
     

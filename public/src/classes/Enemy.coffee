@@ -5,7 +5,7 @@ class window.Enemy
     @health = 100 * (1+healthModifier)
     @maxHealth = 100 * (1+healthModifier)
     @maxSpeed = 50
-    @state = 'moving'
+    @attacking = false
     
     #view
     @sprite.anchor.set 0.5, 0.5
@@ -46,17 +46,18 @@ class window.Enemy
   update: () ->
     return unless @alive
     if !@nextHex
-      # obj1.body.velocity = 0
-      # obj1.body.velocity = 0
       @nextHex = @hex.closestNeighbor
       return
-      # console.log 'oops'
-    
-    # console.log 'here'
+
     @damage @hex.burnDamage
+    if @attacking
+      if not @nextHex.building
+        @attacking = false
+      else
+        @nextHex.building.damage @strength
+    # else
     speed = if @nextHex.nature is 'trees' then @speed/2 else @speed
     @accelerateToObject(@sprite, @nextHex.sprite, speed)
-   
     # b = @nextHex.building 
     # if b
     #   # building_alive = b.damage @strength
@@ -64,7 +65,6 @@ class window.Enemy
     #     window.pathfinding.run @game
         # game.enemies.forEach (e) ->
         #   e.newPath = true if e instanceof SmallEnemy
-
     d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite
     if d < 30
       @hex = @nextHex

@@ -22,7 +22,8 @@ class Crashed.Game
     # Physics
     @game.physics.startSystem Phaser.Physics.P2JS
     @physics.p2.setImpactEvents true
-    @physics.p2.restitution = 1
+    # @physics.p2.restitution = .99
+    # @physics.p2.defaultRestitution = 0.99
 
     @collectorIncome = 2
     @buildingProperties =
