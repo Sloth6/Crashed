@@ -16,11 +16,11 @@ window.collisionManager =
         game.markPowered()
     
     enemyWithWall = (enemy, wall) ->
-      return unless enemy instanceof BigEnemy
-      wall_alive = wall.damage enemy.strength
-      if not wall_alive
-        game.enemies.forEach (e) ->
-          e.newPath = true if e instanceof SmallEnemy
+      # return unless enemy instanceof BigEnemy
+      # wall_alive = wall.damage enemy.strength
+      # if not wall_alive
+      #   game.enemies.forEach (e) ->
+      #     e.newPath = true if e instanceof SmallEnemy
       true
 
     enemyWithBullet = (enemy, bullet) ->

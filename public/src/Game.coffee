@@ -76,6 +76,10 @@ class Crashed.Game
     @worldGroup.add @bulletGroup
     @bombs = []
 
+    #in game ui
+    @worldUi = game.add.group()
+    @worldGroup.add @worldUi
+
     # UI
     @buildUi = game.add.group() # ui specific to build phase
     @fightUi = game.add.group() # ui specific to fight phase
@@ -156,6 +160,7 @@ class Crashed.Game
     @cursors = game.input.keyboard.createCursorKeys()
     @markPowered()
     @updateStatsText()
+    pathfinding.run @
     window.gameinstance = @
 
   markPowered: () ->

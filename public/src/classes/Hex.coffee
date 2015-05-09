@@ -21,7 +21,11 @@ class window.Hex
     @powerSprite.alpha = 0.4
     @powerSprite.anchor.set 0.5, 0.5
 
-    @mytext = game.add.text @x, @y, ""
+    @mytext = new Phaser.Text(game, @x, @y, "")
+    game.worldUi.add @mytext
+    # @mytext = game.add.text @x, @y, ""
+    # @sprite.addChild @mytext
+    # @myText.bringToFront()
 
     switch @nature
       when 'minerals'

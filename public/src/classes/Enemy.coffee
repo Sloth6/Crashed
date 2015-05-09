@@ -1,9 +1,11 @@
 class window.Enemy
   constructor: (@hex, healthModifier) ->
     #state
+    @alive = true
     @health = 100 * (1+healthModifier)
     @maxHealth = 100 * (1+healthModifier)
     @maxSpeed = 50
+    @state = 'moving'
     
     #view
     @sprite.anchor.set 0.5, 0.5
@@ -42,20 +44,23 @@ class window.Enemy
     return nearest
 
   update: () ->
-    return unless @alive
-    @nextHex = @nearestHex() if !@nextHex
-    return unless @nextHex
+    return unless @alive and @nextHex
 
     @damage @hex.burnDamage
+    speed = if @nextHex.nature is 'trees' then @speed/2 else @speed
+    @accelerateToObject(@sprite, @nextHex.sprite, speed)
+   
+    if @nextHex.building instanceof Buildings.Wall
 
-    if @nextHex.sprite
-      speed = if @nextHex.nature is 'trees' then @speed/2 else @speed
-      @accelerateToObject(@sprite, @nextHex.sprite, speed)
+      wall_alive = @nextHex.building.damage @strength
+      if not wall_alive
+        window.pathfinding.run @game
+        # game.enemies.forEach (e) ->
+        #   e.newPath = true if e instanceof SmallEnemy
+
     d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite
-    if d < 40
+    if d < 30
       @nextHex = @nextHex.closestNeighbor
-    else if d >= 200
-      @nextHex = @nearestHex()
 
   accelerateToObject: (obj1, obj2, speed) ->
     angle = Math.atan2 obj2.y - obj1.y, obj2.x - obj1.x

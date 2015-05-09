@@ -7,7 +7,7 @@ class window.SmallEnemy extends Enemy
     @health = 50
     @maxHealth = 50
     @speed = 60
-    @alive = true
+    @strength = 0.1
     @sprite.name = 'enemy'
 
     # physics
@@ -15,11 +15,11 @@ class window.SmallEnemy extends Enemy
     @sprite.body.setCircle 7
 
     # Pathing
-    @options =
-      graph: @game.hexes
-      end: @game.hexes["0:0"]
-      impassable: (h) -> h.building instanceof Buildings.Wall
-      heuristic: hexUtils.hexDistance
-      neighbors: hexUtils.neighbors
+    # @options =
+    #   graph: @game.hexes
+    #   end: @game.hexes["0:0"]
+    #   impassable: (h) -> h.building instanceof Buildings.Wall
+    #   heuristic: hexUtils.hexDistance
+    #   neighbors: hexUtils.neighbors
 
     super(hex, healthModifier)
