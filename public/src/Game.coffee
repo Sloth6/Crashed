@@ -148,14 +148,14 @@ class Crashed.Game
     @tree_proability = 0.1
     @mineral_proability = 0.1
     
-    @rows = 5#@savedGame.rows
+    @rows = @savedGame.rows
     @level = @savedGame.level
     @money = @savedGame.money
 
     for hexState in @savedGame.hexes
-      if hexUtils.hexDistance(hexState, {q:0, r:0 }) < 6
-        hex = @newHex hexState.q, hexState.r, hexState.nature
-        @build hex, hexState.building if hexState.building
+      # if hexUtils.hexDistance(hexState, {q:0, r:0 }) < 6
+      hex = @newHex hexState.q, hexState.r, hexState.nature
+      @build hex, hexState.building if hexState.building
     @expandMap() for i in [0..4]
     @cursors = game.input.keyboard.createCursorKeys()
     @markPowered()
@@ -193,7 +193,7 @@ class Crashed.Game
     for i in [0...6] by 1
       for _ in [0...@rows] by 1
         nature = null
-        nature = 'trees' if Math.random() < 1- Math.E**(-@rows/25) #0.1
+        nature = 'trees' if Math.random() <  0.1# 1- Math.E**(-@rows/25)
         nature = 'minerals' if Math.random() < 0.1
         @newHex q, r, nature
         q = q + directions[i][0]
