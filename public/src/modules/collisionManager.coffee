@@ -9,11 +9,11 @@ window.collisionManager =
     
     enemyWithBuilding = (enemy, building) ->
       return unless building
-      game.buildings.remove building
-      building.hex.building = null
-      building.kill()
-      if building instanceof Buildings.Pylon
-        game.markPowered()
+      # game.buildings.remove building
+      # building.hex.building = null
+      building.damage enemy.strength
+      # if building instanceof Buildings.Pylon
+      #   game.markPowered()
     
     enemyWithWall = (enemy, wall) ->
       # return unless enemy instanceof BigEnemy
@@ -30,13 +30,15 @@ window.collisionManager =
 
     if collider instanceof Enemy
       enemyWithEnemy(enemy, collider)
-    else if (collider instanceof Buildings.Pylon or
-        collider instanceof Buildings.Tower or
-        collider instanceof Buildings.Base or
-        collider instanceof Buildings.Collector)
+    else if collider instanceof Building
       enemyWithBuilding(enemy, collider)
-    else if collider instanceof Buildings.Wall
-      enemyWithWall enemy, collider
+    # else if (collider instanceof Buildings.Pylon or
+    #     collider instanceof Buildings.Tower or
+    #     collider instanceof Buildings.Base or
+    #     collider instanceof Buildings.Collector)
+    #   enemyWithBuilding(enemy, collider)
+    # else if collider instanceof Buildings.Wall
+    #   enemyWithWall enemy, collider
     else if collider instanceof Bullet
       enemyWithBullet(enemy, collider)
     else if collider instanceof Bomb

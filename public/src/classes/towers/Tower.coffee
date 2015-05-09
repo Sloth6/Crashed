@@ -2,13 +2,10 @@ class window.Buildings.Tower
   constructor: (@game, @hex) ->
     # View
     @sprite.anchor.set 0.5, 0.5
-    # graphics = game.add.graphics 0, 0
-    # graphics.lineStyle 1, 0xFF0000, .2
-    # graphics.drawCircle 0,0, @range*2 / @sprite.scale.x
-    # @sprite.addChild graphics
 
     # State
-    @health = 100
+    @health = 20
+    @maxHealth = 20
     @alive = true
     @target = null #Enemy Object
     @sprite.container = @
@@ -21,6 +18,12 @@ class window.Buildings.Tower
     @sprite.body.static = true
     @sprite.body.setCollisionGroup @game.buildingCG
     @sprite.body.collides [ @game.enemyCG ]
+
+  damage: (n) ->
+    @health -= n
+    @sprite.alpha = @health / @maxHealth
+    @kill() if @health <= 0
+    @alive
 
   kill: () ->
     @alive = false
@@ -59,7 +62,6 @@ class window.Buildings.Tower
     else
       @findTarget()
       return false  
-    
 
   fire: () ->
     @nextFire = @game.time.now + @fireRate

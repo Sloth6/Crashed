@@ -14,12 +14,4 @@ class window.SmallEnemy extends Enemy
     @game.physics.p2.enable @sprite, false
     @sprite.body.setCircle 7
 
-    # Pathing
-    # @options =
-    #   graph: @game.hexes
-    #   end: @game.hexes["0:0"]
-    #   impassable: (h) -> h.building instanceof Buildings.Wall
-    #   heuristic: hexUtils.hexDistance
-    #   neighbors: hexUtils.neighbors
-
     super(hex, healthModifier)
