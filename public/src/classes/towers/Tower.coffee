@@ -32,6 +32,10 @@ class window.Buildings.Tower
     @hex.building = null
     true
 
+  repair: () ->
+    @health = @maxHealth
+    @sprite.alpha = 1.0
+  
   findTarget: () ->
     minD = Infinity
     @target = null

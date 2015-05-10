@@ -298,9 +298,11 @@ class Crashed.Game
     @level += 1
     @money += @income()# + 2*@level
     
-    @updateStatsText()
+    b.repair() for b in @buildings      
     h.deselect() for h in @selectedHexes
+    
     @selectedHexes = []
+    @updateStatsText()
   
   startAttack: () =>
     @mode = 'attack'

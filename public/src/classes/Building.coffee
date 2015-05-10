@@ -22,3 +22,7 @@ class window.Building
     @sprite.alpha = @health / @maxHealth
     @kill() if @health <= 0
     @alive
+
+  repair: () ->
+    @health = @maxHealth
+    @sprite.alpha = 1.0
