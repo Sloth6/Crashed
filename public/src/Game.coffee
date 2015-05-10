@@ -154,14 +154,15 @@ class Crashed.Game
     @money = @savedGame.money
 
     for hexState in @savedGame.hexes
-      # if hexUtils.hexDistance(hexState, {q:0, r:0 }) < 6
-      hex = @newHex hexState.q, hexState.r, hexState.nature
-      @build hex, hexState.building if hexState.building
-    @expandMap() for i in [0..4]
+      if hexUtils.hexDistance(hexState, {q:0, r:0 }) <= @rows
+        hex = @newHex hexState.q, hexState.r, hexState.nature
+        @build hex, hexState.building if hexState.building
+    # @expandMap() for i in [0..4]
     @cursors = game.input.keyboard.createCursorKeys()
     @markPowered()
     @updateStatsText()
     pathfinding.run @
+    @rangeDisplay.update()
     window.gameinstance = @
 
   markPowered: () ->
@@ -300,7 +301,7 @@ class Crashed.Game
     
     b.repair() for b in @buildings      
     h.deselect() for h in @selectedHexes
-    
+
     @selectedHexes = []
     @updateStatsText()
   
