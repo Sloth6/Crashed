@@ -1,12 +1,10 @@
-class window.Buildings.Tower
+class window.Buildings.Tower extends Building
   constructor: (@game, @hex) ->
     # View
     @sprite.anchor.set 0.5, 0.5
 
     # State
     @health = 20
-    @maxHealth = 20
-    @alive = true
     @target = null #Enemy Object
     @sprite.container = @
     @nextFire = 0
@@ -15,26 +13,23 @@ class window.Buildings.Tower
     # Physics
     @game.physics.p2.enable @sprite, false
     @sprite.body.setCircle 15
-    @sprite.body.static = true
-    @sprite.body.setCollisionGroup @game.buildingCG
-    @sprite.body.collides [ @game.enemyCG ]
+    super()
+  # damage: (n) ->
+  #   @health -= n
+  #   @sprite.alpha = @health / @maxHealth
+  #   @kill() if @health <= 0
+  #   @alive
 
-  damage: (n) ->
-    @health -= n
-    @sprite.alpha = @health / @maxHealth
-    @kill() if @health <= 0
-    @alive
+  # kill: () ->
+  #   @alive = false
+  #   @sprite.destroy()
+  #   @game.buildings.remove @
+  #   @hex.building = null
+  #   true
 
-  kill: () ->
-    @alive = false
-    @sprite.destroy()
-    @game.buildings.remove @
-    @hex.building = null
-    true
-
-  repair: () ->
-    @health = @maxHealth
-    @sprite.alpha = 1.0
+  # repair: () ->
+  #   @health = @maxHealth
+  #   @sprite.alpha = 1.0
   
   findTarget: () ->
     minD = Infinity

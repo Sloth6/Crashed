@@ -33,6 +33,7 @@ window.collisionManager =
     if collider instanceof Enemy
       enemyWithEnemy(enemy, collider)
     else if collider instanceof Building
+          # collider instanceof Buildings.Tower)
       enemyWithBuilding(enemy, collider)
     # else if (collider instanceof Buildings.Pylon or
     #     collider instanceof Buildings.Tower or
@@ -43,6 +44,6 @@ window.collisionManager =
     #   enemyWithWall enemy, collider
     else if collider instanceof Bullet
       enemyWithBullet(enemy, collider)
-    else if collider instanceof Bomb
-      enemyWithBomb(enemy, collider)
+    # else if collider instanceof Bomb
+    #   enemyWithBomb(enemy, collider)
     true
