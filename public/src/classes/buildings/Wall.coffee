@@ -14,4 +14,5 @@ class window.Buildings.Wall extends Building
 
   kill : () ->
     pathfinding.run @game
+    e.updatePath = true for e in @game.enemies
     super()

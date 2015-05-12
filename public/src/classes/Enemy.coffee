@@ -6,13 +6,13 @@ class window.Enemy
     @maxHealth = 100 * (1+healthModifier)
     @maxSpeed = 50
     @attacking = false
+    @updatePath = false
     
     #view
     @sprite.anchor.set 0.5, 0.5
     @sprite.container = @
-
+    
     #physics
-    @sprite.scale.set(0.5, 0.5)
     @sprite.body.setCollisionGroup @game.enemyCG
     @sprite.body.collides [ @game.buildingCG, @game.bulletCG, @game.enemyCG ]
     @sprite.body.onBeginContact.add (b) =>
@@ -45,8 +45,9 @@ class window.Enemy
 
   update: () ->
     return unless @alive
-    if !@nextHex
+    if !@nextHex or @updatePath
       @nextHex = @hex.closestNeighbor
+      @updatePath = false
       return
 
     @damage @hex.burnDamage
