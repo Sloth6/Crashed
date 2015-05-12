@@ -8,7 +8,7 @@ class window.SmallEnemy extends Enemy
     @health = 50
     @maxHealth = 50
     @speed = 60
-    @strength = 0.25
+    @strength = 0.15
     @sprite.name = 'enemy'
 
     # physics
