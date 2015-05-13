@@ -252,6 +252,7 @@ class Crashed.Game
     null
 
   sell: (hex) ->
+    @money += @buildingProperties[hex.building.name].cost
     hex.building.kill()
     @clearSelected()
     true

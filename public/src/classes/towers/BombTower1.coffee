@@ -6,7 +6,7 @@ class window.Buildings.BombTower1 extends Buildings.Tower
 
     @name = 'BombTower1'
     @range = 200
-    @dps = 600 / 5 #DPS is the same as basicTower 2 when we hit 5 enemies.
+    @dps = 600 / 3 #DPS is the same as basicTower 2 when we hit 5 enemies.
     @fireRate = 2000
 
 
