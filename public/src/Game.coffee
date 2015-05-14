@@ -330,17 +330,14 @@ class Crashed.Game
 
     if 'Click' in @playerUpgrades
       @clickKills = 1
-      for enemy in @enemies
+      @enemies.forEach (enemy) =>
         enemy.sprite.inputEnabled = true
-        clickKill = (enemy) =>
+        clickKill = () =>
           if @clickKills > 0
             @clickKills -= 1
             enemy.kill()
-        # another monstrosity! :-( Actually though I think this might be the best way to do this
-        enemy.sprite.events.onInputDown.add ((_enemy) => (() => clickKill(_enemy))) (enemy) 
-  
-
-    
+        # closures kill the monstrosity! 
+        enemy.sprite.events.onInputDown.add clickKill    
     true
       
   update: () ->    

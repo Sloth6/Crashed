@@ -67,7 +67,7 @@ class window.Enemy
         # game.enemies.forEach (e) ->
         #   e.newPath = true if e instanceof SmallEnemy
     d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite
-    if d < 30
+    if d < 30 and !@hex.building?.alive
       @hex = @nextHex
       @nextHex = @nextHex.closestNeighbor
 

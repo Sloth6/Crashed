@@ -4,6 +4,7 @@ class window.Pylon extends Building
   constructor: (@game, @hex) ->
     # View
     @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'Pylon'
+    @sprite.scale.set 0.2, 0.2
     
     # State
     @health = 5
@@ -11,5 +12,5 @@ class window.Pylon extends Building
 
     # physics
     @game.physics.p2.enable @sprite, false
-    @sprite.body.setCircle 35
+    @sprite.body.setCircle 10#35
     super()
