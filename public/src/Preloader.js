@@ -74,7 +74,7 @@ Crashed.Preloader.prototype = {
     this.load.image('save', 'images/ui/save.png');
     this.load.image('foo', 'images/ui/upgradeButton.gif');
 
-    this.load.image('ClickUpgrade', 'images/upgrades/click.png');
+    this.load.image('click', 'images/upgrades/click.png');
 
   },
 

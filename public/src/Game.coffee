@@ -26,23 +26,6 @@ class Crashed.Game
     # @physics.p2.defaultRestitution = 0.99
 
     @collectorIncome = 2
-    @buildingProperties =
-      Collector:   { consumption:  1, cost: 10, upgrades: [] }
-      Pylon:       { consumption:  0, cost: 4, upgrades: []  }
-      Wall:        { consumption:  0, cost: 2, upgrades: []  }
-      Base:        { consumption:  0, cost: 0, upgrades: ['ClickUpgrade']  }
-      BasicTower1:
-        consumption: 1, cost: 10, upgrades: ['BombTower1', 'BasicTower2']
-      BombTower1:
-        consumption: 1, cost: 30, upgrades: ['FireTower1', 'BombTower2']
-      FireTower1: { cost: 100, consumption: 10, upgrades: [] }
-      BombTower2: { cost: 100, consumption: 10, upgrades: [] }
-      BasicTower2:
-        consumption: 1, cost: 30, upgrades: ['BasicTower3'] #'WallTower', 
-      # WallTower: { cost: 100, consumption: 10, upgrades: [] }
-      BasicTower3: { cost: 100, consumption: 10, upgrades: [] }
-
-      ClickUpgrade: {cost: 5, consumption: 0, upgrades: []}
 
     # View
     @worldScale = .6
@@ -79,8 +62,8 @@ class Crashed.Game
     @worldGroup.add @bulletGroup
     @bombs = []
 
-    # User upgrades
-    @userUpgrades = []
+    # Player upgrades
+    @playerUpgrades = []
 
     #in game ui
     @worldUi = game.add.group()
@@ -100,7 +83,7 @@ class Crashed.Game
       startButton.events.onInputDown.add @startAttack
 
       i = 0
-      for building in [Wall, Collector, Pylon , BasicTower1]
+      for building in [Wall, Collector, Pylon, BasicTower1]
         y = (i * 60) + 150
         button = @buildUi.create 10, y, building.name
         
@@ -237,8 +220,9 @@ class Crashed.Game
     for hex in @selectedHexes
       hex.deselect()
     @selectedHexes = []
+    true
 
-  clickUpgradeButton: (hex, building) ->
+  clickUpgradeButton: (hex, upgrade, cost) ->
     @selectedHexes.forEach (h) -> h.deselect()
     if building.cost > @money
       alert "Cannot afford that, costs #{building.cost}"
