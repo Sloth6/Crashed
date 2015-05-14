@@ -56,20 +56,16 @@ class window.Enemy
         @attacking = false
       else
         @nextHex.building.damage @strength
-    # else
-    speed = if @nextHex.nature is 'trees' then @speed/2 else @speed
-    @accelerateToObject(@sprite, @nextHex.sprite, speed)
-    # b = @nextHex.building 
-    # if b
-    #   # building_alive = b.damage @strength
-    #   if not building_alive and b instanceof Buildings.Wall
-    #     window.pathfinding.run @game
-        # game.enemies.forEach (e) ->
-        #   e.newPath = true if e instanceof SmallEnemy
+
     d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite
-    if d < 30 and !@hex.building?.alive
+    
+    if d < 30 and !@nextHex.building?.alive
       @hex = @nextHex
       @nextHex = @nextHex.closestNeighbor
+
+    else
+      speed = if @nextHex.nature is 'trees' then @speed/2 else @speed
+      @accelerateToObject @sprite, @nextHex.sprite, speed
 
   accelerateToObject: (obj1, obj2, speed) ->
     angle = Math.atan2 obj2.y - obj1.y, obj2.x - obj1.x
