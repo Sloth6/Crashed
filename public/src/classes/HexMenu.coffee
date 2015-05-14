@@ -25,12 +25,9 @@ class window.HexMenu
       button.width = 60
       button.inputEnabled = true
       button.input.useHandCursor = true
-      button.events.onInputDown.add () =>
-        @clickButton hex, name, func, cost
-        @remove()
+      button.events.onInputDown.add (@clickButton hex, name, func, cost)
 
-      button.events.onInputOver.add () =>
-        @overButton hex, name, cost
+      button.events.onInputOver.add (@overButton hex, name, cost)
 
       @buttons.push button
 
@@ -39,15 +36,18 @@ class window.HexMenu
     @text.destroy()
     button.destroy() for button in @buttons
 
-  clickButton: (hex, name, func, cost) ->
-    if cost > @game.money
-      alert "Cannot afford #{name}, costs $#{cost}"
-      return false
-    @game.money -= cost if name isnt 'sell'
-    func(@game, hex)
-    @game.rangeDisplay.update()
-    @game.updateStatsText()
-    @game.clearSelected()
+  clickButton: (hex, name, func, cost) =>
+    () =>
+      console.log("cost is #{cost}")
+      if cost > @game.money
+        alert "Cannot afford #{name}, costs $#{cost}"
+        return false
+      @game.money -= cost if name isnt 'sell'
+      func(@game, hex)
+      @game.rangeDisplay.update()
+      @game.updateStatsText()
+      @game.clearSelected()
+      @remove()
     # if option is 'sell' then @game.sell hex
     # else if @parent instanceof Base
     #   @game.money -= cost
@@ -58,8 +58,9 @@ class window.HexMenu
     #   @game.rangeDisplay.update()
     #   @game.updateStatsText()
     #   @game.clearSelected()
-  overButton: (hex, name, cost) ->
-    if name is 'sell' then message = 'Sell for $#{cost}'
-    else if @parent instanceof Base then message = "base upgrade for $#{cost}"
-    else message = '#{name}: $#{cost}'
-    @text.setText message
+  overButton: (hex, name, cost) =>
+    () =>
+      if name is 'sell' then message = "Sell for $#{-1 * cost}"
+      else if @parent instanceof Base then message = "base upgrade for $#{cost}"
+      else message = "#{name}: $#{cost}"
+      @text.setText message

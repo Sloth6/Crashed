@@ -241,7 +241,7 @@ class Crashed.Game
     null
 
   sell: (hex) ->
-    @money += building.cost
+    @money += hex.building.constructor.cost
     hex.building.kill()
     @clearSelected()
     @updateStatsText()
