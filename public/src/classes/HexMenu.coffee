@@ -43,7 +43,7 @@ class window.HexMenu
     if cost > @game.money
       alert "Cannot afford #{name}, costs $#{cost}"
       return false
-    game.money -= cost if name isnt 'sell'
+    @game.money -= cost if name isnt 'sell'
     func(@game, hex)
     @game.rangeDisplay.update()
     @game.updateStatsText()

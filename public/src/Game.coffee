@@ -297,8 +297,15 @@ class Crashed.Game
     @selectedHexes = []
     @updateStatsText()
   
+  # clickKill: (enemy) ->
+  #   console.log("in click Kill ")
+  #   if @clickKills > 0
+  #     @clickKills -= 1
+  #     enemy.kill()
   startAttack: () =>
+
     @mode = 'attack'
+
     @buildUi.visible = false
     @fightUi.visible = true
 
@@ -320,6 +327,19 @@ class Crashed.Game
     for i in [0...@enemyCount] by 1
       hex = outerRing.random()# outerRing[starts[i%numGroups]]
       @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
+
+    if 'Click' in @playerUpgrades
+      @clickKills = 1
+      for enemy in @enemies
+        enemy.sprite.inputEnabled = true
+        clickKill = (enemy) =>
+          if @clickKills > 0
+            @clickKills -= 1
+            enemy.kill()
+        # another monstrosity! :-( Actually though I think this might be the best way to do this
+        enemy.sprite.events.onInputDown.add ((_enemy) => (() => clickKill(_enemy))) (enemy) 
+  
+
     
     true
       
