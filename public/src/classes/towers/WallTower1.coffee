@@ -1,4 +1,4 @@
-class window.Buildings.WallTower1 extends Buildings.Tower
+class window.Buildings.WallTower1 extends Tower
   constructor: (@game, @hex) ->
     @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'WallTower1'
     @bullet = FireBullet

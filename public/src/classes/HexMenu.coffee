@@ -1,5 +1,5 @@
 class window.HexMenu
-  constructor: (game, hex) ->
+  constructor: (game, hex, parent) ->
     @buttons = []
 
     options = ['sell']
@@ -25,6 +25,7 @@ class window.HexMenu
       button.inputEnabled = true
       button.input.useHandCursor = true
       button.events.onInputDown.add () =>
+        console.log("option is #{option}");
         if option is 'sell'
           game.sell hex
         else
@@ -33,7 +34,7 @@ class window.HexMenu
 
       button.events.onInputOver.add () =>
         if option is 'sell'
-          s = 'Sell for $0'
+          s = "Sell for $#{game.buildingProperties[parent.name].cost}"
         else
           s = "#{option} upgrade: #{game.buildingProperties[option].cost}"
         @text.setText s

@@ -5,7 +5,7 @@ window.pathfinding =
     # Initialize all hexes based off their building type
     for _, hex of game.hexes
       hex.closestNeighbor = null
-      if hex.building instanceof Buildings.Collector or hex.building instanceof Buildings.Base
+      if hex.building instanceof Collector or hex.building instanceof Base
         hex._d = 0
         # Add all neighbors to the frontier
         open = open.concat hexUtils.neighbors(game.hexes, hex)
@@ -30,7 +30,7 @@ window.pathfinding =
             g = 0
             if hex.nature is 'trees' 
               g = 2
-            else if hex.building instanceof Buildings.Wall
+            else if hex.building instanceof Wall
               g = 5
               
             

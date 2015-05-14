@@ -13,7 +13,7 @@ class window.TowerRangeDisplay
 
 
   draw: () ->
-    towers = @game.buildings.filter (b) -> b instanceof Buildings.Tower    
+    towers = @game.buildings.filter (b) -> b instanceof Tower    
     
     maxX = 0
     maxY = 0

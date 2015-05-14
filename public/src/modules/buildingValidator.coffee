@@ -7,9 +7,9 @@ window.buildingValidator =
       return "Select something to sell!"
     true
 
-  canBuild: (game, type) ->
+  canBuild: (game, building) ->
     n = game.selectedHexes.length
-    cost = n * game.buildingProperties[type].cost
+    cost = n * building.cost
 
     if cost > game.money
       return "Cannot afford #{@n} #{type}s. Costs #{cost}."
@@ -17,10 +17,10 @@ window.buildingValidator =
     if (game.selectedHexes.some (h) -> h.building?)
       return 'Sell that building first!'
 
-    if type != 'Wall' and game.selectedHexes.some((h) -> !h.powered)
+    if building isnt Wall and game.selectedHexes.some((h) -> !h.powered)
       return "Buildings must be built on powered tiles"
 
-    if type is 'Wall' #ensure we don't wall off completly.
+    if building is Wall #ensure we don't wall off completly.
       for hex in game.selectedHexes
         hex.building = 'planned_wall'
       can_path_everywhere = pathfinding.run game
@@ -30,7 +30,7 @@ window.buildingValidator =
       if !can_path_everywhere
         return 'Cannot completely wall off part of the base!'
 
-    else if type is 'Collector'
+    else if building is Collector
       if not game.selectedHexes.every((h) -> h.nature is 'minerals')
         return "Can only build collectors on minerals"
   

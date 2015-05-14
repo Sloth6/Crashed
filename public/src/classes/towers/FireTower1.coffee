@@ -1,4 +1,6 @@
-class window.Buildings.FireTower1 extends Buildings.Tower
+class window.FireTower1 extends Tower
+  @cost = 100
+  @upgrades = []
   constructor: (@game, @hex) ->
     @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'FireTower1'
     @bullet = FireBullet

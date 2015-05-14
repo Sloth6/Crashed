@@ -1,4 +1,6 @@
-class window.Buildings.Collector extends Building
+class window.Collector extends Building
+  @cost = 10
+  @upgrades = []
   constructor: (@game, @hex) ->
     # View
     @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'Collector'

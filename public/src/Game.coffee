@@ -30,7 +30,7 @@ class Crashed.Game
       Collector:   { consumption:  1, cost: 10, upgrades: [] }
       Pylon:       { consumption:  0, cost: 4, upgrades: []  }
       Wall:        { consumption:  0, cost: 2, upgrades: []  }
-      Base:        { consumption:  0, cost: 0, upgrades: []  }
+      Base:        { consumption:  0, cost: 0, upgrades: ['ClickUpgrade']  }
       BasicTower1:
         consumption: 1, cost: 10, upgrades: ['BombTower1', 'BasicTower2']
       BombTower1:
@@ -41,6 +41,8 @@ class Crashed.Game
         consumption: 1, cost: 30, upgrades: ['BasicTower3'] #'WallTower', 
       # WallTower: { cost: 100, consumption: 10, upgrades: [] }
       BasicTower3: { cost: 100, consumption: 10, upgrades: [] }
+
+      ClickUpgrade: {cost: 5, consumption: 0, upgrades: []}
 
     # View
     @worldScale = .6
@@ -77,6 +79,9 @@ class Crashed.Game
     @worldGroup.add @bulletGroup
     @bombs = []
 
+    # User upgrades
+    @userUpgrades = []
+
     #in game ui
     @worldUi = game.add.group()
     @worldGroup.add @worldUi
@@ -95,11 +100,11 @@ class Crashed.Game
       startButton.events.onInputDown.add @startAttack
 
       i = 0
-      for type in ['Wall', 'Collector', 'Pylon' , 'BasicTower1']
+      for building in [Wall, Collector, Pylon , BasicTower1]
         y = (i * 60) + 150
-        button = @buildUi.create 10, y, type
+        button = @buildUi.create 10, y, building.name
         
-        price = new Phaser.Text game, 60, y, "$"+@buildingProperties[type].cost
+        price = new Phaser.Text game, 60, y, "$"+building.cost
         price.fixedToCamera = true
         @buildUi.add price
 
@@ -109,7 +114,7 @@ class Crashed.Game
         button.inputEnabled = true
         button.input.useHandCursor = true
         #this monstrousity will wait until I modify phaser library
-        button.events.onInputDown.add ((_type)=> (()=> @clickBuildButton _type))(type)
+        button.events.onInputDown.add ((_building)=> (()=> @clickBuildButton _building))(building)
         i++
       
       style = { font: "45px Arial" }
@@ -173,7 +178,7 @@ class Crashed.Game
       return if h.powered
       h.powered = true
       h.powerSprite.visible = true
-      if (h.building instanceof Buildings.Pylon) or (h.building instanceof Buildings.Base)
+      if (h.building instanceof Pylon) or (h.building instanceof Base)
         hexUtils.ring(@hexes, 1, h).forEach checkR
         hexUtils.ring(@hexes, 2, h).forEach checkR
         hexUtils.ring(@hexes, 3, h).forEach checkR
@@ -214,7 +219,7 @@ class Crashed.Game
       else
         if hex.building
           @clearSelected()
-          @hexMenu = new HexMenu @, hex
+          @hexMenu = new HexMenu @, hex, hex.building
         
         @selectedHexes.push hex
         hex.select()
@@ -233,49 +238,51 @@ class Crashed.Game
       hex.deselect()
     @selectedHexes = []
 
-  clickUpgradeButton: (hex, type) ->
+  clickUpgradeButton: (hex, building) ->
     @selectedHexes.forEach (h) -> h.deselect()
-    if @buildingProperties[type].cost > @money
-      alert "Cannot affort that, costs #{@buildingProperties[type].cost}"
+    if building.cost > @money
+      alert "Cannot afford that, costs #{building.cost}"
       return false
-    @build hex, type
-    @money -= @selectedHexes.length * @buildingProperties[type].cost
+    @build hex, building
+    @money -= @selectedHexes.length * building.cost
     @selectedHexes = []
     @rangeDisplay.update()
     @updateStatsText()
 
-  build: (hex, type) ->
-    building = new Buildings[type](@, hex)
+  build: (hex, building) ->
+    building = new building(@, hex)
     hex.building?.kill()
     hex.building = building
     @buildings.push building
     null
 
   sell: (hex) ->
-    @money += @buildingProperties[hex.building.name].cost
+    @money += building.cost
     hex.building.kill()
     @clearSelected()
+    @updateStatsText()
     true
 
-  clickBuildButton: (type) ->
-    if buildingValidator.canBuild(@, type) != true
-      alert buildingValidator.canBuild @, type
+  clickBuildButton: (building) ->
+    unless buildingValidator.canBuild(@, building)
+      alert buildingValidator.canBuild @, building
       @selectedHexes.forEach (h) -> h.deselect()
       @selectedHexes = []
       return false
 
+    # If we can build
     @selectedHexes.forEach (hex) =>
-      @build hex, type
+      @build hex, building
       hex.deselect()
       while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
         @expandMap()
 
-    if type is 'Pylon'
+    if building is Pylon
       @markPowered()
-    if type is 'BasicTower1'
+    if building is BasicTower1
       @rangeDisplay.update()
 
-    @money -= @selectedHexes.length * @buildingProperties[type].cost
+    @money -= @selectedHexes.length * building.cost
     @selectedHexes = []
     @updateStatsText()
     
@@ -284,7 +291,7 @@ class Crashed.Game
 
   income: () ->
     @buildings.reduce ((sum, b) ->
-      sum + (if b instanceof Buildings.Collector then 4 else 0)), 0
+      sum + (if b instanceof Collector then 4 else 0)), 0
 
   enemiesPerLevel: (n) ->
     n ?= @level

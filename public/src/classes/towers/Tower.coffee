@@ -1,4 +1,4 @@
-class window.Buildings.Tower extends Building
+class window.Tower extends Building
   constructor: (@game, @hex) ->
     # View
     @sprite.anchor.set 0.5, 0.5

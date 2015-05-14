@@ -1,4 +1,6 @@
-class window.Buildings.BasicTower1 extends Buildings.Tower
+class window.BasicTower1 extends Tower
+  @cost = 10
+  @upgrades = [BasicTower2, BombTower1]
   constructor: (@game, @hex) ->
     @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'BasicTower1'
     @sprite.scale.set 1.0, 1.0
