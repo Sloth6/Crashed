@@ -1,8 +1,8 @@
 class window.BombTower1 extends Tower
   @cost = 30
   @upgrades = [
-    ['BombTower2', ((game, hex) -> game.build hex, BasicTower2), BombTower2.cost]
-    ['FireTower1', ((game, hex) -> game.build hex, FireTower1), FireTower1.cost]
+    {name: 'BombTower2', func: ((game, hex) -> game.build hex, BasicTower2), cost: BombTower2.cost}
+    {name: 'FireTower1', func: ((game, hex) -> game.build hex, FireTower1), cost: FireTower1.cost}
     ]
   constructor: (@game, @hex) ->
     @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'BombTower1'

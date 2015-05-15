@@ -1,11 +1,12 @@
 class window.Base extends Building
   @cost = 0
   @upgrades = [
-    [
-      'click'
-      (game, hex) -> game.playerUpgrades.push 'Click'
-      5
-    ]
+    {
+      name: 'click'
+      func: (game, hex) -> game.playerUpgrades.push 'Click'
+      cost: 5
+      purchased: false
+    }
   ]
   constructor: (@game, @hex) ->
     # View
