@@ -48,9 +48,9 @@ class window.HexMenu
       @game.rangeDisplay.update()
       @game.updateStatsText()
       @game.clearSelected()
-      option.purchased = true
+      if @parent instanceof Base then option.purchased = true
       @remove()
-      
+
   overButton: (hex, option) =>
     () =>
       if option.purchased then message = "This has already been purchased"
