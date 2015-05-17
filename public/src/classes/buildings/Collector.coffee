@@ -13,5 +13,6 @@ class window.Collector extends Building
     super()
 
   destroy : () ->
+    @game.updateStatsText()
     @game.map_changed = true
     super()
