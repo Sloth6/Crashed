@@ -75,6 +75,9 @@ class Crashed.Game
     @fightUi.visible = false
     @ui = game.add.group() # static ui
 
+    @map_changed = false
+    @pathfinding_running = false
+
     createMenu = () =>
       startButton = @buildUi.create 10, game.camera.height - 150, 'start'
       startButton.fixedToCamera = true
@@ -235,14 +238,14 @@ class Crashed.Game
 
   build: (hex, building) ->
     building = new building(@, hex)
-    hex.building?.kill()
+    hex.building?.remove()
     hex.building = building
     @buildings.push building
     null
 
   sell: (hex) ->
     @money += hex.building.constructor.cost
-    hex.building.kill()
+    hex.building.remove()
     @clearSelected()
     @updateStatsText()
     true
@@ -275,7 +278,8 @@ class Crashed.Game
 
   income: () ->
     @buildings.reduce ((sum, b) ->
-      sum + (if b instanceof Collector then 4 else 0)), 0
+      income = (b instanceof Collector and b.alive) * Collector.income
+      sum + income), 0
 
   enemiesPerLevel: (n) ->
     n ?= @level
@@ -291,7 +295,7 @@ class Crashed.Game
     @level += 1
     @money += @income()# + 2*@level
     
-    b.repair() for b in @buildings      
+    b.repair() for b in @buildings
     h.deselect() for h in @selectedHexes
 
     @selectedHexes = []
@@ -345,6 +349,14 @@ class Crashed.Game
     # end wave if no more enemies
     if @enemyCount <= 0 and @mode == 'attack'
       @endAttack()
+
+
+    if @map_changed and !@pathfinding_running
+      console.log 'updateing'
+      pathfinding.run @
+      enemy.updatePath = true for enemy in @enemies
+      @map_changed = false
+      # console.log 'behre', @game.enemies
 
     e.update() for e in @enemies
     b?.update() for b in @bombs

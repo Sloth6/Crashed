@@ -1,5 +1,5 @@
 class window.Enemy
-  constructor: (@hex, healthModifier) ->
+  constructor: (startHex, healthModifier) ->
     #state
     @alive = true
     @health = 100 * (1+healthModifier)
@@ -19,7 +19,7 @@ class window.Enemy
       return unless b
       collisionManager.enemyCollision @game, @sprite.container, b.sprite.container
   
-    @nextHex = @hex.closestNeighbor
+    @nextHex = startHex.closestNeighbor
 
   kill: () ->
     return unless @alive
@@ -35,22 +35,20 @@ class window.Enemy
     @kill() if @health <= 0
     @alive
 
-  # nearestHex: () ->
-  #   # if it is on a hex, only checks the neighbors
-  #   if @hex?
-  #     nearest = hexUtils.nearestHex (hexUtils.neighbors @game.hexes, @hex.q, @hex.r), @sprite.position.x, @sprite.position.y
-  #   # If that doesn't work, goes through all the hexes
-  #   nearest or= hexUtils.nearestHex @game.hexes, @sprite.position.x, @sprite.position.y
-  #   return nearest
-
   update: () ->
-    return unless @alive
-    if !@nextHex or @updatePath
-      @nextHex = @hex.closestNeighbor
-      @updatePath = false
+    if !@alive
       return
 
-    @damage @hex.burnDamage
+    if @updatePath
+      @nextHex = @nextHex.closestNeighbor
+      @updatePath = false
+      console.log 'no path'
+      return
+
+    # if !@nextHex
+    #   return
+
+    @damage @nextHex.burnDamage
     if @attacking
       if not @nextHex.building
         @attacking = false
@@ -58,14 +56,13 @@ class window.Enemy
         @nextHex.building.damage @strength
 
     d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite
+    speed = if @nextHex.nature is 'trees' then @speed/2 else @speed
+    @accelerateToObject @sprite, @nextHex.sprite, speed   
     
-    if d < 30 and !@nextHex.building?.alive
-      @hex = @nextHex
+    if d < 30 and (@nextHex.building is null or !@nextHex.building.alive)
       @nextHex = @nextHex.closestNeighbor
 
-    else
-      speed = if @nextHex.nature is 'trees' then @speed/2 else @speed
-      @accelerateToObject @sprite, @nextHex.sprite, speed
+
 
   accelerateToObject: (obj1, obj2, speed) ->
     angle = Math.atan2 obj2.y - obj1.y, obj2.x - obj1.x

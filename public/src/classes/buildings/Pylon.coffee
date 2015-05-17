@@ -8,8 +8,5 @@ class window.Pylon extends Building
     # State
     @health = 5
     @name = 'Pylon'
-
-    # physics
-    @game.physics.p2.enable @sprite, false
-    @sprite.body.setCircle 35
+    @r = 35
     super()

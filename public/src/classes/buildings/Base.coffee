@@ -14,12 +14,9 @@ class window.Base extends Building
     # State
     @health = 1
     @name = 'Base'
-
-    # physics
-    @game.physics.p2.enable @sprite, false
-    @sprite.body.setCircle 35
+    @r = 35
     super()
 
-  kill: () ->
+  destroy: () ->
     super()
     @game.state.start 'Game'

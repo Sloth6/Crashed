@@ -1,19 +1,18 @@
 window.pathfinding =
   run: (game) ->
+    game.pathfinding_running = true
     # Store an array of the 'frontier.'
     open = []
     # Initialize all hexes based off their building type
     for _, hex of game.hexes
       hex.closestNeighbor = null
-      if hex.building instanceof Collector or hex.building instanceof Base
+      hex._d = null
+      if (hex.building and hex.building.alive) and (hex.building instanceof Collector or hex.building instanceof Base)
         hex._d = 0
+        hex.closestNeighbor = hex
         # Add all neighbors to the frontier
         open = open.concat hexUtils.neighbors(game.hexes, hex)
-      # else if hex.building instanceof Buildings.Wall or hex.building is 'planned_wall'
-      #   hex._d = Infinity
-      else
-        hex._d = null
-  
+
     # While there are hexes that have not been examined    
     while open.length > 0
       newOpen = []
@@ -47,6 +46,7 @@ window.pathfinding =
       # hex.setText ''+hex._d
       if hex._d is null
         return false
-        
+      
+    game.pathfinding_running = false
     true
     # null

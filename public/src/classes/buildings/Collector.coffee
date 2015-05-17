@@ -1,5 +1,6 @@
 class window.Collector extends Building
   @cost = 10
+  @income = 4
   @upgrades = []
   constructor: (@game, @hex) ->
     # View
@@ -7,13 +8,10 @@ class window.Collector extends Building
     
     # State
     @health = 5
+    @r = 5
     @name = 'Collector'
-
-    # physics
-    @game.physics.p2.enable @sprite, false
-    @sprite.body.setCircle 35
     super()
 
-  kill : () ->
-    pathfinding.run @game
+  destroy : () ->
+    @game.map_changed = true
     super()

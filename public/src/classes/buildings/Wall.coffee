@@ -8,13 +8,9 @@ class window.Wall extends Building
     # State
     @health = 100
     @name = 'Wall'
-
-    # physics
-    @game.physics.p2.enable @sprite, false
-    @sprite.body.setCircle 35
+    @r = 35
     super()
 
   kill : () ->
-    pathfinding.run @game
-    e.updatePath = true for e in @game.enemies
+    @game.map_changed = true
     super()
