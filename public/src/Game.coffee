@@ -156,6 +156,13 @@ class Crashed.Game
     @rangeDisplay.update()
     window.gameinstance = @
 
+  addAction: (action) ->
+    actionButton = @add.button 500, 700, action.image, action.start, @, 1,1,1
+    actionButton.input.useHandCursor = true
+    actionButton.anchor.set 0.5, 0.5
+    actionButton.fixedToCamera = true
+    true
+
   markPowered: () ->
     for coords, h of @hexes
       h.powered = false
