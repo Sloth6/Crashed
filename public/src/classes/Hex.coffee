@@ -1,4 +1,7 @@
 class window.Hex
+  size: 75/2
+  width: 75
+  height: 75 * Math.sqrt(3)/2
   constructor: ({ game, group, @click, @x, @y, @q, @r, @nature }) ->
     # State
     @building = null #Object

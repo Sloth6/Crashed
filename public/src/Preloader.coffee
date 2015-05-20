@@ -32,6 +32,7 @@ class Crashed.Preloader
     # @load.audio('titleMusic', ['audio/One_More_Time.m4a']);
 
     # @stage.backgroundColor = '#007236';
+    
 
     @load.image 'hex', 'images/greenhex.gif'
     @load.image 'minerals', 'images/environment/minerals.gif'
