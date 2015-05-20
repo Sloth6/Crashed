@@ -72,6 +72,7 @@ class Crashed.Preloader
 
     @load.image 'click', 'images/upgrades/click.png'
     @load.image 'knockback', 'images/upgrades/knockback.jpg'
+    @load.image 'airstrike', 'images/upgrades/airstrike.jpg'
 
   create: () ->
     #  Once the load has finished we disable the crop because we're going to sit in the update loop for a short while as the music decodes

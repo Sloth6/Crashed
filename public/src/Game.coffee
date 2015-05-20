@@ -117,6 +117,7 @@ class Crashed.Game
         window.saveManager.save name, @export() if name
 
     createMenu()
+    @createActionMenu()
 
     # Control
     @upKey = game.input.keyboard.addKey Phaser.Keyboard.W
@@ -159,11 +160,24 @@ class Crashed.Game
     @rangeDisplay.update()
     window.gameinstance = @
 
+  createActionMenu: ->
+    x = 0
+    for name, action of actions
+      console.log(action)
+      x += 85
+      actionButton = @add.button 100 + x, 650, action.image, action.start, @, 1, 1, 1
+      actionButton.input.useHandCursor = true
+      actionButton.anchor.set 0.5, 0.5
+      actionButton.fixedToCamera = true
+      actionButton.height = 75
+      actionButton.width = 75
   addAction: (action) ->
     actionButton = @add.button 500, 700, action.image, action.start, @, 1,1,1
     actionButton.input.useHandCursor = true
     actionButton.anchor.set 0.5, 0.5
     actionButton.fixedToCamera = true
+    actionButton.height = 50
+    actionButton.width = 50
     true
 
   markPowered: () ->
