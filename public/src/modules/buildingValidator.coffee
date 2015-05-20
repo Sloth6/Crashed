@@ -23,13 +23,10 @@ window.buildingValidator =
     if building is Wall #ensure we don't wall off completly.
       for hex in game.selectedHexes
         hex.building = 'planned_wall'
-      can_path_everywhere = pathfinding.run game
+
       for hex in game.selectedHexes
         hex.building = null
       
-      if !can_path_everywhere
-        return 'Cannot completely wall off part of the base!'
-
     else if building is Collector
       if not game.selectedHexes.every((h) -> h.nature is 'minerals')
         return "Can only build collectors on minerals"
