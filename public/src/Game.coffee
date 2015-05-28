@@ -74,6 +74,7 @@ class Crashed.Game
     @fightUi = game.add.group() # ui specific to fight phase
     @fightUi.visible = false
     @ui = game.add.group() # static ui
+    graphics = game.add.graphics 0, 0
 
     @map_changed = false
     @pathfinding_running = false
@@ -168,14 +169,7 @@ class Crashed.Game
       actionButton.fixedToCamera = true
       actionButton.height = 75
       actionButton.width = 75
-  addAction: (action) ->
-    actionButton = @add.button 500, 700, action.image, action.start, @, 1,1,1
-    actionButton.input.useHandCursor = true
-    actionButton.anchor.set 0.5, 0.5
-    actionButton.fixedToCamera = true
-    actionButton.height = 50
-    actionButton.width = 50
-    true
+      @fightUi.add actionButton
 
   markPowered: () ->
     for coords, h of @hexes
@@ -366,6 +360,7 @@ class Crashed.Game
     true
       
   update: () ->    
+    @activeAction?.update.call @
     @mouse = @input.getLocalPosition @worldGroup, game.input.activePointer
     # end wave if no more enemies
     if @enemyCount <= 0 and @mode == 'attack'
@@ -373,7 +368,7 @@ class Crashed.Game
 
 
     if @map_changed and !@pathfinding_running
-      console.log 'updateing'
+      console.log 'updating'
       pathfinding.run @
       enemy.updatePath = true for enemy in @enemies
       @map_changed = false
