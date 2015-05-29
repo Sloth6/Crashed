@@ -74,7 +74,6 @@ class Crashed.Game
     @fightUi = game.add.group() # ui specific to fight phase
     @fightUi.visible = false
     @ui = game.add.group() # static ui
-    graphics = game.add.graphics 0, 0
 
     @map_changed = false
     @pathfinding_running = false
@@ -161,9 +160,8 @@ class Crashed.Game
   createActionMenu: ->
     x = 0
     for name, action of actions
-      console.log(action)
       x += 85
-      actionButton = @add.button 100 + x, 650, action.image, action.start, @, 1, 1, 1
+      actionButton = @add.button 100 + x, 650, action.image, action.click, @, 1, 1, 1
       actionButton.input.useHandCursor = true
       actionButton.anchor.set 0.5, 0.5
       actionButton.fixedToCamera = true
@@ -315,12 +313,7 @@ class Crashed.Game
 
     @selectedHexes = []
     @updateStatsText()
-  
-  # clickKill: (enemy) ->
-  #   console.log("in click Kill ")
-  #   if @clickKills > 0
-  #     @clickKills -= 1
-  #     enemy.kill()
+
   startAttack: () =>
 
     @mode = 'attack'
@@ -333,7 +326,6 @@ class Crashed.Game
 
     @enemyCount = @enemiesPerLevel()
     enemyHealthModifier = Math.pow(@level, 2) / 37
-    # console.log {enemyHealthModifier, enemyCount: @enemyCount}
 
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     
@@ -360,7 +352,7 @@ class Crashed.Game
     true
       
   update: () ->    
-    @activeAction?.update.call @
+    # @activeAction?.update.call @
     @mouse = @input.getLocalPosition @worldGroup, game.input.activePointer
     # end wave if no more enemies
     if @enemyCount <= 0 and @mode == 'attack'
@@ -368,11 +360,9 @@ class Crashed.Game
 
 
     if @map_changed and !@pathfinding_running
-      console.log 'updating'
       pathfinding.run @
       enemy.updatePath = true for enemy in @enemies
       @map_changed = false
-      # console.log 'behre', @game.enemies
 
     e.update() for e in @enemies
     b?.update() for b in @bombs

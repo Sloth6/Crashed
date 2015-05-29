@@ -4,7 +4,7 @@
       cooldown: 12000
       used: false
       
-      start: ->
+      click: ->
         return if actions.knockback.used
         @activeAction = null
         actions.knockback.used = true
@@ -21,38 +21,51 @@
       image: 'airstrike'
       cooldown: 120
       strength: 9999999
-      startLocation: null
+      width: 50
+      start: null
+      end: null
       line: null
-      start: ->
+      click: ->
         #game is the context (@)
+        console.log 'click @', @
         self = actions.airStrike
+        return if @activeAction == self
         @activeAction = self 
-        @input.onDown.add (=> 
-          self.startLocation = {x: @mouse.x, y: @mouse.y}
-          self.line =  @game.add.graphics 100, 100
-          @buildUi.add self.line
-          self.line.lineStyle 20, 0xFF0000
+        @input.onDown.addOnce (=> 
+          console.log "down"
+          self.start = @mouse
+          self.line = @game.add.graphics 0, 0
+          @buildUi.add self.line 
+          self.line.lineStyle self.width, 0xFF0000, 0.5
           self.line.moveTo @mouse.x, @mouse.y
-          console.log "down", @mouse.x, @mouse.y
           true
           )
-        @input.onUp.add (=>
+        @input.onUp.addOnce (=>
+          console.log "up"
+          self.end = @mouse
           @activeAction = null
           self.line.lineTo @mouse.x, @mouse.y
-          # self.line.drawCircle 73, 87, 50
-          @ui.add self.line
-          @fightUi.visible = false
-          @ui.visible = false
-          console.log "fightUi", @fightUi.visible
-          console.log "buildUi", @buildUi.visible
-          console.log "up", @mouse.x, @mouse.y
-          setTimeout (-> 
-            self.startLocation = null
-            self.line.clear), 500
+          @fightUi.add self.line 
+          setTimeout (=> 
+            self.line.clear()
+            self.line.lineStyle self.width, 0xFF0000, .75
+            self.line.moveTo self.start.x, self.start.y
+            self.line.lineTo self.end.x, self.end.y
+            setTimeout (=> self.line.clear()), 100
+            self.strike()
+            ), 500
           )
-          
-      update: ->
-        self = actions.airStrike
-        return unless self.clickLocation and self.line
+      # distance of (x2, y2) from line formed by (x0, y0) and (x1, y1)
+      pointLineDistance: (x0, y0, x1, y1, x2, y2)->
+        num = Math.abs ((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1)
+        denom = ((y2-y1)**2 + (x2-x1)**2)**0.5
+        num / denom
+      strike : ->
+        for enemy in window.gameinstance.enemies
+          if (@pointLineDistance @start.x, @start.y, @end.x, @end.y, enemy.sprite.x, enemy.sprite.y) < @width
+            enemy.damage @strength
 
+
+      #   console.log(actions.airStrike.start)
+          
 
