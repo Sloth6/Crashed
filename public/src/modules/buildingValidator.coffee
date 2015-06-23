@@ -17,9 +17,6 @@ window.buildingValidator =
     if (game.selectedHexes.some (h) -> h.building?)
       return 'Sell that building first!'
 
-    if building isnt Wall and game.selectedHexes.some((h) -> !h.powered)
-      return "Buildings must be built on powered tiles"
-
     if building is Wall #ensure we don't wall off completly.
       for hex in game.selectedHexes
         hex.building = 'planned_wall'

@@ -39,7 +39,6 @@ class Crashed.Preloader
     @load.image 'trees', 'images/hexes/3.png'
     
     @load.image 'Base', 'images/hexes/6.png'
-    @load.image 'Pylon', 'images/buildings/pylon.gif'
 
     @load.image 'BasicTower1', 'images/buildings/tower.gif'
     @load.image 'BasicTower2', 'images/buildings/tower.gif'

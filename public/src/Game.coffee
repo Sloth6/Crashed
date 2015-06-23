@@ -82,7 +82,7 @@ class Crashed.Game
       startButton.events.onInputDown.add @startAttack
 
       i = 0
-      for building in [Wall, Collector, Pylon, BasicTower1]
+      for building in [Wall, Collector, BasicTower1]
         y = (i * 60) + 150
         button = @buildUi.create 10, y, building.name
         
@@ -154,7 +154,6 @@ class Crashed.Game
     @camera.y -= @camera.height/2
 
     @cursors = game.input.keyboard.createCursorKeys()
-    @markPowered()
     @updateStatsText()
     pathfinding.run @
     @rangeDisplay.update()
@@ -171,20 +170,6 @@ class Crashed.Game
       actionButton.height = 75
       actionButton.width = 75
       @fightUi.add actionButton
-
-  markPowered: () ->
-    for coords, h of @hexes
-      h.powered = false
-      h.powerSprite.visible = false
-    checkR = (h) =>
-      return if h.powered
-      h.powered = true
-      h.powerSprite.visible = true
-      if (h.building instanceof Pylon) or (h.building instanceof Base)
-        hexUtils.ring(@hexes, 1, h).forEach checkR
-        hexUtils.ring(@hexes, 2, h).forEach checkR
-        hexUtils.ring(@hexes, 3, h).forEach checkR
-    checkR @hexes["0:0"]
   
   newHex: (q, r, nature) ->
     x = q * Hex::size * 1.5
@@ -283,8 +268,6 @@ class Crashed.Game
       while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
         @expandMap()
 
-    if building is Pylon
-      @markPowered()
     if building is BasicTower1
       @rangeDisplay.update()
 
