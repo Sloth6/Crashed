@@ -12,6 +12,8 @@ class window.Hex
 
     # view
     @sprite = group.create @x, @y, 'hex'
+    @sprite.width = Hex::width
+    @sprite.height = Hex::width
     @sprite.anchor.set 0.5, 0.5
     @natureSprite = null #Phaser sprite object
     @sprite.inputEnabled = true
@@ -38,6 +40,9 @@ class window.Hex
         @natureSprite = group.create @x, @y, 'trees'
         @natureSprite.anchor.set 0.5, 0.5
         # @natureSprite.scale.set 0.15, 0.2
+    if @natureSprite
+      @natureSprite.width = Hex::width
+      @natureSprite.height = Hex::width
   
   setText: (s) ->
     @mytext.setText s

@@ -163,22 +163,14 @@ class Crashed.Game
   createActionMenu: ->
     x = 0
     for name, action of actions
-      console.log(action)
       x += 85
-      actionButton = @add.button 100 + x, 650, action.image, action.start, @, 1, 1, 1
+      actionButton = @add.button 100 + x, 650, action.image, action.click, @, 1, 1, 1
       actionButton.input.useHandCursor = true
       actionButton.anchor.set 0.5, 0.5
       actionButton.fixedToCamera = true
       actionButton.height = 75
       actionButton.width = 75
-  addAction: (action) ->
-    actionButton = @add.button 500, 700, action.image, action.start, @, 1,1,1
-    actionButton.input.useHandCursor = true
-    actionButton.anchor.set 0.5, 0.5
-    actionButton.fixedToCamera = true
-    actionButton.height = 50
-    actionButton.width = 50
-    true
+      @fightUi.add actionButton
 
   markPowered: () ->
     for coords, h of @hexes
@@ -327,7 +319,7 @@ class Crashed.Game
 
     @selectedHexes = []
     @updateStatsText()
-  
+
   startAttack: () =>
 
     @mode = 'attack'
@@ -340,7 +332,6 @@ class Crashed.Game
 
     @enemyCount = @enemiesPerLevel()
     enemyHealthModifier = Math.pow(@level, 2) / 37
-    # console.log {enemyHealthModifier, enemyCount: @enemyCount}
 
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     
@@ -367,6 +358,7 @@ class Crashed.Game
     true
       
   update: () ->    
+    # @activeAction?.update.call @
     @mouse = @input.getLocalPosition @worldGroup, game.input.activePointer
     # end wave if no more enemies
     if @enemyCount <= 0 and @mode == 'attack'
@@ -374,7 +366,6 @@ class Crashed.Game
 
 
     if @map_changed and !@pathfinding_running
-      console.log 'updateing'
       pathfinding.run @
       enemy.updatePath = true for enemy in @enemies
       @map_changed = false

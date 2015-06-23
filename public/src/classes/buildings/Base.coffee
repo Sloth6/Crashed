@@ -10,7 +10,7 @@ class window.Base extends Building
   ]
   constructor: (@game, @hex) ->
     # View
-    @sprite = @game.buildingGroup.create @hex.x, @hex.y-10, 'Base'
+    @sprite = @game.buildingGroup.create @hex.x, @hex.y, 'Base'
 
     # State
     @health = 1

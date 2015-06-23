@@ -5,6 +5,8 @@ class window.Building
 
     @sprite.anchor.set 0.5, 0.5
     @sprite.container = @
+    @sprite.width = Hex::width
+    @sprite.height = Hex::width
     
     # physics
     @game.physics.p2.enable @sprite, false

@@ -34,11 +34,11 @@ class Crashed.Preloader
     # @stage.backgroundColor = '#007236';
     
 
-    @load.image 'hex', 'images/greenhex.gif'
-    @load.image 'minerals', 'images/environment/minerals.gif'
-    @load.image 'trees', 'images/environment/trees2.png'
+    @load.image 'hex', 'images/hexes/2.png'
+    @load.image 'minerals', 'images/hexes/1.png'
+    @load.image 'trees', 'images/hexes/3.png'
     
-    @load.image 'Base', 'images/buildings/base.png'
+    @load.image 'Base', 'images/hexes/6.png'
     @load.image 'Pylon', 'images/buildings/pylon.gif'
 
     @load.image 'BasicTower1', 'images/buildings/tower.gif'
