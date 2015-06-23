@@ -19,11 +19,6 @@ class window.Hex
     @sprite.input.pixelPerfectClick = true
     @sprite.input.useHandCursor = true
 
-    @powerSprite = group.create @x, @y, 'powered'
-    @powerSprite.visible = false
-    @powerSprite.alpha = 0.4
-    @powerSprite.anchor.set 0.5, 0.5
-
     @mytext = new Phaser.Text(game, @x, @y, "")
     game.worldUi.add @mytext
     # @mytext = game.add.text @x, @y, ""
@@ -51,7 +46,6 @@ class window.Hex
   select: () ->
     @selected = true
     @sprite.alpha = 0.5
-    console.log @q, @r
 
   deselect: () ->
     @selected = false

@@ -107,7 +107,6 @@ class Crashed.Game
         window.saveManager.save name, @export() if name
 
     createMenu()
-    @createActionMenu()
 
     # Control
     @upKey = game.input.keyboard.addKey Phaser.Keyboard.W
@@ -116,7 +115,6 @@ class Crashed.Game
     @rightKey = game.input.keyboard.addKey Phaser.Keyboard.D
 
     @time.advancedTiming = true
-    @rangeDisplay = new TowerRangeDisplay @
 
   create: () ->
     window.history.pushState "Game", "", "/game"
@@ -127,14 +125,17 @@ class Crashed.Game
     @tree_proability = 0.1
     @mineral_proability = 0.1
     
-    @rows = @savedGame.rows
+    @rows = 0#@savedGame.rows
     @level = @savedGame.level
     @money = @savedGame.money
 
-    for hexState in @savedGame.hexes
-      if hexUtils.hexDistance(hexState, {q:0, r:0 }) <= @rows
-        hex = @newHex hexState.q, hexState.r, hexState.nature
-        @build hex, window[hexState.building] if hexState.building
+    @newHex 0, 0, 'base'
+    for i in [1..7] by 1
+      @expandMap()
+    # for hexState in @savedGame.hexes
+    #   if hexUtils.hexDistance(hexState, {q:0, r:0 }) <= @rows
+    #     hex = @newHex hexState.q, hexState.r, "default"
+        # @build hex, window[hexState.building] if hexState.building
 
     width = Hex::width * @rows * (3 / 4) + game.camera.width / 2
     height = Hex::height * @rows + game.camera.height / 2
@@ -146,25 +147,12 @@ class Crashed.Game
     @cursors = game.input.keyboard.createCursorKeys()
     @updateStatsText()
     pathfinding.run @
-    @rangeDisplay.update()
     window.gameinstance = @
-
-  createActionMenu: ->
-    x = 0
-    for name, action of actions
-      x += 85
-      actionButton = @add.button 100 + x, 650, action.image, action.click, @, 1, 1, 1
-      actionButton.input.useHandCursor = true
-      actionButton.anchor.set 0.5, 0.5
-      actionButton.fixedToCamera = true
-      actionButton.height = 75
-      actionButton.width = 75
-      @fightUi.add actionButton
   
-  newHex: (q, r, nature) ->
+  newHex: (q, r, type) ->
     x = q * Hex::size * 1.5
     y = (r * Hex::height) + (q * Hex::height / 2)
-    hex = new Hex { game: @, group: @hexGroup, click: @clickHex, x, y, q, r, nature}
+    hex = new Hex { game: @, group: @hexGroup, click: @clickHex, x, y, q, r, type}
     @hexes["#{q}:#{r}"] = hex
     hex
 
@@ -175,10 +163,13 @@ class Crashed.Game
     directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
     for i in [0...6] by 1
       for _ in [0...@rows] by 1
-        nature = null
-        nature = 'trees' if Math.random() <  0.1# 1- Math.E**(-@rows/25)
-        nature = 'minerals' if Math.random() < 0.1
-        @newHex q, r, nature
+        rand = Math.random()
+        type = 'default'
+        if rand <  0.1
+          type = 'mineralA'
+        else if rand < 0.2
+          type = 'mineralB'
+        @newHex q, r, type
         q = q + directions[i][0]
         r = r + directions[i][1]
 
@@ -322,23 +313,12 @@ class Crashed.Game
     true
       
   update: () ->    
-    # @activeAction?.update.call @
     @mouse = @input.getLocalPosition @worldGroup, game.input.activePointer
     # end wave if no more enemies
     if @enemyCount <= 0 and @mode == 'attack'
       @endAttack()
 
-
-    if @map_changed and !@pathfinding_running
-      pathfinding.run @
-      enemy.updatePath = true for enemy in @enemies
-      @map_changed = false
-
     e.update() for e in @enemies
-    b?.update() for b in @bombs
-
-    for b in @buildings
-      b.update() if b.update
 
     if @cursors.up.isDown
       @worldScale += .05

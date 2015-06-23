@@ -1,7 +1,7 @@
 
 
 window.buildingValidator =
-  canBuildRoad = (game) ->
+  canBuildRoad: (game) ->
     true
   canBuild: (game, building) ->
     n = game.selectedHexes.length
@@ -38,6 +38,3 @@ window.buildingValidator =
   #     numSeen++
 
   #     hexUtils.neighbors(game.hexes, h).forEach checkR
-
-    else
-      true
