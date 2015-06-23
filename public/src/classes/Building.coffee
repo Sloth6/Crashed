@@ -9,11 +9,11 @@ class window.Building
     @sprite.height = Hex::width
     
     # physics
-    @game.physics.p2.enable @sprite, false
-    @sprite.body.setCircle @r
-    @sprite.body.static = true
-    @sprite.body.setCollisionGroup @game.buildingCG
-    @sprite.body.collides [ @game.enemyCG ]
+    # @game.physics.p2.enable @sprite, false
+    # @sprite.body.setCircle @r
+    # @sprite.body.static = true
+    # @sprite.body.setCollisionGroup @game.buildingCG
+    # @sprite.body.collides [ @game.enemyCG ]
 
   remove: () ->
     @alive = false

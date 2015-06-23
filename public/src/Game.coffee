@@ -82,7 +82,7 @@ class Crashed.Game
       startButton.events.onInputDown.add @startAttack
 
       i = 0
-      for building in [Wall, Collector, BasicTower1]
+      for building in [Wall, Collector, Road, BasicTower1]
         y = (i * 60) + 150
         button = @buildUi.create 10, y, building.name
         

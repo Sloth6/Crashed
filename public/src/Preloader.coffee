@@ -35,9 +35,9 @@ class Crashed.Preloader
     
 
     @load.image 'hex', 'images/hexes/2.png'
-    @load.image 'minerals', 'images/hexes/1.png'
+    @load.image 'minerals', 'images/hexes/4.png'
     @load.image 'trees', 'images/hexes/3.png'
-    
+    @load.image 'Road', 'images/hexes/1.png'
     @load.image 'Base', 'images/hexes/6.png'
 
     @load.image 'BasicTower1', 'images/buildings/tower.gif'
@@ -50,7 +50,7 @@ class Crashed.Preloader
     @load.image 'WallTower1', 'images/buildings/walltower.gif'
     @load.image 'FireTower1', 'images/buildings/firetower.gif'
 
-    @load.image 'Wall', 'images/buildings/wall.gif'
+    @load.image 'Wall', 'images/hexes/5.png'
     @load.image 'Collector', 'images/buildings/collector.png'
 
     @load.image 'powered', 'images/powered.png'
