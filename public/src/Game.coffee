@@ -134,7 +134,7 @@ class Crashed.Game
     for hexState in @savedGame.hexes
       if hexUtils.hexDistance(hexState, {q:0, r:0 }) <= @rows
         hex = @newHex hexState.q, hexState.r, hexState.nature
-        @build hex, hexState.building if hexState.building
+        @build hex, window[hexState.building] if hexState.building
 
     width = Hex::width * @rows * (3 / 4) + game.camera.width / 2
     height = Hex::height * @rows + game.camera.height / 2
