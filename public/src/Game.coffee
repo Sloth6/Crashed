@@ -56,14 +56,9 @@ class Crashed.Game
     @buildingCG = game.physics.p2.createCollisionGroup()
     @worldGroup.add @buildingGroup
 
-    # Bullets
-    @bulletGroup = game.add.group()
-    @bulletCG = game.physics.p2.createCollisionGroup()
-    @worldGroup.add @bulletGroup
-    @bombs = []
 
     # Player upgrades
-    @playerUpgrades = []
+    # @playerUpgrades = []
 
     #in game ui
     @worldUi = game.add.group()
@@ -75,9 +70,6 @@ class Crashed.Game
     @fightUi.visible = false
     @ui = game.add.group() # static ui
 
-    @map_changed = false
-    @pathfinding_running = false
-
     createMenu = () =>
       startButton = @buildUi.create 10, game.camera.height - 150, 'start'
       startButton.fixedToCamera = true
@@ -85,23 +77,21 @@ class Crashed.Game
       startButton.input.useHandCursor = true
       startButton.events.onInputDown.add @startAttack
 
-      i = 0
-      for building in [Wall, Collector, Pylon, BasicTower1]
-        y = (i * 60) + 150
-        button = @buildUi.create 10, y, building.name
-        
-        price = new Phaser.Text game, 60, y, "$"+building.cost
-        price.fixedToCamera = true
-        @buildUi.add price
+      y = 150
+      roadCost = 1
+      roadButton = @buildUi.create 10, y, "road"
+      
+      price = new Phaser.Text game, 60, y, "$"+roadCost
+      price.fixedToCamera = true
+      @buildUi.add price
 
-        button.height = 50
-        button.width = 50
-        button.fixedToCamera = true
-        button.inputEnabled = true
-        button.input.useHandCursor = true
-        #this monstrousity will wait until I modify phaser library
-        button.events.onInputDown.add ((_building)=> (()=> @clickBuildButton _building))(building)
-        i++
+      roadButton.height = 50
+      roadButton.width = 50
+      roadButton.fixedToCamera = true
+      roadButton.inputEnabled = true
+      roadButton.input.useHandCursor = true
+      #this monstrousity will wait until I modify phaser library
+      roadButton.events.onInputDown.add @buildRoad
       
       style = { font: "45px Arial" }
       @statsText = game.add.text 50, 10, "", style
@@ -168,20 +158,6 @@ class Crashed.Game
       actionButton.height = 75
       actionButton.width = 75
       @fightUi.add actionButton
-
-  markPowered: () ->
-    for coords, h of @hexes
-      h.powered = false
-      h.powerSprite.visible = false
-    checkR = (h) =>
-      return if h.powered
-      h.powered = true
-      h.powerSprite.visible = true
-      if (h.building instanceof Pylon) or (h.building instanceof Base)
-        hexUtils.ring(@hexes, 1, h).forEach checkR
-        hexUtils.ring(@hexes, 2, h).forEach checkR
-        hexUtils.ring(@hexes, 3, h).forEach checkR
-    checkR @hexes["0:0"]
   
   newHex: (q, r, nature) ->
     size = (new Phaser.Sprite game, 0, 0, 'hex').width/2
@@ -238,17 +214,6 @@ class Crashed.Game
     @selectedHexes = []
     true
 
-  clickUpgradeButton: (hex, upgrade, cost) ->
-    @selectedHexes.forEach (h) -> h.deselect()
-    if building.cost > @money
-      alert "Cannot afford that, costs #{building.cost}"
-      return false
-    @build hex, building
-    @money -= @selectedHexes.length * building.cost
-    @selectedHexes = []
-    @rangeDisplay.update()
-    @updateStatsText()
-
   build: (hex, building) ->
     building = new building(@, hex)
     hex.building?.remove()
@@ -263,28 +228,28 @@ class Crashed.Game
     @updateStatsText()
     true
 
-  clickBuildButton: (building) ->
-    unless buildingValidator.canBuild(@, building)
-      alert buildingValidator.canBuild @, building
-      @selectedHexes.forEach (h) -> h.deselect()
-      @selectedHexes = []
-      return false
+  buildRoad: () ->
+    # unless buildingValidator.canBuild(@, building)
+    #   alert buildingValidator.canBuild @, building
+    #   @selectedHexes.forEach (h) -> h.deselect()
+    #   @selectedHexes = []
+    #   return false
 
-    # If we can build
-    @selectedHexes.forEach (hex) =>
-      @build hex, building
-      hex.deselect()
-      while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
-        @expandMap()
+    # # If we can build
+    # @selectedHexes.forEach (hex) =>
+    #   @build hex, building
+    #   hex.deselect()
+    #   while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
+    #     @expandMap()
 
-    if building is Pylon
-      @markPowered()
-    if building is BasicTower1
-      @rangeDisplay.update()
+    # if building is Pylon
+    #   @markPowered()
+    # if building is BasicTower1
+    #   @rangeDisplay.update()
 
-    @money -= @selectedHexes.length * building.cost
-    @selectedHexes = []
-    @updateStatsText()
+    # @money -= @selectedHexes.length * building.cost
+    # @selectedHexes = []
+    # @updateStatsText()
     
   updateStatsText: () ->
     @statsText.setText "Level: #{@level}  Income:#{@income()}  $#{@money} "

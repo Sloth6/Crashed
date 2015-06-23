@@ -14,7 +14,7 @@ class window.Enemy
     
     #physics
     @sprite.body.setCollisionGroup @game.enemyCG
-    @sprite.body.collides [ @game.buildingCG, @game.bulletCG, @game.enemyCG ]
+    @sprite.body.collides [@game.enemyCG]
     @sprite.body.onBeginContact.add (b) =>
       return unless b
       collisionManager.enemyCollision @game, @sprite.container, b.sprite.container
@@ -56,7 +56,7 @@ class window.Enemy
         @nextHex.building.damage @strength
 
     d = @game.physics.arcade.distanceBetween @sprite, @nextHex.sprite
-    speed = if @nextHex.nature is 'trees' then @speed/2 else @speed
+    speed = @nextHex.enemySpeed
     @accelerateToObject @sprite, @nextHex.sprite, speed   
     
     if d < 30 and (@nextHex.building is null or !@nextHex.building.alive)

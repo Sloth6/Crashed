@@ -2,10 +2,8 @@ class window.Hex
   constructor: ({ game, group, @click, @x, @y, @q, @r, @nature }) ->
     # State
     @building = null #Object
-    @minerals = 0
     @selected = false #Boolean
-    @powered = false
-    @burnDamage = 0
+    @enemySpeed = 10
 
     # view
     @sprite = group.create @x, @y, 'hex'
@@ -38,9 +36,6 @@ class window.Hex
   
   setText: (s) ->
     @mytext.setText s
-
-  getCost: () ->
-    if @nature is 'trees' then 3 else 1
 
   onInputDown: () ->
     @click @

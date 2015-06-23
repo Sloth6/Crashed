@@ -1,22 +1,31 @@
 window.pathfinding =
+  pointNeighborsToward: (startingHex) ->
+    for hex in startingHex.neighbors
+      if hex.
+        hex.closestNeighbor ?= startingHex
+        pointNeighborsToward hex
   run: (game) ->
     game.pathfinding_running = true
     # Store an array of the 'frontier.'
-    open = []
+    frontier = []
     # Initialize all hexes based off their building type
     for _, hex of game.hexes
       hex.closestNeighbor = null
+    for hex in game.hexes
+      if hex.building instanceof Base
+        pointNeighborsToward hex
+        break
       hex._d = null
-      if (hex.building and hex.building.alive) and (hex.building instanceof Collector or hex.building instanceof Base)
+      if (hex.building and hex.building.alive) and hex.building instanceof Base
         hex._d = 0
         hex.closestNeighbor = hex
         # Add all neighbors to the frontier
-        open = open.concat hexUtils.neighbors(game.hexes, hex)
+        frontier = frontier.concat hexUtils.neighbors(game.hexes, hex)
 
     # While there are hexes that have not been examined    
-    while open.length > 0
+    while frontier.length > 0
       newOpen = []
-      for hex in open
+      for hex in frontier 
         continue unless hex._d is null
         neighbors = hexUtils.neighbors game.hexes, hex
 
@@ -40,7 +49,7 @@ window.pathfinding =
         # Move the frontier one step out. Dont add hexes that have already
         # been examined.
         newOpen = newOpen.concat(neighbors.filter((hex) -> hex? and hex._d is null))
-      open = newOpen
+      frontier = newOpen
 
     for _, hex of game.hexes
       # hex.setText ''+hex._d
