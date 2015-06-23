@@ -28,12 +28,8 @@ class Crashed.Game
     @collectorIncome = 2
 
     # View
-    @worldScale = .6
-    width = 2000
-    game.world.setBounds -width, -width, 2*width, 2*width
-    @camera.x -= @camera.width/2
-    @camera.y -= @camera.height/2
-    
+    @stage.backgroundColor = '#89898A'
+    @worldScale = 1.0
 
     @hexMenu = null
     @worldGroup = game.add.group()
@@ -139,9 +135,15 @@ class Crashed.Game
       if hexUtils.hexDistance(hexState, {q:0, r:0 }) <= @rows
         hex = @newHex hexState.q, hexState.r, hexState.nature
         @build hex, hexState.building if hexState.building
-    # @expandMap() for i in [0..4]
+
+    width = Hex::width * @rows * (3 / 4) + game.camera.width / 2
+    height = Hex::height * @rows + game.camera.height / 2
+    game.world.setBounds -width, -height, 2*width, 2*height
+
+    @camera.x -= @camera.width/2
+    @camera.y -= @camera.height/2
+
     @cursors = game.input.keyboard.createCursorKeys()
-    @markPowered()
     @updateStatsText()
     pathfinding.run @
     @rangeDisplay.update()
@@ -160,9 +162,8 @@ class Crashed.Game
       @fightUi.add actionButton
   
   newHex: (q, r, nature) ->
-    size = (new Phaser.Sprite game, 0, 0, 'hex').width/2
-    x = q * size * 1.5
-    y = (r * Math.sqrt(3) * size) + (q * Math.sqrt(3)/2 * size)
+    x = q * Hex::size * 1.5
+    y = (r * Hex::height) + (q * Hex::height / 2)
     hex = new Hex { game: @, group: @hexGroup, click: @clickHex, x, y, q, r, nature}
     @hexes["#{q}:#{r}"] = hex
     hex
@@ -180,6 +181,10 @@ class Crashed.Game
         @newHex q, r, nature
         q = q + directions[i][0]
         r = r + directions[i][1]
+
+    width = Hex::width * @rows * (3 / 4) + game.camera.width / 2
+    height = Hex::height * @rows + game.camera.height / 2
+    game.world.setBounds -width, -height, 2*width, 2*height
     true
 
   clickHex: (hex) =>
@@ -342,7 +347,7 @@ class Crashed.Game
       
     else if @cursors.down.isDown
       @worldScale -= .05
-      @worldScale = Math.max @worldScale, 0.05
+      @worldScale = Math.max @worldScale, 0.35
       @worldGroup.scale.setTo @worldScale, @worldScale
 
     if @upKey.isDown
