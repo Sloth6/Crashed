@@ -2,18 +2,17 @@ class window.Hex
   size: 75/2
   width: 75
   height: 75 * Math.sqrt(3)/2
-  constructor: ({ game, group, @click, @x, @y, @q, @r, @type }) ->
+  constructor: ({ game, @group, @click, @x, @y, @q, @r, @type }) ->
     # State
     @building = null #Object
     @selected = false #Boolean
     @enemySpeed = 10
 
     # view
-    @sprite = group.create @x, @y, @type
+    @sprite = @group.create @x, @y, @type
     @sprite.width = Hex::width
     @sprite.height = Hex::width
     @sprite.anchor.set 0.5, 0.5
-    @natureSprite = null #Phaser sprite object
     @sprite.inputEnabled = true
     @sprite.events.onInputDown.add @onInputDown, @
     # @sprite.input.pixelPerfectClick = true
@@ -24,19 +23,18 @@ class window.Hex
     # @mytext = game.add.text @x, @y, ""
     # @sprite.addChild @mytext
     # @myText.bringToFront()
-
-    switch @nature
-      when 'minerals'
-        @natureSprite = group.create @x, @y, 'minerals'
-        @natureSprite.anchor.set 0.5, 0.5
-      when 'trees'
-        @natureSprite = group.create @x, @y, 'trees'
-        @natureSprite.anchor.set 0.5, 0.5
-        # @natureSprite.scale.set 0.15, 0.2
-    if @natureSprite
-      @natureSprite.width = Hex::width
-      @natureSprite.height = Hex::width
   
+  changeType: (@type) ->
+    @sprite.kill()
+    @sprite = @group.create @x, @y, @type
+    @sprite.width = Hex::width
+    @sprite.height = Hex::width
+    @sprite.anchor.set 0.5, 0.5
+    @sprite.inputEnabled = true
+    @sprite.events.onInputDown.add @onInputDown, @
+    # @sprite.input.pixelPerfectClick = true
+    @sprite.input.useHandCursor = true
+
   setText: (s) ->
     @mytext.setText s
 

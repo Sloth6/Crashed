@@ -46,11 +46,11 @@ class Crashed.Game
     @enemyCG = game.physics.p2.createCollisionGroup()
     @worldGroup.add @enemyGroup
 
-    # Buildings
-    @buildings = []
-    @buildingGroup = game.add.group()
-    @buildingCG = game.physics.p2.createCollisionGroup()
-    @worldGroup.add @buildingGroup
+    # roads
+    @roads = []
+    @roadsGroup = game.add.group()
+    # @buildingCG = game.physics.p2.createCollisionGroup()
+    @worldGroup.add @roadsGroup
 
 
     # Player upgrades
@@ -87,7 +87,7 @@ class Crashed.Game
       roadButton.inputEnabled = true
       roadButton.input.useHandCursor = true
       #this monstrousity will wait until I modify phaser library
-      roadButton.events.onInputDown.add @buildRoad
+      roadButton.events.onInputDown.add () => @buildRoad()
       
       style = { font: "45px Arial" }
       @statsText = game.add.text 50, 10, "", style
@@ -216,13 +216,6 @@ class Crashed.Game
     @selectedHexes = []
     true
 
-  build: (hex, building) ->
-    building = new building(@, hex)
-    hex.building?.remove()
-    hex.building = building
-    @buildings.push building
-    null
-
   sell: (hex) ->
     @money += hex.building.constructor.cost
     hex.building.remove()
@@ -238,11 +231,11 @@ class Crashed.Game
     #   return false
 
     # # If we can build
-    # @selectedHexes.forEach (hex) =>
-    #   @build hex, building
-    #   hex.deselect()
-    #   while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
-    #     @expandMap()
+    @selectedHexes.forEach (hex) =>
+      hex.changeType 'road'
+      hex.deselect()
+      while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
+        @expandMap()
 
     # if building is Pylon
     #   @markPowered()
@@ -257,7 +250,7 @@ class Crashed.Game
     @statsText.setText "Level: #{@level}  Income:#{@income()}  $#{@money} "
 
   income: () ->
-    @buildings.reduce ((sum, b) ->
+    @roads.reduce ((sum, b) ->
       income = (b instanceof Collector and b.alive) * Collector.income
       sum + income), 0
 
@@ -275,7 +268,7 @@ class Crashed.Game
     @level += 1
     @money += @income()# + 2*@level
     
-    b.repair() for b in @buildings
+    b.repair() for b in @roads
     h.deselect() for h in @selectedHexes
 
     @selectedHexes = []
