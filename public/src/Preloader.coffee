@@ -28,50 +28,24 @@ class Crashed.Preloader
 
     @load.spritesheet 'instructionsButton', 'images/mainmenu/instructionsButton.png', 326, 287, 2
     
-
     # @load.audio('titleMusic', ['audio/One_More_Time.m4a']);
-
     # @stage.backgroundColor = '#007236';
     
+    @load.image 'road', 'images/hexes/1.png'
+    @load.image 'default', 'images/hexes/2.png'
+    @load.image 'mineralA', 'images/hexes/3.png'
+    @load.image 'mineralB', 'images/hexes/4.png'
+    @load.image 'base', 'images/hexes/6.png'
 
-    @load.image 'hex', 'images/hexes/2.png'
-    @load.image 'minerals', 'images/hexes/4.png'
-    @load.image 'trees', 'images/hexes/3.png'
-    @load.image 'Road', 'images/hexes/1.png'
-    @load.image 'Base', 'images/hexes/6.png'
-
-    @load.image 'BasicTower1', 'images/buildings/tower.gif'
-    @load.image 'BasicTower2', 'images/buildings/tower.gif'
-    @load.image 'BasicTower3', 'images/buildings/tower.gif'
-
-    @load.image 'BombTower1', 'images/buildings/bombTower.gif'
-    @load.image 'BombTower2', 'images/buildings/bombTower.gif'
-
-    @load.image 'WallTower1', 'images/buildings/walltower.gif'
-    @load.image 'FireTower1', 'images/buildings/firetower.gif'
-
-    @load.image 'Wall', 'images/hexes/5.png'
-    @load.image 'Collector', 'images/buildings/collector.png'
-
-    @load.image 'powered', 'images/powered.png'
     @load.image 'hexMenu', 'images/ui/hexMenu.gif'
     @load.image 'menuPartition', 'images/ui/menuPartition.gif'
     @load.image 'sell', 'images/ui/sell.gif'
 
     @load.image 'enemy', 'images/units/enemy.gif'
-    @load.image 'bigEnemy', 'images/units/bigEnemy.gif'
-
-    @load.image 'bullet', 'images/ammo/bullet.gif'
-    @load.image 'bomb', 'images/ammo/bomb.gif'
-    @load.spritesheet 'explosion', 'images/ammo/explosion.png', 64, 64, 25
 
     @load.image 'start', 'images/ui/start.png'
     @load.image 'save', 'images/ui/save.png'
     @load.image 'foo', 'images/ui/upgradeButton.gif'
-
-    @load.image 'click', 'images/upgrades/click.png'
-    @load.image 'knockback', 'images/upgrades/knockback.jpg'
-    @load.image 'airstrike', 'images/upgrades/airstrike.jpg'
 
   create: () ->
     #  Once the load has finished we disable the crop because we're going to sit in the update loop for a short while as the music decodes

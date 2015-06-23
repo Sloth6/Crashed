@@ -56,6 +56,7 @@ class window.Hex
   select: () ->
     @selected = true
     @sprite.alpha = 0.5
+    console.log @q, @r
 
   deselect: () ->
     @selected = false
@@ -63,8 +64,6 @@ class window.Hex
 
   # Export a non circular json structure for saving
   export: () -> 
-    x: @x
-    y:@y
     q:@q
     r:@r
     nature: @nature
