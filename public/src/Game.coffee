@@ -125,11 +125,14 @@ class Crashed.Game
     @tree_proability = 0.1
     @mineral_proability = 0.1
     
-    @rows = 0#@savedGame.rows
+    @rows = 1#@savedGame.rows
     @level = @savedGame.level
     @money = @savedGame.money
 
     @newHex 0, 0, 'base'
+    for [q, r] in [[1,-1], [0,-1],[-1,0], [-1,1], [0,1], [1,0]]
+      @newHex q, r, 'road'
+
     for i in [1..7] by 1
       @expandMap()
     # for hexState in @savedGame.hexes
@@ -163,12 +166,15 @@ class Crashed.Game
     directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
     for i in [0...6] by 1
       for _ in [0...@rows] by 1
-        rand = Math.random()
-        type = 'default'
-        if rand <  0.1
-          type = 'mineralA'
-        else if rand < 0.2
-          type = 'mineralB'
+        if (q is 0 and r > 0) or (r is 0 and q < 0) or (q is -r and q > 0)
+          type = 'road'
+        else
+          rand = Math.random()
+          type = 'default'
+          if rand <  0.1
+            type = 'mineralA'
+          else if rand < 0.2
+            type = 'mineralB'
         @newHex q, r, type
         q = q + directions[i][0]
         r = r + directions[i][1]

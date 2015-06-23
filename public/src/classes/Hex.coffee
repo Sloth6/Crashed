@@ -16,7 +16,7 @@ class window.Hex
     @natureSprite = null #Phaser sprite object
     @sprite.inputEnabled = true
     @sprite.events.onInputDown.add @onInputDown, @
-    @sprite.input.pixelPerfectClick = true
+    # @sprite.input.pixelPerfectClick = true
     @sprite.input.useHandCursor = true
 
     @mytext = new Phaser.Text(game, @x, @y, "")
@@ -46,6 +46,7 @@ class window.Hex
   select: () ->
     @selected = true
     @sprite.alpha = 0.5
+    console.log @q, @r
 
   deselect: () ->
     @selected = false
