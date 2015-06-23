@@ -2,14 +2,14 @@ class window.Hex
   size: 75/2
   width: 75
   height: 75 * Math.sqrt(3)/2
-  constructor: ({ game, group, @click, @x, @y, @q, @r, @nature }) ->
+  constructor: ({ game, group, @click, @x, @y, @q, @r, @type }) ->
     # State
     @building = null #Object
     @selected = false #Boolean
     @enemySpeed = 10
 
     # view
-    @sprite = group.create @x, @y, 'hex'
+    @sprite = group.create @x, @y, @type
     @sprite.width = Hex::width
     @sprite.height = Hex::width
     @sprite.anchor.set 0.5, 0.5
