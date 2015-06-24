@@ -12,6 +12,12 @@ hexUtils =
     mapped = (hexes["#{dq+q}:#{dr+r}"] for [dq, dr] in directions)
     (item for item in mapped when !!item)
 
+  #gives the coords on the opposite side of hex1 from hex2
+  opposite: ({q1, r1}, {q2, r2}) ->
+    direction = [q1 - q2, r1 - r2]
+    [dq+q1, dr+r1] for [dq, dr] in direction
+
+
 
   hexDistance: (a, b) ->
     (Math.abs(a.q - b.q) + Math.abs(a.r - b.r) + Math.abs(a.q + a.r - b.q - b.r)) / 2
