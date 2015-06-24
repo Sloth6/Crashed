@@ -6,7 +6,7 @@ class window.Hex
     # State
     @building = null #Object
     @selected = false #Boolean
-    @enemySpeed = 10
+    @enemySpeed = 50
 
     # view
     @sprite = @group.create @x, @y, @type

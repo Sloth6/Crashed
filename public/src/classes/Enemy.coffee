@@ -4,7 +4,7 @@ class window.Enemy
     @alive = true
     @health = 100 * (1+healthModifier)
     @maxHealth = 100 * (1+healthModifier)
-    @maxSpeed = 50
+    @maxSpeed = 100
     @attacking = false
     @updatePath = false
     
@@ -24,8 +24,8 @@ class window.Enemy
   kill: () ->
     return unless @alive
     @alive = false
-    @game.enemyCount -= 1
-    @game.remainingText.setText "Enemies remaining: #{@game.enemyCount}"
+    @game.aliveEnemies -= 1
+    @game.remainingText.setText "Enemies remaining: #{@game.aliveEnemies}"
     @game.updateStatsText()
     @sprite.kill()
 
@@ -48,7 +48,6 @@ class window.Enemy
     # if !@nextHex
     #   return
 
-    @damage @nextHex.burnDamage
     if @attacking
       if not @nextHex.building
         @attacking = false
