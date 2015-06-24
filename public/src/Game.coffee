@@ -224,13 +224,14 @@ class Crashed.Game
     true
 
   buildRoad: () ->
-    # unless buildingValidator.canBuild(@, building)
-    #   alert buildingValidator.canBuild @, building
-    #   @selectedHexes.forEach (h) -> h.deselect()
-    #   @selectedHexes = []
-    #   return false
+    if game.selectedHexes.length > game.money
+      return alert "Cannot afford #{@n} #{type}s. Costs #{cost}."
 
-    # # If we can build
+      # @selectedHexes.forEach (h) -> h.deselect()
+      # @selectedHexes = []
+      # return false
+
+    # If we can build
     @selectedHexes.forEach (hex) =>
       hex.changeType 'road'
       hex.deselect()
@@ -282,33 +283,25 @@ class Crashed.Game
     @fightUi.visible = true
 
     pathfinding.run @
-    @clearSelected()  
+    @clearSelected()
 
     @enemyCount = @enemiesPerLevel()
     enemyHealthModifier = Math.pow(@level, 2) / 37
 
     @remainingText.setText "Enemies remaining: #{@enemyCount}"
     
-    groupSize = @level * 3
-    numGroups = @enemyCount // groupSize
-    outerRing = hexUtils.ring(@hexes, @rows)
-    step = (outerRing.length // numGroups) - 1
-    starts = ((i*step)%outerRing.length for i in [0...numGroups])
+    outerRing = hexUtils.ring(@hexes, @rows)    
+    starts = outerRing.filter (hex) -> hex.type is 'road'
+    steps = Math.ceil(@enemyCount / starts.length)
+    console.log @enemyCount,  starts.length
+    (myLoop = (i) =>
+      setTimeout (()=>
+        for hex in starts
+          @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
+        myLoop(i) if (--i)    # decrement i and call myLoop again if i > 0
+      ), 1000
+    )(steps)                     # pass the number of iterations as an argument
 
-    for i in [0...@enemyCount] by 1
-      hex = outerRing.random()# outerRing[starts[i%numGroups]]
-      @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
-
-    if 'Click' in @playerUpgrades
-      @clickKills = 1
-      @enemies.forEach (enemy) =>
-        enemy.sprite.inputEnabled = true
-        clickKill = () =>
-          if @clickKills > 0
-            @clickKills -= 1
-            enemy.kill()
-        # closures kill the monstrosity! 
-        enemy.sprite.events.onInputDown.add clickKill    
     true
       
   update: () ->    

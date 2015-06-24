@@ -41,7 +41,7 @@ class Crashed.Preloader
     @load.image 'menuPartition', 'images/ui/menuPartition.gif'
     @load.image 'sell', 'images/ui/sell.gif'
 
-    @load.image 'enemy', 'images/units/enemy.gif'
+    @load.image 'enemy', 'images/units/enemy.png'
 
     @load.image 'start', 'images/ui/start.png'
     @load.image 'save', 'images/ui/save.png'

@@ -1,8 +1,7 @@
 
 
 window.buildingValidator =
-  canBuildRoad: (game) ->
-    true
+
   canBuild: (game, building) ->
     n = game.selectedHexes.length
     cost = n * building.cost
