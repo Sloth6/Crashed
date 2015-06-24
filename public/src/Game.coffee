@@ -224,7 +224,7 @@ class Crashed.Game
     true
 
   buildRoad: () ->
-    if game.selectedHexes.length > game.money
+    if @selectedHexes.length > @money
       return alert "Cannot afford #{@n} #{type}s. Costs #{cost}."
 
       # @selectedHexes.forEach (h) -> h.deselect()
