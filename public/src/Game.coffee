@@ -49,6 +49,7 @@ class Crashed.Game
     # roads
     @roads = []
     @roadsGroup = game.add.group()
+    @forks = 3
     # @buildingCG = game.physics.p2.createCollisionGroup()
     @worldGroup.add @roadsGroup
 
@@ -130,8 +131,11 @@ class Crashed.Game
     @money = @savedGame.money
 
     @newHex 0, 0, 'base'
-    for [q, r] in [[1,-1], [0,-1],[-1,0], [-1,1], [0,1], [1,0]]
+    roadDirections = (dir for dir in hexUtils.directions by 2)
+    for [q, r] in roadDirections
       @newHex q, r, 'road'
+    for [q,r] in (dir for dir in hexUtils.directions when dir not in roadDirections)
+      @newHex q, r, 'default'
 
     for i in [1..7] by 1
       @expandMap()
@@ -161,24 +165,61 @@ class Crashed.Game
     hex
 
   expandMap: () ->
+    pathfinding.run @
     @rows += 1
     q = -@rows
     r = @rows
-    directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
+    dirs = hexUtils.directions
     for i in [0...6] by 1
       for _ in [0...@rows] by 1
-        if (q is 0 and r > 0) or (r is 0 and q < 0) or (q is -r and q > 0)
-          type = 'road'
-        else
-          rand = Math.random()
-          type = 'default'
-          if rand <  0.1
-            type = 'mineralA'
-          else if rand < 0.2
-            type = 'mineralB'
+        rand = Math.random()
+        type = 'default'
+        if rand <  0.1
+          type = 'mineralA'
+        else if rand < 0.2
+          type = 'mineralB'
         @newHex q, r, type
-        q = q + directions[i][0]
-        r = r + directions[i][1]
+        q = q + dirs[i][0]
+        r = r + dirs[i][1]
+    for hex in hexUtils.ring @hexes, @rows - 1
+      if hex.type is 'road' and hex.closestNeighbor
+        fork = Math.random() < 0.5 / 2**hex.forkDepth and @rows > 7
+        if fork and (hex.q is 0 or hex.r is 0 or hex.q is -1 * hex.r)
+          for dir, index in dirs
+            if dir[0] is hex.q - hex.closestNeighbor.q and dir[1] is hex.r - hex.closestNeighbor.r
+              roadHexQ = hex.q + dirs[(index + 1) % dirs.length][0]
+              roadHexR = hex.r + dirs[(index + 1) % dirs.length][1]
+              roadHex = @hexes["#{roadHexQ}:#{roadHexR}"]
+              if roadHex in hexUtils.ring @hexes, @rows
+                roadHex.changeType "road"
+                roadHex.forkDepth = hex.forkDepth + 1
+              roadHexQ = hex.q + dirs[(index + 5) % dirs.length][0]
+              roadHexR = hex.r + dirs[(index + 5) % dirs.length][1]
+              roadHex = @hexes["#{roadHexQ}:#{roadHexR}"]
+              if roadHex in hexUtils.ring @hexes, @rows
+                roadHex.changeType "road"
+                roadHex.forkDepth = hex.forkDepth + 1
+
+        else 
+          if fork
+            for dir, index in dirs
+              curDistance = hexUtils.hexDistance hex, {q:0, r:0}
+              nextQ = hex.q + dir[0]
+              nextR = hex.r + dir[1]
+              nextHex = @hexes["#{nextQ}:#{nextR}"]
+              nextDistance = hexUtils.hexDistance nextHex, {q:0, r:0}
+              if nextDistance > curDistance
+                nextHex.changeType "road"
+                nextHex.forkDepth = hex.forkDepth + 1
+          roadHexQ = 2*hex.q - hex.closestNeighbor.q
+          roadHexR = 2*hex.r - hex.closestNeighbor.r
+          roadHex = @hexes["#{roadHexQ}:#{roadHexR}"]
+          if roadHex in hexUtils.ring @hexes, @rows
+            roadHex.changeType "road"
+            if fork
+              roadHex.forkDepth = hex.forkDepth + 1
+            else
+              roadHex.forkDepth = hex.forkDepth
 
     width = Hex::width * @rows * (3 / 4) + game.camera.width / 2
     height = Hex::height * @rows + game.camera.height / 2

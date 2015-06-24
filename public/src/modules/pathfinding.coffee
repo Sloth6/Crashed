@@ -1,10 +1,13 @@
 window.pathfinding =
   run: (game) ->
     pointNeighborsToward = (game, startingHex) ->
+      neighborRoads = []
       for hex in hexUtils.neighbors game.hexes, startingHex
         if hex.type is 'road' and hex.closestNeighbor is null
+          neighborRoads.push hex
           hex.closestNeighbor = startingHex
-          pointNeighborsToward game, hex
+      for neighborRoad in neighborRoads
+        pointNeighborsToward game, neighborRoad
 
     # Initialize all hexes based off their building type
     for _, hex of game.hexes
