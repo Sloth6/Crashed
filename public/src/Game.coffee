@@ -137,7 +137,7 @@ class Crashed.Game
     for [q,r] in (dir for dir in hexUtils.directions when dir not in roadDirections)
       @newHex q, r, 'default'
 
-    for i in [1..7] by 1
+    for i in [1..5] by 1
       @expandMap()
     # for hexState in @savedGame.hexes
     #   if hexUtils.hexDistance(hexState, {q:0, r:0 }) <= @rows

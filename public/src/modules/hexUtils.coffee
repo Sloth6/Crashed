@@ -40,27 +40,46 @@ hexUtils =
     minHex
 
   getDistricts: (hexes) ->
-    filter = (h) -> h._district is null and h.type != 'road'
-    floodFill = (hex, districtName) ->
-      fill = [] # collect all hexes in the same district as 'hex'
-      floodFillR = (h) -> #recursive sub function of flood fill
-        h.setText districtName
-        h._district = districtName
-        neighbors = hexUtils.neighbors(hexes, h).filter filter
-        fill.concat neighbors
-        floodFillR _h for _h in neighbors
-      floodFillR hex
-      fill
+    
+    # Filter hexes that cant be in district
+    filter = (h) -> h._district is null and h.type not in ['road', 'base']
 
+    # Given a hex, get its cluster
+    getDistrictFor = (hex, districtName) ->
+      roads = [] # Collect all roads that border district
+      interior = [hex] # Collect all hexes in district
+      is_exterior = false
+      floodFillR = (h) -> # Recursive sub function that adds to district
+        h._district = districtName
+        neighbors = hexUtils.neighbors(hexes, h)
+        if neighbors.length != 6
+          is_exterior = true
+        toCheck = neighbors.filter filter
+        interior = interior.concat toCheck
+        roads = roads.concat neighbors.filter (h) -> h.type is 'road'
+        for _h in toCheck
+          floodFillR _h
+      floodFillR hex
+      
+      if is_exterior
+        null
+      else
+        new District(roads, interior, districtName)
+
+    districts = []
     open = [] #copy the array
     for _, h of hexes
       h._district = null
-      h.setText ''
-      open.push h
-
+      open.push h if h.type not in ['road', 'base']
+      
     i = 0
     while open.length > 0 #while some hexes are not assigned to districts
-      floodFill open.pop(), "D:#{i++}"
+      district = getDistrictFor(open.pop(), "D:#{i++}")
+      districts.push district if district?
       open = open.filter filter
-    null
-    # districts = []
+    
+    for _,h of hexes
+      h._district = null
+
+    console.log districts
+    districts

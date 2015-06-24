@@ -1,3 +1,2 @@
 class window.District
-  constructor: (@perimeter) ->
-    
+  constructor: (@perimeter, @interior, @name) ->
