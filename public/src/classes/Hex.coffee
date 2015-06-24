@@ -7,6 +7,7 @@ class window.Hex
     @building = null #Object
     @selected = false #Boolean
     @enemySpeed = 50
+    @district = null
     @forkDepth = 1
 
     # view
@@ -22,6 +23,9 @@ class window.Hex
     @mytext = new Phaser.Text(game, @x, @y, "")
     @mytext.fontSize = 16
     game.worldUi.add @mytext
+
+    if @type in ['mineralA', 'mineralB']
+      @sprite.alpha = 0.6
     # @mytext = game.add.text @x, @y, ""
     # @sprite.addChild @mytext
     # @myText.bringToFront()
@@ -46,7 +50,7 @@ class window.Hex
   select: () ->
     @selected = true
     @sprite.alpha = 0.5
-    console.log @q, @r
+    # console.log @q, @r
 
   deselect: () ->
     @selected = false

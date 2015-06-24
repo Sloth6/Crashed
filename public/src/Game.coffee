@@ -125,6 +125,7 @@ class Crashed.Game
     @savedGame = @savedGame or window.defaultStart
     @tree_proability = 0.1
     @mineral_proability = 0.1
+    @income = 0
     
     @rows = 1#@savedGame.rows
     @level = @savedGame.level
@@ -154,9 +155,17 @@ class Crashed.Game
     @cursors = game.input.keyboard.createCursorKeys()
     @updateStatsText()
     pathfinding.run @
-    hexUtils.getDistricts @hexes
+    @updateIncome()
     window.gameinstance = @
   
+  updateIncome: () ->
+    districts = hexUtils.getNewDistricts @hexes
+    console.log 'new districts', districts
+    for district in districts
+      @income += district.income
+
+    @updateStatsText()
+
   newHex: (q, r, type) ->
     x = q * Hex::size * 1.5
     y = (r * Hex::height) + (q * Hex::height / 2)
@@ -279,7 +288,8 @@ class Crashed.Game
       hex.deselect()
       while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
         @expandMap()
-    hexUtils.getDistricts @hexes
+
+    @updateIncome()
     pathfinding.run @
     # if building is Pylon
     #   @markPowered()
@@ -291,12 +301,7 @@ class Crashed.Game
     # @updateStatsText()
     
   updateStatsText: () ->
-    @statsText.setText "Level: #{@level}  Income:#{@income()}  $#{@money} "
-
-  income: () ->
-    @roads.reduce ((sum, b) ->
-      income = (b instanceof Collector and b.alive) * Collector.income
-      sum + income), 0
+    @statsText.setText "Level: #{@level}  Income:#{@income}  $#{@money} "
 
   enemiesPerLevel: (n) ->
     n ?= @level
@@ -310,7 +315,7 @@ class Crashed.Game
     
     @enemies = []
     @level += 1
-    @money += @income()# + 2*@level
+    @money += @income# + 2*@level
     
     b.repair() for b in @roads
     h.deselect() for h in @selectedHexes

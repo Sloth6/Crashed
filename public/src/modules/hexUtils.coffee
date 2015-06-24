@@ -39,29 +39,31 @@ hexUtils =
         minHex = hex
     minHex
 
-  getDistricts: (hexes) ->
+  getNewDistricts: (hexes) ->
     
     # Filter hexes that cant be in district
-    filter = (h) -> h._district is null and h.type not in ['road', 'base']
+    filter = (_h) -> (_h.district is null) and (_h.type not in ['road', 'base'])
 
     # Given a hex, get its cluster
     getDistrictFor = (hex, districtName) ->
       roads = [] # Collect all roads that border district
-      interior = [hex] # Collect all hexes in district
+      interior = [] # Collect all hexes in district
       is_exterior = false
       floodFillR = (h) -> # Recursive sub function that adds to district
-        h._district = districtName
+        return unless h.district is null
+        interior.push h
+        h.district = districtName
         neighbors = hexUtils.neighbors(hexes, h)
         if neighbors.length != 6
           is_exterior = true
         toCheck = neighbors.filter filter
-        interior = interior.concat toCheck
-        roads = roads.concat neighbors.filter (h) -> h.type is 'road'
+        roads = roads.concat neighbors.filter (_h) -> _h.type is 'road'
         for _h in toCheck
           floodFillR _h
       floodFillR hex
       
       if is_exterior
+        interior.forEach (h) -> h.district = 'exterior'
         null
       else
         new District(roads, interior, districtName)
@@ -69,17 +71,15 @@ hexUtils =
     districts = []
     open = [] #copy the array
     for _, h of hexes
-      h._district = null
-      open.push h if h.type not in ['road', 'base']
+      open.push h if h.type not in ['road', 'base'] and h.district is null
       
     i = 0
     while open.length > 0 #while some hexes are not assigned to districts
       district = getDistrictFor(open.pop(), "D:#{i++}")
       districts.push district if district?
       open = open.filter filter
-    
-    for _,h of hexes
-      h._district = null
 
-    console.log districts
+    for _, h of hexes
+      h.district = null if h.district is 'exterior'
+
     districts
