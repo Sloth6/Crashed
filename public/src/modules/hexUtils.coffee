@@ -3,6 +3,8 @@
 directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]]
 
 hexUtils =
+  directions: directions
+
   XYtoHex: (x, y) ->
     q = Math.floor((x * Math.sqrt(3) / 3 - y / 3) / 40)
     r = Math.floor(y * 2 / 3 / 40)
