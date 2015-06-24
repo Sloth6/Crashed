@@ -239,6 +239,7 @@ class Crashed.Game
       while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
         @expandMap()
     hexUtils.getDistricts @hexes
+    pathfinding.run @
     # if building is Pylon
     #   @markPowered()
     # if building is BasicTower1
