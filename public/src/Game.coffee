@@ -288,16 +288,20 @@ class Crashed.Game
     @enemyCount = @enemiesPerLevel()
     enemyHealthModifier = Math.pow(@level, 2) / 37
 
-    @remainingText.setText "Enemies remaining: #{@enemyCount}"
-    
-    outerRing = hexUtils.ring(@hexes, @rows)    
+    @aliveEnemies = 0    
+    @remainingText.setText "Enemies remaining: #{@aliveEnemies}"
+
+    outerRing = hexUtils.ring(@hexes, @rows)
     starts = outerRing.filter (hex) -> hex.type is 'road'
-    steps = Math.ceil(@enemyCount / starts.length)
-    console.log @enemyCount,  starts.length
+    steps = Math.ceil(@enemiesPerLevel() / starts.length)
+
+
     (myLoop = (i) =>
       setTimeout (()=>
         for hex in starts
           @enemies.push new SmallEnemy(@, hex, enemyHealthModifier)
+          @aliveEnemies += 1
+          @remainingText.setText "Enemies remaining: #{@aliveEnemies}"
         myLoop(i) if (--i)    # decrement i and call myLoop again if i > 0
       ), 1000
     )(steps)                     # pass the number of iterations as an argument

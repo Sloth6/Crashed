@@ -24,8 +24,8 @@ class window.Enemy
   kill: () ->
     return unless @alive
     @alive = false
-    @game.enemyCount -= 1
-    @game.remainingText.setText "Enemies remaining: #{@game.enemyCount}"
+    @game.aliveEnemies -= 1
+    @game.remainingText.setText "Enemies remaining: #{@game.aliveEnemies}"
     @game.updateStatsText()
     @sprite.kill()
 
