@@ -20,6 +20,7 @@ class window.Hex
     @sprite.input.useHandCursor = true
 
     @mytext = new Phaser.Text(game, @x, @y, "")
+    @mytext.fontSize = 16
     game.worldUi.add @mytext
     # @mytext = game.add.text @x, @y, ""
     # @sprite.addChild @mytext

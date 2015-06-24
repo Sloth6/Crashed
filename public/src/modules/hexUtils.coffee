@@ -14,18 +14,10 @@ hexUtils =
     mapped = (hexes["#{dq+q}:#{dr+r}"] for [dq, dr] in directions)
     (item for item in mapped when !!item)
 
-  #gives the coords on the opposite side of hex1 from hex2
-  opposite: ({q1, r1}, {q2, r2}) ->
-    direction = [q1 - q2, r1 - r2]
-    [dq+q1, dr+r1] for [dq, dr] in direction
-
-
-
   hexDistance: (a, b) ->
     (Math.abs(a.q - b.q) + Math.abs(a.r - b.r) + Math.abs(a.q + a.r - b.q - b.r)) / 2
 
   ring: (hexes, r, c) ->
-    # console.log hexes, r, c
     c ?= { q: 0, r: 0 }
     hex = hexes["#{-r+c.q}:#{r+c.r}"]
     ringHexes = []
@@ -36,6 +28,7 @@ hexUtils =
         _r = hex.r+directions[i][1]
         hex = hexes["#{q}:#{_r}"]
     ringHexes
+  
   nearestHex: (hexes, x, y) ->
     min = Infinity
     minHex = null
@@ -46,5 +39,28 @@ hexUtils =
         minHex = hex
     minHex
 
+  getDistricts: (hexes) ->
+    filter = (h) -> h._district is null and h.type != 'road'
+    floodFill = (hex, districtName) ->
+      fill = [] # collect all hexes in the same district as 'hex'
+      floodFillR = (h) -> #recursive sub function of flood fill
+        h.setText districtName
+        h._district = districtName
+        neighbors = hexUtils.neighbors(hexes, h).filter filter
+        fill.concat neighbors
+        floodFillR _h for _h in neighbors
+      floodFillR hex
+      fill
 
-# console.log hexUtils.XYtoHex({x: 2, y:3})
+    open = [] #copy the array
+    for _, h of hexes
+      h._district = null
+      h.setText ''
+      open.push h
+
+    i = 0
+    while open.length > 0 #while some hexes are not assigned to districts
+      floodFill open.pop(), "D:#{i++}"
+      open = open.filter filter
+    null
+    # districts = []
