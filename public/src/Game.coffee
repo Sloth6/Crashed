@@ -37,7 +37,6 @@ class Crashed.Game
     # Hexes
     @hexes = {}
     @hexGroup = game.add.group()
-    @selectedHexes = []
     @worldGroup.add @hexGroup
 
     # Enemies
@@ -76,19 +75,20 @@ class Crashed.Game
 
       y = 150
       roadCost = 1
-      roadButton = @buildUi.create 10, y, "road"
+      new BuildButton(10, 150, 'road', @)
+      # roadButton = @buildUi.create 10, y, "road"
       
-      price = new Phaser.Text game, 60, y, "$"+roadCost
-      price.fixedToCamera = true
-      @buildUi.add price
+      # price = new Phaser.Text game, 60, y, "$"+roadCost
+      # price.fixedToCamera = true
+      # @buildUi.add price
 
-      roadButton.height = 50
-      roadButton.width = 50
-      roadButton.fixedToCamera = true
-      roadButton.inputEnabled = true
-      roadButton.input.useHandCursor = true
-      #this monstrousity will wait until I modify phaser library
-      roadButton.events.onInputDown.add () => @buildRoad()
+      # roadButton.height = 50
+      # roadButton.width = 50
+      # roadButton.fixedToCamera = true
+      # roadButton.inputEnabled = true
+      # roadButton.input.useHandCursor = true
+      # #this monstrousity will wait until I modify phaser library
+      # roadButton.events.onInputDown.add () => @buildRoad()
       
       style = { font: "45px Arial" }
       @statsText = game.add.text 50, 10, "", style
@@ -126,7 +126,8 @@ class Crashed.Game
     @tree_proability = 0.1
     @mineral_proability = 0.1
     @income = 0
-    
+    @prices = 
+      road: 1
     @rows = 1#@savedGame.rows
     @level = @savedGame.level
     @money = @savedGame.money
@@ -236,69 +237,23 @@ class Crashed.Game
     true
 
   clickHex: (hex) =>
-    return if hex.nature is 'trees'
-    if @hexMenu?
-      @hexMenu.remove()
-      @hexMenu = null
-    if @mode == 'build'
-      if hex.selected
-        @selectedHexes.remove hex
-        hex.deselect()
-      else
-        if hex.building
-          @clearSelected()
-          @hexMenu = new HexMenu @, hex, hex.building
-        
-        @selectedHexes.push hex
-        hex.select()
-    # else if @mode == 'attack'
-    #   if hex.selected
-    #     @selectedHexes = []
-    #     hex.deselect()
-    #   else
-    #     for hex in @selectedHexes
-    #       hex.deselect()
-    #     @selectedHexes = [hex]
-    #     hex.select()
-  
-  clearSelected: () ->
-    for hex in @selectedHexes
-      hex.deselect()
-    @selectedHexes = []
-    true
+    if @activeBuildTool?
+      @activeBuildTool.hexClicked hex
 
   sell: (hex) ->
     @money += hex.building.constructor.cost
     hex.building.remove()
-    @clearSelected()
     @updateStatsText()
     true
 
-  buildRoad: () ->
-    if @selectedHexes.length > @money
-      return alert "Cannot afford #{@n} #{type}s. Costs #{cost}."
+  build: (hex, type) ->
+    hex.changeType type
+    while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
+      @expandMap()
 
-      # @selectedHexes.forEach (h) -> h.deselect()
-      # @selectedHexes = []
-      # return false
-
-    # If we can build
-    @selectedHexes.forEach (hex) =>
-      hex.changeType 'road'
-      hex.deselect()
-      while @rows - hexUtils.hexDistance(hex, { q:0, r:0 }) < 7
-        @expandMap()
-
+    @money -= @prices[type]
     @updateIncome()
     pathfinding.run @
-    # if building is Pylon
-    #   @markPowered()
-    # if building is BasicTower1
-    #   @rangeDisplay.update()
-
-    # @money -= @selectedHexes.length * building.cost
-    # @selectedHexes = []
-    # @updateStatsText()
     
   updateStatsText: () ->
     @statsText.setText "Level: #{@level}  Income:#{@income}  $#{@money} "
@@ -317,10 +272,6 @@ class Crashed.Game
     @level += 1
     @money += @income# + 2*@level
     
-    b.repair() for b in @roads
-    h.deselect() for h in @selectedHexes
-
-    @selectedHexes = []
     @updateStatsText()
 
   startAttack: () =>
@@ -331,7 +282,6 @@ class Crashed.Game
     @fightUi.visible = true
 
     pathfinding.run @
-    @clearSelected()
 
     @enemyCount = @enemiesPerLevel()
     enemyHealthModifier = Math.pow(@level, 2) / 37
@@ -358,6 +308,9 @@ class Crashed.Game
       
   update: () ->    
     @mouse = @input.getLocalPosition @worldGroup, game.input.activePointer
+
+    @activeBuildTool.update(game.input.activePointer) if @activeBuildTool
+
     # end wave if no more enemies
     if @enemyCount <= 0 and @mode == 'attack'
       @endAttack()
