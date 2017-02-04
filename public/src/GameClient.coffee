@@ -58,9 +58,9 @@ class Crashed.Game
     height = 2000#1.5 * @hex_radius * @cols + @hex_radius
     game.world.setBounds -@hex_radius,-2*@hex_radius, width, height
 
-    t = @hex_grid.data['16:0']#.point
-    p = @layout.hex_to_pixel(t.point)
-    @players = [new Player('cody', t, p)]
+    tile = @hex_grid.data['16:0']
+    point = @layout.hex_to_pixel(tile.hex)
+    @players = [new Player('cody', tile, point)]
     @user = @players[0]
     @world_group.add(@user.sprite)
 
@@ -93,7 +93,7 @@ class Crashed.Game
     @tile_group.add(graphics)
 
   pathfind: (hex_tile_a, hex_tile_b) ->
-    impassable = (tile) -> tile.type != 0
+    impassable = (tile_a, tile_b) -> Math.abs(tile_a.type - tile_b.type) > 1
     astar.search(@hex_grid, hex_tile_a, hex_tile_b, hex_distance, impassable)
 
   client_build_tile: (tile) ->
@@ -101,7 +101,7 @@ class Crashed.Game
       tile.sprite.destroy()
 
     if tile.type > 0
-      p = @layout.hex_to_pixel(tile.point)
+      p = @layout.hex_to_pixel(tile.hex)
 
       if tile.type == 1
         sprite_name = 'tile1'
@@ -112,7 +112,7 @@ class Crashed.Game
       scale_factor = (@hex_radius *2) / tile.sprite.width
       tile.sprite.scale.setTo(scale_factor)
       tile.sprite.anchor.set 0.5, 0.75
-      # @world_group.sort('y', Phaser.Group.SORT_ASCENDING)
+      tile.sprite.depth = tile.sprite.y
 
   build_tile: (tile) ->
     if tile.type < 2
@@ -169,14 +169,18 @@ class Crashed.Game
       if use_update
         if player.current_path.length
           player.last_move_update = Date.now()
-          next_tile = player.current_path.shift()
-          player.tile = next_tile
-          p = @layout.hex_to_pixel(next_tile.point)
-          tween = game.add.tween(player.sprite).to( p, player.speed, "Linear", true, 0)
+          player.tile = player.current_path.shift()
+          p = @layout.hex_to_pixel(player.tile.hex)
+
+          tile_height = player.tile.type * 10
+          player.sprite.depth += tile_height
+          to = {x: p.x, y:p.y-tile_height, depth:p.y + tile_height}
+          tween = game.add.tween(player.sprite).to(to, player.speed, "Linear", true, 0)
+
         else if player.path_end_event
           player.path_end_event()
           player.path_end_event = null
 
     game.debug.text game.time.fps, 2, 14, "#00ff00"
-    @world_group.sort('y', Phaser.Group.SORT_ASCENDING)
+    @world_group.sort('depth', Phaser.Group.SORT_ASCENDING)
     true

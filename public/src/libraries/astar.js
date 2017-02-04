@@ -88,9 +88,7 @@ var astar = {
 
         start.h = heuristic(start, end);
         openHeap.push(start);
-        zz = 0
         while(openHeap.size() > 0) {
-            zz += 1
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
             var current_node = openHeap.pop();
 
@@ -109,7 +107,7 @@ var astar = {
             for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
-                if (neighbor.closed || impassable(neighbor)) { // || impassable(neighbor, unit)// Not a valid node to process, skip to next neighbor.
+                if (neighbor.closed || impassable(current_node, neighbor)) { // || impassable(neighbor, unit)// Not a valid node to process, skip to next neighbor.
 
                     continue; // Not a valid node to process, skip to next neighbor.
                 }

@@ -19,7 +19,7 @@ class HexGrid
             false
 
     get_neighbors: (tile) =>
-        (@get_hextile(h) for h in tile.point.neighbors() when @get_hextile(h))
+        (@get_hextile(h) for h in tile.hex.neighbors() when @get_hextile(h))
 
     get_hextile: (h) ->
         if !h
@@ -41,7 +41,7 @@ class HexGrid
     #         @data[hash] = {k: v}
 
 class HexTile
-    constructor: (@point) ->
+    constructor: (@hex) ->
         #### Game Logic Variables ####
         @type = 0 # {0: empty, 1: }
 
@@ -55,10 +55,10 @@ class HexTile
         ###########################
 
     distance: (other) ->
-        @point.distance(other.point)
+        @hex.distance(other.hex)
 
     equal: (other) ->
-        @point.equal(other.point)
+        @hex.equal(other.hex)
 
 class HexPoint
     constructor: (@q, @r, @s) ->
