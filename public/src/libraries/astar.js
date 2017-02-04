@@ -4,6 +4,7 @@
 // Implements the astar search algorithm in javascript using a Binary Heap.
 // Includes Binary Heap (with modifications) from Marijn Haverbeke.
 // http://eloquentjavascript.net/appendix2.html
+// 'use strict'
 
 (function(definition) {
     /* global module, define */
@@ -36,8 +37,8 @@ function getHeap() {
 
 var astar = {
     init: function(graph) {
-        for (qr in graph) {
-            var node = graph[qr]
+        for (var key in graph.data) {
+            var node = graph.data[key];
             node.f = 0;
             node.g = 0;
             node.h = 0;
@@ -45,6 +46,17 @@ var astar = {
             node.closed = false;
             node._parent = null;
         }
+        // foo = {}
+        // for (var i = 0; i < graph.length; i++){
+        //     var row = graph[i]
+        //     for (var j = 0; j < row.length; j++){
+        //         var node = row[j]
+        //         foo[node.hash()] = {f:0, g:0, h:0, visited:false, closed:false, _parent:null}
+        //         // console.log(node);
+
+        //     }
+        // }
+        // return foo
     },
 
     /**
@@ -58,55 +70,64 @@ var astar = {
 	* @param {Function} [options.impassable] Impasssable function (returns
 	*          true if impassable)
     */
-    search: function(options) {
-        var graph = options.graph;
-        var start = options.start;
-        var end = options.end;
+    search: function(graph, start, end, heuristic, impassable) {
+        // var graph = options.graph;
+        // var start = options.start;
+        // var end = options.end;
         astar.init(graph);
-        options = options || {};
-        var unit = options.unit || false;
-        var heuristic = options.heuristic;
-        var closest = options.closest || false;
+        // return graph
+        // options = options || {};
+        var unit = false;
+        // var heuristic = options.heuristic;
+        // var closest = options.closest || false;
         // var neighbors = options.neighbors;
-        var impassable = options.impassable || function(){ return false };
-        var openHeap = getHeap(),
-            closestNode = start; // set the start node to be the closest if required
+        var impassable = impassable || function(){ return false };
+        // var impassable = function(){ return false }
+
+        var openHeap = getHeap();
+
         start.h = heuristic(start, end);
         openHeap.push(start);
-
+        zz = 0
         while(openHeap.size() > 0) {
-
+            zz += 1
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
-            var currentHex = openHeap.pop();
+            var current_node = openHeap.pop();
 
+            // console.log('test');
             // End case -- result has been found, return the traced path.
-            //if(currentHex === end) {
-                //return pathTo(currentHex);
-            //}
+            if(current_node.equal(end)) {
+                return pathTo(current_node);
+            }
 
-            // Normal case -- move currentHex from open to closed, process each of its neighbors.
-            currentHex.closed = true;
+            // Normal case -- move current_node from open to closed, process each of its neighbors.
+            current_node.closed = true;
 
             // Find all neighbors for the current node.
-            var neighbors = options.neighbors(graph, currentHex);
+            var neighbors = graph.get_neighbors(current_node);
+            // console.log('neighbors', neighbors);
             for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
-                if (neighbor.closed || impassable(neighbor, unit)) {
-                    // Not a valid node to process, skip to next neighbor.
-                    continue;
+                if (neighbor.closed || impassable(neighbor)) { // || impassable(neighbor, unit)// Not a valid node to process, skip to next neighbor.
+
+                    continue; // Not a valid node to process, skip to next neighbor.
                 }
+
+
+                // console.log(current_node, neighbor, neighbor.visited, heuristic(neighbor, end));
 
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
-                var gScore = currentHex.g + neighbor.getCost(),
-                    beenVisited = neighbor.visited;
+                var gScore = current_node.g + 1 //neighbor.getCost();
+                // var gScore = current_node.g + neighbor.getCost();
+                var beenVisited = neighbor.visited;
 
                 if (!beenVisited || gScore < neighbor.g) {
 
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
                     neighbor.visited = true;
-                    neighbor._parent = currentHex;
+                    neighbor._parent = current_node;
                     neighbor.h = neighbor.h || heuristic(neighbor, end);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
@@ -121,6 +142,7 @@ var astar = {
                     }
                 }
             }
+            // console.log('.');
         }
         return pathTo(end);
     }

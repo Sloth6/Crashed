@@ -28,11 +28,11 @@ class window.BuildButton
   hexClicked: (hex) ->
     @game.build hex, @type
 
-  update: (mouse) ->
-    # console.log mouse.clientX, mouse.clientY
-    if @active
-      @sprite.fixedToCamera = false
-      @sprite.x = mouse.clientX
-      @sprite.y = mouse.clientY
-      @sprite.fixedToCamera = true
-      
+  # update: (mouse) ->
+  #   # console.log mouse.clientX, mouse.clientY
+  #   if @active
+  #     @sprite.fixedToCamera = false
+  #     @sprite.x = mouse.clientX
+  #     @sprite.y = mouse.clientY
+  #     @sprite.fixedToCamera = true
+  #

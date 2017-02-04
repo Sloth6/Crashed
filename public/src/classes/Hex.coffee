@@ -15,11 +15,12 @@ class window.Hex
     @sprite.width = Hex::width
     @sprite.height = Hex::width
     @sprite.anchor.set 0.5, 0.5
+
     @sprite.inputEnabled = true
     @sprite.events.onInputDown.add @onInputDown, @
     # @sprite.input.pixelPerfectClick = true
     @sprite.input.useHandCursor = true
-
+    @sprite.autoCull = true 
     @mytext = new Phaser.Text(game, @x, @y, "")
     @mytext.fontSize = 16
     game.worldUi.add @mytext

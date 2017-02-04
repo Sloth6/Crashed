@@ -32,6 +32,8 @@ class Crashed.Boot
     Array.prototype.random = () ->
       @[Math.floor(Math.random()*@length)]
 
+    game.canvas.oncontextmenu = (e) -> e.preventDefault()
+
   preload: () ->
     #  Here we load the assets required for our preloader (in this case a
     #  background and a loading bar)
@@ -46,5 +48,5 @@ class Crashed.Boot
     window.onpopstate = (e) ->
       if e.state
         state.start e.state
-  
+
     state.start 'Preloader'

@@ -27,10 +27,18 @@ class Crashed.Preloader
     @load.spritesheet 'loadButton', 'images/mainmenu/loadButton.png', 326, 287, 2
 
     @load.spritesheet 'instructionsButton', 'images/mainmenu/instructionsButton.png', 326, 287, 2
-    
+
     # @load.audio('titleMusic', ['audio/One_More_Time.m4a']);
     # @stage.backgroundColor = '#007236';
-    
+
+    @load.image "tile1", "images/tiles/tile1.gif"
+    @load.image "tile2", "images/tiles/tile2.gif"
+
+    # for i in [0...6]
+    #     @load.image "hex#{i}", "images/hexes/#{i}.png"
+
+    @load.image 'green_hex', 'images/greenhex.gif'
+
     @load.image 'road', 'images/hexes/1.png'
     @load.image 'default', 'images/hexes/2.png'
     @load.image 'mineralA', 'images/hexes/3.png'
@@ -41,7 +49,7 @@ class Crashed.Preloader
     @load.image 'menuPartition', 'images/ui/menuPartition.gif'
     @load.image 'sell', 'images/ui/sell.gif'
 
-    @load.image 'enemy', 'images/units/enemy.png'
+    @load.image 'enemy', 'images/units/enemy.gif'
 
     @load.image 'start', 'images/ui/start.png'
     @load.image 'save', 'images/ui/save.png'
@@ -57,12 +65,12 @@ class Crashed.Preloader
     #  You can jump right into the menu if you want and still play the music, but you'll have a few
     #  seconds of delay while the mp3 decodes - so if you need your music to be in-sync with your menu
     #  it's best to wait for it to decode here first, then carry on.
-    
+
     #  If you don't have any music in your game then put the game.state.start line into the create function and delete
     #  the update function completely.
-    
+
     @ready = true
-    # @state.start('Game');
+    @state.start('Game')
     # if (@cache.isSoundDecoded('titleMusic') && @ready == false) {
     #   @ready = true;
-    @state.start 'MainMenu'
+    # @state.start 'MainMenu'

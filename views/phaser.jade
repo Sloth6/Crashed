@@ -1,4 +1,4 @@
-whtml
+html
   head
     title= title
     script(src='/src/libraries/jquery.min.js')
@@ -8,33 +8,31 @@ whtml
 
     script(src="/src/Boot.js")
     script(src="/src/Preloader.js")
-    script(src="/src/MainMenu.js")
-    script(src="/src/Game.js")
-    script(src="/src/SavedGames.js")
+    //- script(src="/src/MainMenu.js")
 
-    script(src="/src/classes/Hex.js")
+    //- script(src="/src/GameCore.js")
+    script(src="/src/GameClient.js")
+    script(src="/src/Player.js")
 
-    script(src="/src/classes/Enemy.js")
-    script(src="/src/classes/SmallEnemy.js")
+    script(src="/src/hexlib.js")
 
-    script(src="/src/classes/District.js")
+    //- script(src="/src/classes/Enemy.js")
+    //- script(src="/src/classes/SmallEnemy.js")
 
-    script(src="/src/modules/hexUtils.js")
-    script(src="/src/modules/buildingValidator.js")
-    script(src="/src/modules/collisionManager.js")
+    //- script(src="/src/classes/District.js")
+
+    //- script(src="/src/modules/hexUtils.js")
+    //- script(src="/src/modules/buildingValidator.js")
+    //- script(src="/src/modules/collisionManager.js")
     script(src="/src/modules/pathfinding.js")
-    script(src="/src/saveManager.js")
-    
-    script(src="/src/classes/LabelButton.js")
-    script(src="/src/classes/HexMenu.js")
-    script(src="/src/classes/BuildButton.js")
-    script(src="/src/actions.js")
+    //- script(src="/src/saveManager.js")
+
+    //- script(src="/src/classes/LabelButton.js")
+    //- script(src="/src/classes/HexMenu.js")
+    //- script(src="/src/classes/BuildButton.js")
+    //- script(src="/src/actions.js")
 
 
-    script(src="/src/defaultStart.js")
-
-
-  
   body(style="margin:0px;")
     block content
         #gameContainer
