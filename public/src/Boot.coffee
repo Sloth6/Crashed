@@ -12,9 +12,16 @@ class Crashed.Boot
     @stage.disableVisibilityChange = true
 
     if @game.device.desktop
+      game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
       #  If you have any desktop specific settings, they can go in here
       # @scale.setMinMax 480, 260, 1024, 768
-      @scale.pageAlignHorizontally = true
+      # #scaling options
+      # this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+      @scale.pageAlignHorizontally = true #have the game centered
+      @scale.pageAlignVertically = true
+      @scale.setScreenSize(true) # #screen size will be set automatically
+
+
     else
       #  Same goes for mobile settings.
       #  In this case we're saying "scale the game, no lower than 480x260 and
@@ -34,6 +41,20 @@ class Crashed.Boot
 
     game.canvas.oncontextmenu = (e) -> e.preventDefault()
 
+    $(window).resize () ->
+      height = window.innerHeight
+      width = window.innerWidth
+      console.log game, game.stage
+      game.width = width
+      game.height = height
+      game.stage.width = width
+      game.stage.height = height
+
+      if (game.renderType == 1)
+        game.renderer.resize(width, height)
+        # Phaser.Canvas.setSmoothingEnabled(game.context, false)
+        game.scale.setGameSize(width, height);
+
   preload: () ->
     #  Here we load the assets required for our preloader (in this case a
     #  background and a loading bar)
@@ -48,5 +69,7 @@ class Crashed.Boot
     window.onpopstate = (e) ->
       if e.state
         state.start e.state
+
+
 
     state.start 'Preloader'
