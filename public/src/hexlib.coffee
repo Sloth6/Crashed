@@ -52,7 +52,10 @@ class HexTile
         @visited = false
         @closed = false
         @_parent = null
-        ###########################
+
+        ####### Enclosure finding. #########
+        @enclosure_viewed = false
+        @enclosure_exterior = false
 
     distance: (other) ->
         @hex.distance(other.hex)

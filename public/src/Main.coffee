@@ -1,5 +1,6 @@
 $ ->
-    [w, h] = window.innerWidth, window.innerHeight
+    w = window.innerWidth
+    h = window.innerHeight
     window.game = new Phaser.Game(w, h, Phaser.AUTO, $('#gameContainer')[0])
     #Add the States your game has.
     game.state.add 'Boot', Crashed.Boot

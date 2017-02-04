@@ -25,20 +25,18 @@ class Crashed.Game
   init: (@savedGame) ->
     # @stage.backgroundColor = '#89898A'
     @stage.backgroundColor = '#078c16'
-    # @worldScale = 1.0
-
-    # @worldUi = game.add.group()
-    # @world_group.add @worldUi
 
   create: () ->
     @hex_radius = 40
     @rows = 32
     @cols = 32
+    @draw_coords = false
 
     @layout = new Layout('flat', new Point(@hex_radius, @hex_radius*.5), new Point(0, 0))
     @hex_grid = new HexGrid(@rows, @cols)
 
     @tile_group = game.add.group()
+    @enclosure_group = game.add.group()
     @world_group = game.add.group()
     @mouse_down = false
 
@@ -47,6 +45,7 @@ class Crashed.Game
       game_mode: 'default'
       income: 0
       money: 0
+      enclosures: []
 
     @prices =
       tile1: 1
@@ -58,7 +57,8 @@ class Crashed.Game
     height = 2000#1.5 * @hex_radius * @cols + @hex_radius
     game.world.setBounds -@hex_radius,-2*@hex_radius, width, height
 
-    tile = @hex_grid.data['16:0']
+    tile = @hex_grid.data['16:8']
+    # tile = @hex_grid.data['4:2']
     point = @layout.hex_to_pixel(tile.hex)
     @players = [new Player('cody', tile, point)]
     @user = @players[0]
@@ -78,10 +78,12 @@ class Crashed.Game
     polygon = @layout.polygon_corners(h)
     graphics.drawPolygon(polygon)
 
-    # p = @layout.hex_to_pixel(h)
-    # style = { font: "18px Arial"}#, fill: "#ff0044", wordWrap: true, align: "center", backgroundColor: "#ffff00" };
-    # text = game.add.text(p.x, p.y, h.to_string(), style)
-    # text.anchor.set(0.5)
+    if @draw_coords
+      p = @layout.hex_to_pixel(h)
+      style = { font: "18px Arial"}#, fill: "#ff0044", wordWrap: true, align: "center", backgroundColor: "#ffff00" };
+      str = h.to_string()
+      text = game.add.text(p.x, p.y, str, style)
+      text.anchor.set(0.5)
 
   client_draw_hex_grid: (hex_grid) ->
     graphics = game.add.graphics(0, 0)
@@ -91,6 +93,24 @@ class Crashed.Game
         h = qoffset_to_cube(1, {'row':r, 'col':c})
         @client_draw_hex(graphics, h)
     @tile_group.add(graphics)
+
+  client_draw_enclosures: () ->
+    @enclosure_group.removeAll()
+    graphics = game.add.graphics(0, 0)
+    graphics.beginFill(0xFF3300, .5)
+
+    # for _, t of @hex_grid.data
+    #   if t.enclosure_exterior
+    #     h = t.hex
+    #     @client_draw_hex(graphics, h)
+
+    for e in @state.enclosures
+      for t in e.interior
+        h = t.hex
+        @client_draw_hex(graphics, h)
+
+    graphics.endFill()
+    @enclosure_group.add(graphics)
 
   pathfind: (hex_tile_a, hex_tile_b) ->
     impassable = (tile_a, tile_b) -> Math.abs(tile_a.type - tile_b.type) > 1
@@ -119,7 +139,26 @@ class Crashed.Game
       tile.type += 1
     else
       tile.type -= 1
+
     @client_build_tile(tile)
+
+    for _, t of @hex_grid.data
+      t.enclosure_viewed = false
+      t.enclosure_exterior = false
+
+    # foo = get_enclosure(@hex_grid, @hex_grid.data['16:0'], (tile) -> tile.type > 0)
+    # console.log foo
+    # if foo
+    #   console.log (t.hex.to_string() for t in foo.interior)
+    #   console.log (t.hex.to_string() for t in foo.perimeter)
+
+    @state.enclosures = get_enclosures(@hex_grid)
+    console.log @state.enclosures.length, 'enclosures found.'
+    @client_draw_enclosures()
+    # for e in enclosures
+    #   console.log (t.hex.to_string() for t in e.interior)
+    #   console.log (t.hex.to_string() for t in e.perimeter)
+    #   console.log('\n')
 
   update_left_clicked_tile: (tile) ->
     new_path = @pathfind(@user.tile, tile)

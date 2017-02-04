@@ -44,7 +44,7 @@ class Crashed.Boot
     $(window).resize () ->
       height = window.innerHeight
       width = window.innerWidth
-      console.log game, game.stage
+      # console.log game, game.stage
       game.width = width
       game.height = height
       game.stage.width = width

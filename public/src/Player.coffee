@@ -15,4 +15,3 @@ class Player
     set_path: (path, path_end_event) ->
         @current_path = path
         @path_end_event = path_end_event
-
