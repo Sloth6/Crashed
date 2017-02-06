@@ -40,10 +40,17 @@ class HexGrid
     #     else
     #         @data[hash] = {k: v}
 
+TileTypes =
+    empty: 0
+    short: 1
+    tall: 2
+    room: 3
+    door: 4
+
 class HexTile
     constructor: (@hex) ->
         #### Game Logic Variables ####
-        @type = 0 # {0: empty, 1: }
+        @type = TileTypes.empty
 
         #### A star variabels. ####
         @f = 0

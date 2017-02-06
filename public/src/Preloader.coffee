@@ -33,6 +33,8 @@ class Crashed.Preloader
 
     @load.image "tile1", "images/tiles/tile1.gif"
     @load.image "tile2", "images/tiles/tile2.gif"
+    @load.image "tile3", "images/tiles/tile3.gif"
+    @load.image "tile4", "images/tiles/tile4.gif"
 
     # for i in [0...6]
     #     @load.image "hex#{i}", "images/hexes/#{i}.png"

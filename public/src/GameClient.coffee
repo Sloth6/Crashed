@@ -1,6 +1,12 @@
 'use strict'
     # window.history.pushState "Game", "", "/game"
 
+random_color = () ->
+  letters = '0123456789ABCDEF'
+  color = '0x'
+  for i in [0...6]
+      color += letters[Math.floor(Math.random() * 16)]
+  color
 
 class Crashed.Game
     #  When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
@@ -31,13 +37,15 @@ class Crashed.Game
     @rows = 32
     @cols = 32
     @draw_coords = false
+    # @draw_coords = true
 
     @layout = new Layout('flat', new Point(@hex_radius, @hex_radius*.5), new Point(0, 0))
     @hex_grid = new HexGrid(@rows, @cols)
 
     @tile_group = game.add.group()
-    @enclosure_group = game.add.group()
+
     @world_group = game.add.group()
+    @enclosure_group = game.add.group()
     @mouse_down = false
 
     # Game state
@@ -47,9 +55,16 @@ class Crashed.Game
       money: 0
       enclosures: []
 
-    @prices =
-      tile1: 1
-      tile2: 1
+    # console.log "#{TileTypes.empty}"
+    @tile_heights = {}
+    @tile_heights[TileTypes.empty] = 0
+    @tile_heights[TileTypes.short] = 1
+    @tile_heights[TileTypes.tall] = 2
+    @tile_heights[TileTypes.room] = 2
+    @tile_heights[TileTypes.door] = 0
+    # @prices =
+    #   tile1: 1
+    #   tile2: 1
 
     @client_draw_hex_grid(@hex_grid)
 
@@ -69,10 +84,11 @@ class Crashed.Game
     game.camera.follow(@user.sprite)
 
     @highlight = game.add.graphics(0, 0)
-    @highlight.lineStyle(2, 0xffff80, .5)
+    @highlight.lineStyle(4, 0xffff80, .5)
     polygon = @layout.polygon_corners(new HexPoint(0,0,0))
     polygon.push(polygon[0])
     @highlight.drawPolygon(polygon)
+    @world_group.add(@highlight)
 
   client_draw_hex: (graphics, h) ->
     polygon = @layout.polygon_corners(h)
@@ -97,82 +113,91 @@ class Crashed.Game
   client_draw_enclosures: () ->
     @enclosure_group.removeAll()
     graphics = game.add.graphics(0, 0)
-    graphics.beginFill(0xFF3300, .5)
-
-    # for _, t of @hex_grid.data
-    #   if t.enclosure_exterior
-    #     h = t.hex
-    #     @client_draw_hex(graphics, h)
+    graphics.lineStyle(5, 0x664400)
 
     for e in @state.enclosures
-      for t in e.interior
-        h = t.hex
-        @client_draw_hex(graphics, h)
+      # color = random_color()
+      color = "0x996600"
+      graphics.beginFill(color, .5)
+
+      polygon = (@layout.hex_to_pixel(t.hex) for t in e.perimeter)
+      for p in polygon
+        p.y -= 20
+      graphics.drawPolygon(polygon)
 
     graphics.endFill()
     @enclosure_group.add(graphics)
 
-  pathfind: (hex_tile_a, hex_tile_b) ->
-    impassable = (tile_a, tile_b) -> Math.abs(tile_a.type - tile_b.type) > 1
-    astar.search(@hex_grid, hex_tile_a, hex_tile_b, hex_distance, impassable)
+  pathfind: (start_tile, end_tile, include_end = true) ->
+    impassable = (tile_a, tile_b) =>
+      return false if not include_end and tile_b is end_tile
+      return true if tile_b.type == TileTypes.room
+      Math.abs(@tile_heights[tile_a.type] - @tile_heights[tile_b.type]) > 1
+
+    path = astar.search(@hex_grid, start_tile, end_tile, hex_distance, impassable)
+    if not include_end and path.length > 1
+      return path[...-1]
+    return path
 
   client_build_tile: (tile) ->
     if tile.sprite
       tile.sprite.destroy()
 
-    if tile.type > 0
+    if tile.type != TileTypes.empty
+      sprite_name = switch tile.type
+        when TileTypes.short then 'tile1'
+        when TileTypes.tall then 'tile2'
+        when TileTypes.room then 'tile3'
+        when TileTypes.door then 'tile4'
+        else
+          throw 'Invalid Tile Type:' + tile.type
+
       p = @layout.hex_to_pixel(tile.hex)
-
-      if tile.type == 1
-        sprite_name = 'tile1'
-      else
-        sprite_name = 'tile2'
-
       tile.sprite = @world_group.create(p.x, p.y, sprite_name)
       scale_factor = (@hex_radius *2) / tile.sprite.width
       tile.sprite.scale.setTo(scale_factor)
       tile.sprite.anchor.set 0.5, 0.75
       tile.sprite.depth = tile.sprite.y
 
-  build_tile: (tile) ->
-    if tile.type < 2
-      tile.type += 1
-    else
-      tile.type -= 1
+  handle_new_enclosures: () ->
+    @state.enclosures = get_enclosures(@hex_grid)
+    for e in @state.enclosures
+      for t in e.perimeter
+        if t.type != TileTypes.door
+          t.type = TileTypes.room
+        @client_build_tile(t)
+    # console.log @state.enclosures.length, 'enclosures found.'
+    @client_draw_enclosures()
+
+  tile_action: (tile) ->
+    # The main action of clicking a tile, and are next to it
+    tile.type = switch tile.type
+      when TileTypes.empty then TileTypes.short
+      when TileTypes.short then TileTypes.tall
+      when TileTypes.tall then TileTypes.empty
+      when TileTypes.room then TileTypes.door
+      when TileTypes.door then TileTypes.room
+      else
+        throw 'Invalid Tile Type:' + tile.type
 
     @client_build_tile(tile)
-
-    for _, t of @hex_grid.data
-      t.enclosure_viewed = false
-      t.enclosure_exterior = false
-
-    # foo = get_enclosure(@hex_grid, @hex_grid.data['16:0'], (tile) -> tile.type > 0)
-    # console.log foo
-    # if foo
-    #   console.log (t.hex.to_string() for t in foo.interior)
-    #   console.log (t.hex.to_string() for t in foo.perimeter)
-
-    @state.enclosures = get_enclosures(@hex_grid)
-    console.log @state.enclosures.length, 'enclosures found.'
-    @client_draw_enclosures()
-    # for e in enclosures
-    #   console.log (t.hex.to_string() for t in e.interior)
-    #   console.log (t.hex.to_string() for t in e.perimeter)
-    #   console.log('\n')
+    @handle_new_enclosures()
 
   update_left_clicked_tile: (tile) ->
+
+    distance = tile.distance(@user.tile)
+    console.log 'left click', distance
+    if distance > 1
+      new_path = @pathfind(@user.tile, tile, false)
+      @players[0].set_path new_path, () =>
+        @tile_action(tile)
+    else if distance == 1
+      @tile_action(tile)
+
+  update_right_clicked_tile: (tile) ->
     new_path = @pathfind(@user.tile, tile)
     @players[0].set_path(new_path)
 
-  update_right_clicked_tile: (tile) ->
-    distance = tile.distance(@user.tile)
-    if distance > 1
-      new_path = @pathfind(@user.tile, tile)
-      if new_path.length != 0
-        @players[0].set_path new_path[...-1], () =>
-          @build_tile(tile)
-    else if distance == 1
-      @build_tile(tile)
 
   update: () ->
     left_click = false
@@ -183,17 +208,20 @@ class Crashed.Game
     tile = @hex_grid.get_hextile(h)
     p = @layout.hex_to_pixel(h)
 
+    # Move highlight.
     @highlight.x = p.x
-    @highlight.y = p.y
+    @highlight.y = p.y - @tile_heights[tile.type] * 8
+    @highlight.depth = p.y
 
     if game.input.activePointer.isDown
       @mouse_down = game.input.mouse.button + 1
 
     else if game.input.activePointer.isUp and @mouse_down
       if @mouse_down == 3
-        left_click = true
-      else
         right_click = true
+      else
+        left_click = true
+
       @mouse_down = false
 
     # Handle click events
@@ -211,7 +239,7 @@ class Crashed.Game
           player.tile = player.current_path.shift()
           p = @layout.hex_to_pixel(player.tile.hex)
 
-          tile_height = player.tile.type * 10
+          tile_height = @tile_heights[player.tile.type] * 10
           player.sprite.depth += tile_height
           to = {x: p.x, y:p.y-tile_height, depth:p.y + tile_height}
           tween = game.add.tween(player.sprite).to(to, player.speed, "Linear", true, 0)

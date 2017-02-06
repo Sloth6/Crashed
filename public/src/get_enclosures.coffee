@@ -1,10 +1,50 @@
 class Enclosure
     constructor: (@interior, @perimeter) ->
-        #Store two groups of tiles.
+        #Store two groups of tiles. perimeters tiles are ordered.
+
+
+order_tiles = (tile_grid, tiles) ->
+    # console.log '\nordering'
+    tile_set = new Set(tiles) # Only to make lookups O(1)
+    t = tiles[0]
+    ordered = []
+    seen = new Set()
+
+    # console.log (t.hex.to_string() for t in tiles)
+    try
+        while ordered.length < tiles.length
+            found = false
+            ordered.push(t)
+            seen.add(t)
+
+            if ordered.length == tiles.length
+                break
+
+            # console.log 't=', t.hex.to_string()
+            # console.log ordered.length,tiles.length
+            for n in tile_grid.get_neighbors(t)
+                # console.log 'trying ', n.hex.to_string(), not seen.has(n), tile_set.has(n)
+                if not seen.has(n) and tile_set.has(n)
+                    t = n
+                    found = true
+                    break
+
+            if !found
+                console.log (t.hex.to_string() for t in ordered)
+                console.log (t.hex.to_string() for t of ordered)
+                throw 'Should not be here!'
+        return ordered
+    catch e
+        console.log e
+        return tiles
+
+
+
 
 # Given a hex, get its cluster
 get_enclosure = (tile_grid, tile, is_partition) ->
     return null if tile.enclosure_viewed
+    seen_partitions = new Set()
     partitions = [] # Collect all roads that border district
     interior = [] # Collect all hexes in district
     is_exterior = false
@@ -12,8 +52,9 @@ get_enclosure = (tile_grid, tile, is_partition) ->
     verbose = false
 
     floodFillR = (t) -> # Recursive function that adds to district.
-        if is_partition(t)
+        if is_partition(t) and not seen_partitions.has(t.hex.hash())
             partitions.push(t)
+            seen_partitions.add(t.hex.hash())
             t.enclosure_viewed = true
 
         else if not (t.enclosure_exterior or t.enclosure_viewed)
@@ -39,7 +80,7 @@ get_enclosure = (tile_grid, tile, is_partition) ->
     return new Enclosure(interior, partitions)
 
 get_enclosures = (tile_grid, is_partition) ->
-    is_partition ?= (tile) -> tile.type > 0
+    is_partition ?= (tile) -> [TileTypes.short, TileTypes.room, TileTypes.door].indexOf(tile.type) isnt -1
     # console.log(is_partition)
     open = []
     enclosures = []
@@ -57,3 +98,9 @@ get_enclosures = (tile_grid, is_partition) ->
             enclosures.push(enclosure)
 
     enclosures.filter((x) -> !!x)
+    for e in enclosures
+        e.perimeter = order_tiles(tile_grid, e.perimeter)
+    enclosures
+
+
+
