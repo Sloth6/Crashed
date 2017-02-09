@@ -70,6 +70,8 @@ class HexTile
     equal: (other) ->
         @hex.equal(other.hex)
 
+    toString: () -> "Tile:#{@hex.to_string()}"
+
 class HexPoint
     constructor: (@q, @r, @s) ->
         @str = "#{@q}:#{@r}"

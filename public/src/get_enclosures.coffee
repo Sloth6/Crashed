@@ -2,7 +2,6 @@ class Enclosure
     constructor: (@interior, @perimeter) ->
         #Store two groups of tiles. perimeters tiles are ordered.
 
-
 order_tiles = (tile_grid, tiles) ->
     # console.log '\nordering'
     tile_set = new Set(tiles) # Only to make lookups O(1)
@@ -30,9 +29,10 @@ order_tiles = (tile_grid, tiles) ->
                     break
 
             if !found
-                console.log (t.hex.to_string() for t in ordered)
-                console.log (t.hex.to_string() for t of ordered)
-                throw 'Should not be here!'
+                break
+                # console.log (t.hex.to_string() for t in ordered)
+                # console.log (t.hex.to_string() for t of ordered)
+                # throw 'Should not be here!'
         return ordered
     catch e
         console.log e
@@ -76,11 +76,12 @@ get_enclosure = (tile_grid, tile, is_partition) ->
             t.enclosure_exterior = true
         return null
 
+    return null if interior.some((t) -> t.type != TileTypes.empty)
     return null if (interior.length == 0) or (partitions.length == 0)
     return new Enclosure(interior, partitions)
 
 get_enclosures = (tile_grid, is_partition) ->
-    is_partition ?= (tile) -> [TileTypes.short, TileTypes.room, TileTypes.door].indexOf(tile.type) isnt -1
+
     # console.log(is_partition)
     open = []
     enclosures = []

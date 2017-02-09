@@ -10,7 +10,7 @@ html
     script(src="/src/Preloader.js")
     //- script(src="/src/MainMenu.js")
 
-    //- script(src="/src/GameCore.js")
+    script(src="/src/GameCore.js")
     script(src="/src/GameClient.js")
     script(src="/src/Player.js")
     script(src="/src/hexlib.js")
@@ -22,8 +22,45 @@ html
 
     //- script(src="/src/classes/District.js")
 
-
   body(style="margin:0px;")
+    style.
+        .option {
+            position: relative;
+            width: 200px;
+            height: 90%;
+            float: left;
+            margin: 10px;
+            background-color: gray;
+            cursor: pointer;
+        }
+        #bottomMenu {
+            display: none;
+            position:absolute;
+            overflow: hidden;
+            bottom:0px;
+            height:10%;
+            width:100%;
+            border-top-style: solid;
+            border-top-color: black;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+
     block content
-        #gameContainer
+        #gameContainer(style="position:absolute")
+        #bottomMenu()
+            .sub_menu.build_building
+                .option(data-name="solar")
+                    p Build Solar
+                .option(data-name="turrets")
+                    p Build Factory
+                .option(data-name="battery")
+                    p Build Battery
+                .option(data-name="houses")
+                    p Build Houses
+            .sub_menu.manage_building
+                .option(data-name="destroy")
+                    p Destroy Building
+
         script(src="/src/Main.js")
+

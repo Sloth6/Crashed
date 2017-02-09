@@ -1,7 +1,9 @@
 $ ->
     w = window.innerWidth
     h = window.innerHeight
+    # console.log Phaser.GameClient
     window.game = new Phaser.Game(w, h, Phaser.AUTO, $('#gameContainer')[0])
+
     #Add the States your game has.
     game.state.add 'Boot', Crashed.Boot
     game.state.add 'Preloader', Crashed.Preloader
