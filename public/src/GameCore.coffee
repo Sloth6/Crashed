@@ -12,13 +12,6 @@ BuildingTypes =
 class Building
     constructor: (id, @type, @enclosure) ->
 
-# class GameSpecific
-#     # constructor: (arguments) ->
-#     #   @game = new GameCommon
-#     new_building: (building) -> throw Error "unimplemented method"
-#     move_user: (user, tile) -> throw Error "unimplemented method"
-
-
 class GameCommon
     constructor: (@game_specific) ->
         @rows = 32
@@ -48,6 +41,13 @@ class GameCommon
         @tile_heights[TileTypes.room] = 2
         @tile_heights[TileTypes.door] = 0
 
+        # @astar_tile_costs = {}
+        # @astar_tile_costs[TileTypes.empty] = 0
+        # @astar_tile_costs[TileTypes.short] = 1
+        # @astar_tile_costs[TileTypes.tall] = 2
+        # @astar_tile_costs[TileTypes.room] = 2
+        # @astar_tile_costs[TileTypes.door] = 0
+
     starting_tile: () ->
         #TODO for new players find empty tile.
         @tile_grid.data['16:8']
@@ -67,17 +67,35 @@ class GameCommon
         building = new Building(type, enclosure)
         @game_specific.new_building(building)
 
+    travel_speed: (player, tile_a, tile_b) ->
+        c = 1
+        if tile_a.type == tile_b.type
+            if tile_a.type == TileTypes.empty
+                # no op
+            else if tile_a.type == TileTypes.short
+                c -= (.5)
+        else
+            h_diff = Math.abs(@tile_heights[tile_a.type] - @tile_heights[tile_b.type])
+            c += h_diff
+
+        return c * player.speed
+
     pathfind: (player, end_tile, include_end = true) ->
         start_tile = player.tile
+
+        cost = (tile_a, tile_b) => @travel_speed(player, tile_a, tile_b)
+
         impassable = (tile_a, tile_b) =>
           return false if not include_end and tile_b is end_tile
           return true if tile_b.type == TileTypes.room
           Math.abs(@tile_heights[tile_a.type] - @tile_heights[tile_b.type]) > 1
 
-        path = astar.search(@tile_grid, start_tile, end_tile, hex_distance, impassable)
+        path = astar.search(@tile_grid, start_tile, end_tile, hex_distance, impassable, cost)
+
         if not include_end and path.length > 1
-          return path[...-1]
-        return path
+            path[...-1]
+        else
+            path
 
     update_enclosures: () ->
         is_partition = (tile) ->
@@ -108,18 +126,25 @@ class GameCommon
             @game_specific.enclosures_updated(@enclosures)
             @game_specific.tile_changed(tile)
 
+    move_player: (player, tile, include_end, on_done) ->
+        if @tile_to_building[tile]
+            @game_specific.warn('Cannot go to building')
+            return
+        new_path = @pathfind(player, tile, include_end)
+        player.set_path(new_path, on_done)
+
     primary_action: (player, tile) ->
         distance = tile.distance(player.tile)
         # Do we have to walk there?
         if distance > 1
-          new_path = @pathfind(player, tile, false)
-          player.set_path(new_path, (() => @tile_action(player, tile)))
+            @move_player(player, tile, false, (() => @tile_action(player, tile)))
         else # Act immediately.
           @tile_action(player, tile)
 
     secondary_action: (player, tile) ->
-        new_path = @pathfind(player, tile)
-        player.set_path(new_path)
+        @move_player(player, tile, true)
+        # new_path = @pathfind(player, tile)
+        # player.set_path(new_path)
 
     build_building: (player, building_type) ->
         unless BuildingTypes[building_type]?
@@ -160,17 +185,20 @@ class GameCommon
     update: () ->
         # Update players
         for id, player of @players
-
-            use_update = player.last_move_update < Date.now() - player.speed
-
-            if use_update and player.current_path
+            if player.current_path?
                 if player.current_path.length
-                    player.last_move_update = Date.now()
-                    player.tile = player.current_path.shift()
-                    @game_specific.update_player_position(player, player.tile)
-                # else
-                else
-                    # Path over.
+                    next_tile = player.current_path[0]# player.current_path.shift()
+                    travel_time = @travel_speed(player, player.tile, next_tile)
+
+                    use_update = player.last_move_update < Date.now() - travel_time
+
+                    if use_update
+                        player.last_move_update = Date.now()
+                        player.tile = next_tile
+                        player.current_path.shift() # remove from queue
+                        @game_specific.update_player_position(player, player.tile)
+
+                else # Path over.
                     player.current_path = null
                     if player.path_end_event
                         player.path_end_event()

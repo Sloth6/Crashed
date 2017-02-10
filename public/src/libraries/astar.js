@@ -70,18 +70,11 @@ var astar = {
 	* @param {Function} [options.impassable] Impasssable function (returns
 	*          true if impassable)
     */
-    search: function(graph, start, end, heuristic, impassable) {
-        // var graph = options.graph;
-        // var start = options.start;
-        // var end = options.end;
+    search: function(graph, start, end, heuristic, impassable, cost) {
         astar.init(graph);
-        // return graph
-        // options = options || {};
         var unit = false;
-        // var heuristic = options.heuristic;
-        // var closest = options.closest || false;
-        // var neighbors = options.neighbors;
         var impassable = impassable || function(){ return false };
+        var cost = cost || function(){ return 1 };
         // var impassable = function(){ return false }
 
         var openHeap = getHeap();
@@ -108,7 +101,6 @@ var astar = {
                 var neighbor = neighbors[i];
 
                 if (neighbor.closed || impassable(current_node, neighbor)) { // || impassable(neighbor, unit)// Not a valid node to process, skip to next neighbor.
-
                     continue; // Not a valid node to process, skip to next neighbor.
                 }
 
@@ -117,8 +109,7 @@ var astar = {
 
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
-                var gScore = current_node.g + 1 //neighbor.getCost();
-                // var gScore = current_node.g + neighbor.getCost();
+                var gScore = current_node.g + cost(current_node, neighbor)
                 var beenVisited = neighbor.visited;
 
                 if (!beenVisited || gScore < neighbor.g) {
